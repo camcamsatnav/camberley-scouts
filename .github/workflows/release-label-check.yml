@@ -17,5 +17,6 @@ jobs:
           if echo "$LABELS" | grep -Eq 'release:(patch|minor|major)'; then
             exit 0
           else
+            echo "Error: Missing required release label. Please add one of: release:patch, release:minor, or release:major." >&2
             exit 1
           fi
