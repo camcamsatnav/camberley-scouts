@@ -1,0 +1,21 @@
+name: Check release label
+on:
+  pull_request:
+    types: [ opened, reopened, labeled, unlabeled, synchronize ]
+
+jobs:
+  check-label:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check for release label
+        run: |
+          LABELS='${{ toJson(github.event.pull_request.labels.*.name) }}'
+          
+          echo "PR labels: $LABELS"
+          
+          if echo "$LABELS" | grep -Eq 'release:(patch|minor|major)'; then
+            exit 0
+          else
+            exit 1
+          fi

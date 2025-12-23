@@ -1,0 +1,61 @@
+name: prod
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v6.1.0
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Determine version bump
+        id: bump
+        run: |
+          LABELS=$(gh pr view ${{ github.event.pull_request.number }} --json labels -q '.labels[].name')
+
+          if echo "$LABELS" | grep -q "release:major"; then
+            echo "LEVEL=major" >> $GITHUB_OUTPUT
+          elif echo "$LABELS" | grep -q "release:minor"; then
+            echo "LEVEL=minor" >> $GITHUB_OUTPUT
+          else
+            echo "LEVEL=patch" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Bump version
+        run: |
+          npm version ${{ steps.bump.outputs.LEVEL }} -m "increase version number"
+
+      - name: Push version + tag
+        run: |
+          git push origin main --tags
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Read package version
+        run: |
+          echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6.18.0
+        with:
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.VERSION }}
+            ghcr.io/${{ github.repository }}:latest
