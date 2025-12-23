@@ -1,12 +1,11 @@
-permissions:
-  contents: read
-  packages: write
-
 name: dev
 on:
   push:
     branches:
       - dev
+
+env:
+  BUILDX_NO_DEFAULT_ATTESTATIONS: 1
 
 jobs:
   deploy:
