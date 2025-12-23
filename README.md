@@ -37,4 +37,11 @@ To build and run the website using Docker:
 3. ```bash
    docker run -d -p 8080:80 camberley-scouts
 
+## Docker compose
+
+1. Start the services using Docker Compose:
+   ```bash
+   docker-compose up -d
+   ```
+
 Docker images can be found [here](https://github.com/camcamsatnav/camberley-scouts/pkgs/container/camberley-scouts)
