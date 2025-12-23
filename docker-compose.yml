@@ -1,0 +1,7 @@
+services:
+  app:
+    image: ghcr.io/camcamsatnav/camberley-scouts:dev
+    container_name: camberley-scouts-dev
+    restart: always
+    ports:
+      - "8080:80"
