@@ -1,10 +1,12 @@
+import '../less/scoutsStackIcon.less';
+
 export const ScoutsStackIcon = () => {
   return (
     <div
-      style={{ height: 40, width: 55, display: 'flex', alignItems: 'center' }}
+      className='scouts-stack-icon'
       data-testid='scouts-icon'
     >
-      <img src='/scouts-logo.png' alt='scouts icon' height={40} width={55} />
+      <img className='scouts-stack-icon__image' src='/scouts-logo.png' alt='scouts icon' />
     </div>
   );
 };

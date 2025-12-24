@@ -17,10 +17,22 @@ export const Navbar = () => {
       <span className='navbar__title'>{t('title')}</span>
 
       <div className='navbar__socials' data-testid='navbar-socials'>
-        <IconButton aria-label='facebook' href={FACEBOOK_URL} data-testid='navbar-facebook'>
+        <IconButton
+          aria-label='facebook'
+          href={FACEBOOK_URL}
+          target='_blank'
+          rel='noopener noreferrer'
+          data-testid='navbar-facebook'
+        >
           <FacebookRounded sx={{ color: 'var(--mui-palette-common-white)' }} />
         </IconButton>
-        <IconButton aria-label='instagram' href={INSTAGRAM_URL} data-testid='navbar-instagram'>
+        <IconButton
+          aria-label='instagram'
+          href={INSTAGRAM_URL}
+          target='_blank'
+          rel='noopener noreferrer'
+          data-testid='navbar-instagram'
+        >
           <Instagram sx={{ color: 'var(--mui-palette-common-white)' }} />
         </IconButton>
       </div>
