@@ -2,6 +2,7 @@ name: Check release label
 on:
   pull_request:
     types: [ opened, reopened, labeled, unlabeled, synchronize ]
+    branches: [ main ]
 
 jobs:
   check-label:
