@@ -1,5 +1,30 @@
 {
-  "title": "Camberley 478 Scout Group",
+  "navbar": {
+    "title": "Camberley 478 Scout Group",
+    "join": {
+      "label": "Join",
+      "beavers": "Beavers",
+      "cubs": "Cubs",
+      "scouts": "Scouts"
+    },
+    "parents": {
+      "label": "Info for parents",
+      "shop": "Scout shop"
+    },
+    "volunteers": {
+      "label": "Info for volunteers",
+      "fundraising": "Fundraising",
+      "volunteer": "Volunteer"
+    },
+    "about": {
+      "label": "About us",
+      "hut": "Hut renovation",
+      "bookings": "Bookings",
+      "documentation": "Official documentation",
+      "faq": "FAQ",
+      "contact": "Contact"
+    }
+  },
   "footer": {
     "address1": "Scout Hall",
     "address2": "270 London Rd, Royal Military Academy, Camberley GU15 3JP",
