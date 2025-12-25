@@ -26,10 +26,10 @@ export const NavigationButton = ({ title, options, testId }: NavigationButtonPro
   return (
     <>
       <Button
-        id='nav-button'
+        id={`${testId}-nav-button`}
         variant='text'
         size='large'
-        aria-controls={open ? 'nav-menu' : undefined}
+        aria-controls={open ? `${testId}-nav-menu` : undefined}
         aria-haspopup='true'
         aria-expanded={open ? 'true' : undefined}
         onClick={handleOnButtonClick}
@@ -38,12 +38,12 @@ export const NavigationButton = ({ title, options, testId }: NavigationButtonPro
         <span className='navigation-button__text'>{title}</span>
       </Button>
       <Menu
-        id='nav-menu'
+        id={`${testId}-nav-menu`}
         anchorEl={anchorEl}
         open={open}
         slotProps={{
           list: {
-            'aria-labelledby': 'nav-button',
+            'aria-labelledby': `${testId}-nav-button`,
           },
         }}
         onClose={handleOnClose}
@@ -51,7 +51,7 @@ export const NavigationButton = ({ title, options, testId }: NavigationButtonPro
       >
         {options.map((option, index) => (
           <MenuItem
-            key={option.label}
+            key={`${option.label}-${index}`}
             component='a'
             href={option.url}
             onClick={handleOnClose}
