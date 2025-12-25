@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { Navbar } from './Navbar';
 
@@ -23,3 +23,46 @@ it('should have correct social media links', () => {
     'https://www.instagram.com/camberley.478.scout.group',
   );
 });
+
+it('shows the correct options for each navigation button when clicked', async () => {
+  render(<Navbar />);
+
+  const cases = [
+    {
+      testId: 'nav-join',
+      expected: ['Beavers', 'Cubs', 'Scouts'],
+    },
+    {
+      testId: 'nav-parents',
+      expected: ['Scout shop'],
+    },
+    {
+      testId: 'nav-volunteers',
+      expected: ['Fundraising', 'Volunteer'],
+    },
+    {
+      testId: 'nav-about',
+      expected: ['Hut renovation', 'Bookings', 'Official documentation', 'FAQ', 'Contact'],
+    },
+  ];
+
+  for (const c of cases) {
+    const button = screen.getByTestId(`${c.testId}-button`);
+    expect(button).toBeInTheDocument();
+    fireEvent.click(button);
+
+    const menu = screen.getByTestId(`${c.testId}-menu`);
+    expect(menu).toBeInTheDocument();
+
+    // shows all options
+    for (let i = 0; i < c.expected.length; i++) {
+      const item = screen.getByTestId(`${c.testId}-menu-item-${i}`);
+      expect(item).toBeInTheDocument();
+      expect(item).toHaveTextContent(c.expected[i]);
+    }
+
+    // Close the menu after checking
+    fireEvent.click(document.body);
+  }
+});
+
