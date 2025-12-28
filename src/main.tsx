@@ -6,7 +6,12 @@ import './i18n/i18n';
 
 import './index.less';
 
-const theme = createTheme({ cssVariables: true });
+const theme = createTheme({
+  cssVariables: true,
+  palette: {
+    primary: { main: '#2A6432' },
+  },
+});
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
