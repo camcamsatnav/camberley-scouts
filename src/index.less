@@ -14,6 +14,7 @@
   user-select: none;
 
   --green: #2A6432;
+  --green-raw: 42 100 50;
   --yellow: #F2BA35;
   --yellow-raw: 242, 186, 53;
   --color-neutral-200: #D9DADC;
@@ -30,6 +31,9 @@
   --spacing-10: calc(var(--mui-spacing, 8px) * 10);
   --spacing-11: calc(var(--mui-spacing, 8px) * 11);
   --spacing-12: calc(var(--mui-spacing, 8px) * 12);
+  --spacing-13: calc(var(--mui-spacing, 8px) * 13);
+  --spacing-14: calc(var(--mui-spacing, 8px) * 14);
+  --spacing-15: calc(var(--mui-spacing, 8px) * 15);
 }
 
 *,
@@ -54,5 +58,7 @@ body {
 }
 
 .content {
+  display: flex;
+  flex-direction: column;
   flex: 1 0 auto;
 }

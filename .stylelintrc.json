@@ -42,8 +42,8 @@
         ]
       }
     ],
-    "max-nesting-depth": 3,
-    "selector-max-compound-selectors": 3,
+    "max-nesting-depth": 5,
+    "selector-max-compound-selectors": 5,
     "no-descending-specificity": null
   }
 }

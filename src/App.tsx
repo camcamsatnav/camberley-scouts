@@ -1,6 +1,6 @@
 import { Footer } from './common/components/Footer';
 import { Navbar } from './common/components/Navbar';
-import { HomePageView } from './HomePage/HomePageView';
+import { HomePageView } from './HomePage/components/HomePageView';
 
 export const App = () => {
   return (

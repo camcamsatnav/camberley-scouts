@@ -25,6 +25,30 @@
       "contact": "Contact"
     }
   },
+  "home": {
+    "welcome": {
+      "title": "Welcome to Camberley 478 scout group",
+      "subtitle": "where every child has the right to an adventure"
+    },
+    "buttons": {
+      "join": "Join",
+      "volunteer": "Volunteer"
+    },
+    "intro": {
+      "title": "Our group",
+      "line1": "We currently have: 2 Beaver colonies, 1 Cub pack and 1 Scout troop.",
+      "line2": "Camberley 478 Scout Group was formed after the original groups in Camberley (4th, 7th and 8th) were at risk of closure.",
+      "line3": "The group has now grown significantly since 2022 and our numbers are increasing further."
+    },
+    "cards": {
+      "title": "View",
+      "age": {
+        "beavers": "6-8 years",
+        "cubs": "8-10½ years",
+        "scouts": "10½-14 years"
+      }
+    }
+  },
   "footer": {
     "address1": "Scout Hall",
     "address2": "270 London Rd, Royal Military Academy, Camberley GU15 3JP",
