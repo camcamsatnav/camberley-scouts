@@ -31,5 +31,5 @@ it('renders HomePageView correctly', () => {
   expect(screen.getAllByText('View').length).toEqual(3);
   expect(within(screen.getByTestId('beavers-card')).getByText('6-8 years')).toBeInTheDocument();
   expect(within(screen.getByTestId('cubs-card')).getByText('8-10½ years')).toBeInTheDocument();
-  expect(within(screen.getByTestId('scouts-card')).getByText('10½ -14 years')).toBeInTheDocument();
+  expect(within(screen.getByTestId('scouts-card')).getByText('10½-14 years')).toBeInTheDocument();
 });

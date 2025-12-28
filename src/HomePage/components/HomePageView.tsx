@@ -15,6 +15,8 @@ export const HomePageView = () => {
           <img
             src='/kayaks.png'
             alt='Children in kayaks'
+            width={608}
+            height={280}
             data-testid='intro-image'
           />
         </div>
@@ -45,21 +47,21 @@ export const HomePageView = () => {
         <Card className='home-page-card' data-testid='beavers-card'>
           <CardContent>
             <div className='card-header'>{t('home.cards.title')}</div>
-            <img className='card-image' src='/beavers.png' alt='beavers logo' />
+            <img className='card-image' src='/beavers.png' alt='beavers logo' width={200} height={75} />
             <div className='card-caption'>{t('home.cards.age.beavers')}</div>
           </CardContent>
         </Card>
         <Card className='home-page-card' data-testid='cubs-card'>
           <CardContent>
             <div className='card-header'>{t('home.cards.title')}</div>
-            <img className='card-image' src='/cubs.png' alt='cubs logo' />
+            <img className='card-image' src='/cubs.png' alt='cubs logo' width={200} height={75} />
             <div className='card-caption'>{t('home.cards.age.cubs')}</div>
           </CardContent>
         </Card>
         <Card className='home-page-card' data-testid='scouts-card'>
           <CardContent>
             <div className='card-header'>{t('home.cards.title')}</div>
-            <img className='card-image' src='/scouts.png' alt='scouts logo' />
+            <img className='card-image' src='/scouts.png' alt='scouts logo' width={200} height={75} />
             <div className='card-caption'>{t('home.cards.age.scouts')}</div>
           </CardContent>
         </Card>
