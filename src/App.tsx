@@ -1,25 +1,20 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Route, Routes } from 'react-router';
+import { Footer } from './common/components/Footer';
+import { Navbar } from './common/components/Navbar';
+import { NotFoundView } from './common/components/NotFoundView';
+import { HomePageView } from './HomePage/components/HomePageView';
 
 export const App = () => {
-  const [count, setCount] = useState(0);
-
-  const { t } = useTranslation();
-
   return (
-    <>
-      <h1>{t('title')}</h1>
-      <div className='card'>
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className='read-the-docs'>
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className='main-container' data-testid='main-container'>
+      <Navbar />
+      <main className='content' data-testid='content'>
+        <Routes>
+          <Route path='/' element={<HomePageView />} />
+          <Route path='*' element={<NotFoundView />} />
+        </Routes>
+      </main>
+      <Footer />
+    </div>
   );
 };
