@@ -37,7 +37,7 @@ export const Navbar = () => {
   return (
     <div className='navbar' data-testid='navbar'>
       <IconButton
-        aria-label='instagram'
+        aria-label='home'
         href='/'
         target='_self'
         rel='noopener noreferrer'

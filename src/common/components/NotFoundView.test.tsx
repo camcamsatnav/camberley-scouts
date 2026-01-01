@@ -7,5 +7,5 @@ it('should render NotFoundView correctly', () => {
 
   expect(screen.getByTestId('not-found-view')).toBeInTheDocument();
   expect(screen.getByText('Not Found')).toBeInTheDocument();
-  expect(screen.getByText('The requested page was not found.'));
+  expect(screen.getByText('The requested page was not found.')).toBeInTheDocument();
 });

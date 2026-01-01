@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router';
 import { Footer } from './common/components/Footer';
 import { Navbar } from './common/components/Navbar';
-import { NotFoundView } from './common/components/NotFoundView.tsx';
+import { NotFoundView } from './common/components/NotFoundView';
 import { HomePageView } from './HomePage/components/HomePageView';
 
 export const App = () => {
