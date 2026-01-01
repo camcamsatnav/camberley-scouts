@@ -6,7 +6,7 @@ it('should render Navbar correctly', () => {
   render(<Navbar />);
 
   expect(screen.getByTestId('navbar')).toBeInTheDocument();
-  expect(screen.getByTestId('navbar-icon')).toBeInTheDocument();
+  expect(screen.getByTestId('navbar-home')).toBeInTheDocument();
   expect(screen.getByText('Camberley 478 Scout Group')).toBeInTheDocument();
 
   expect(screen.getByTestId('navbar-socials')).toBeInTheDocument();
@@ -65,4 +65,3 @@ it('shows the correct options for each navigation button when clicked', async ()
     fireEvent.click(document.body);
   }
 });
-
