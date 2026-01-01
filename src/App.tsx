@@ -1,5 +1,7 @@
+import { Route, Routes } from 'react-router';
 import { Footer } from './common/components/Footer';
 import { Navbar } from './common/components/Navbar';
+import { NotFoundView } from './common/components/NotFoundView.tsx';
 import { HomePageView } from './HomePage/components/HomePageView';
 
 export const App = () => {
@@ -7,7 +9,10 @@ export const App = () => {
     <div className='main-container' data-testid='main-container'>
       <Navbar />
       <main className='content' data-testid='content'>
-        <HomePageView />
+        <Routes>
+          <Route path='/' element={<HomePageView />} />
+          <Route path='*' element={<NotFoundView />} />
+        </Routes>
       </main>
       <Footer />
     </div>

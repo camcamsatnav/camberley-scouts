@@ -36,7 +36,16 @@ export const Navbar = () => {
 
   return (
     <div className='navbar' data-testid='navbar'>
-      <AccountBalance className='navbar__icon' sx={{ fontSize: '2rem' }} data-testid='navbar-icon' />
+      <IconButton
+        aria-label='instagram'
+        href='/'
+        target='_self'
+        rel='noopener noreferrer'
+        sx={{ marginRight: 'var(--spacing-2)' }}
+        data-testid='navbar-home'
+      >
+        <AccountBalance sx={{ fontSize: '2rem', color: 'var(--mui-palette-common-white)' }} />
+      </IconButton>
       <span className='navbar__title'>{t('navbar.title')}</span>
 
       <div className='navbar__navigation' data-testid='navbar-navigation'>
