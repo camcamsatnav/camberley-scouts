@@ -1,5 +1,6 @@
 import { Button, Menu, MenuItem } from '@mui/material';
 import React, { useState } from 'react';
+import { Link } from 'react-router';
 
 import '../less/navigationButton.less';
 
@@ -52,8 +53,8 @@ export const NavigationButton = ({ title, options, testId }: NavigationButtonPro
         {options.map((option, index) => (
           <MenuItem
             key={`${option.label}-${index}`}
-            component='a'
-            href={option.url}
+            component={Link}
+            to={option.url}
             onClick={handleOnClose}
             data-testid={`${testId}-menu-item-${index}-container`}
           >

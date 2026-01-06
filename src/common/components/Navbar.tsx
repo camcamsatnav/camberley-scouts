@@ -3,6 +3,7 @@ import FacebookRounded from '@mui/icons-material/FacebookRounded';
 import Instagram from '@mui/icons-material/Instagram';
 import { IconButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 import { FACEBOOK_URL, INSTAGRAM_URL } from '../constants';
 import { NavigationButton } from './NavigationButton';
 
@@ -38,7 +39,8 @@ export const Navbar = () => {
     <div className='navbar' data-testid='navbar'>
       <IconButton
         aria-label='home'
-        href='/'
+        component={Link}
+        to='/'
         target='_self'
         rel='noopener noreferrer'
         sx={{ marginRight: 'var(--spacing-2)' }}

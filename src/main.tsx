@@ -12,6 +12,15 @@ const theme = createTheme({
   palette: {
     primary: { main: '#2A6432' },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+        },
+      },
+    },
+  },
 });
 
 createRoot(document.getElementById('root')!).render(
