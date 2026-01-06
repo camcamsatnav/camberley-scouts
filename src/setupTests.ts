@@ -37,3 +37,54 @@ vi.mock('react-i18next', () => {
     initReactI18next: {},
   };
 });
+
+type RouterLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+  to?: string | Record<string, unknown>;
+  children?: React.ReactNode;
+};
+
+vi.mock('react-router-dom', () => {
+  return {
+    BrowserRouter: ({ children }: { children?: React.ReactNode }) => children ?? null,
+    Routes: ({ children }: { children?: React.ReactNode }) => children ?? null,
+    Route: ({ element }: { element?: React.ReactNode }) => element ?? null,
+    Link: (props: RouterLinkProps) => {
+      const { to, children, ...rest } = props;
+      const href = typeof to === 'string' ? to : '';
+      return React.createElement('a', { href, ...rest }, children);
+    },
+    NavLink: (props: RouterLinkProps) => {
+      const { to, children, ...rest } = props;
+      const href = typeof to === 'string' ? to : '';
+      return React.createElement('a', { href, ...rest }, children);
+    },
+    useNavigate: () => () => {
+    },
+    useLocation: () => ({ pathname: '/', search: '', hash: '', state: null, key: 'test' }),
+    useParams: () => ({}),
+    useMatch: () => null,
+  };
+});
+
+vi.mock('react-router', () => {
+  return {
+    BrowserRouter: ({ children }: { children?: React.ReactNode }) => children ?? null,
+    Routes: ({ children }: { children?: React.ReactNode }) => children ?? null,
+    Route: ({ element }: { element?: React.ReactNode }) => element ?? null,
+    Link: (props: RouterLinkProps) => {
+      const { to, children, ...rest } = props;
+      const href = typeof to === 'string' ? to : '';
+      return React.createElement('a', { href, ...rest }, children);
+    },
+    NavLink: (props: RouterLinkProps) => {
+      const { to, children, ...rest } = props;
+      const href = typeof to === 'string' ? to : '';
+      return React.createElement('a', { href, ...rest }, children);
+    },
+    useNavigate: () => () => {
+    },
+    useLocation: () => ({ pathname: '/', search: '', hash: '', state: null, key: 'test' }),
+    useParams: () => ({}),
+    useMatch: () => null,
+  };
+});
