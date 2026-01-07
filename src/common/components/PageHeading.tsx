@@ -9,8 +9,11 @@ interface PageHeadingProps {
   title: string;
 }
 
+/**
+ * Contains the page title and breadcrumbs navigation. Uses react-router location to build the breadcrumbs with translations.
+ */
 export const PageHeading = ({ title }: PageHeadingProps) => {
-
+  // The keys used assume that the route paths are in kebab-case, all '-' will be replaced with '' to match the translation keys
   const { t } = useTranslation();
 
   const location = useLocation();
