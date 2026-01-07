@@ -27,11 +27,11 @@ export const Navbar = () => {
       { label: t('navbar.volunteers.volunteer'), url: '/volunteer' },
     ],
     about: [
-      { label: t('navbar.about.hut'), url: '/hut-renovation' },
-      { label: t('navbar.about.bookings'), url: '/bookings' },
-      { label: t('navbar.about.documentation'), url: '/documentation' },
-      { label: t('navbar.about.faq'), url: '/faq' },
-      { label: t('navbar.about.contact'), url: '/contact' },
+      { label: t('navbar.about.hut'), url: '/about-us/hut-renovation' },
+      { label: t('navbar.about.bookings'), url: '/about-us/bookings' },
+      { label: t('navbar.about.documentation'), url: '/about-us/documentation' },
+      { label: t('navbar.about.faq'), url: '/about-us/faq' },
+      { label: t('navbar.about.contact'), url: '/about-us/contact' },
     ],
   };
 
