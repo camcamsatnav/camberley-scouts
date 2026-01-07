@@ -3,6 +3,7 @@ import FacebookRounded from '@mui/icons-material/FacebookRounded';
 import Instagram from '@mui/icons-material/Instagram';
 import { IconButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 import { FACEBOOK_URL, INSTAGRAM_URL } from '../constants';
 import { NavigationButton } from './NavigationButton';
 
@@ -26,11 +27,11 @@ export const Navbar = () => {
       { label: t('navbar.volunteers.volunteer'), url: '/volunteer' },
     ],
     about: [
-      { label: t('navbar.about.hut'), url: '/hut-renovation' },
-      { label: t('navbar.about.bookings'), url: '/bookings' },
-      { label: t('navbar.about.documentation'), url: '/documentation' },
-      { label: t('navbar.about.faq'), url: '/faq' },
-      { label: t('navbar.about.contact'), url: '/contact' },
+      { label: t('navbar.about.hut'), url: '/about-us/hut-renovation' },
+      { label: t('navbar.about.bookings'), url: '/about-us/bookings' },
+      { label: t('navbar.about.documentation'), url: '/about-us/documentation' },
+      { label: t('navbar.about.faq'), url: '/about-us/faq' },
+      { label: t('navbar.about.contact'), url: '/about-us/contact' },
     ],
   };
 
@@ -38,7 +39,8 @@ export const Navbar = () => {
     <div className='navbar' data-testid='navbar'>
       <IconButton
         aria-label='home'
-        href='/'
+        component={Link}
+        to='/'
         target='_self'
         rel='noopener noreferrer'
         sx={{ marginRight: 'var(--spacing-2)' }}
