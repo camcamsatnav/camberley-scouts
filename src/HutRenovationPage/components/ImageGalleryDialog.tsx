@@ -2,7 +2,7 @@ import { Dialog, DialogContent, Fab, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { FileImage } from '../../common/types';
 
 import '../less/imageGalleryDialog.less';
@@ -17,6 +17,10 @@ export const ImageGalleryDialog = ({ open, setOpen, images }: ImageGalleryDialog
 
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const onClickNext = () => {
     if (currentImageIndex < images.length - 1) {
       setCurrentImageIndex(prev => prev + 1);
@@ -29,12 +33,58 @@ export const ImageGalleryDialog = ({ open, setOpen, images }: ImageGalleryDialog
     }
   };
 
+  /* allow navigation with left and right arrow keys */
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target) {
+        const tag = target.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || target.isContentEditable) {
+          return; // ignore typing
+        }
+      }
+
+      if (event.key === 'Escape') {
+        // Ensure the controlled dialog's close handler is called (use setOpen directly)
+        setOpen(false);
+        return;
+      }
+
+      if (event.key === 'ArrowRight') {
+        setCurrentImageIndex(prev => Math.min(prev + 1, images.length - 1));
+      } else if (event.key === 'ArrowLeft') {
+        setCurrentImageIndex(prev => Math.max(prev - 1, 0));
+      }
+    };
+
+    if (open) {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [open, images.length]);
+
+  /* Reset to first image when reopening the dialog */
+  useEffect(() => {
+    if (open) {
+      setCurrentImageIndex(0);
+    }
+  }, [open]);
+
   return (
-    <Dialog className='image-gallery-dialog' open={open} maxWidth='xl' fullWidth data-testid='image-gallery-dialog'>
+    <Dialog
+      className='image-gallery-dialog'
+      open={open}
+      onClose={handleClose}
+      maxWidth='xl'
+      fullWidth
+      data-testid='image-gallery-dialog'
+    >
       <IconButton
         aria-label='close'
         className='image-gallery-dialog__close-button'
-        onClick={() => setOpen(false)}
+        onClick={handleClose}
         data-testid='image-gallery-dialog-close-button'
       >
         <CloseIcon />

@@ -50,3 +50,32 @@ it('should handle image gallery correctly', async () => {
 
   await waitFor(() => expect(screen.queryByTestId('image-gallery-dialog')).not.toBeInTheDocument());
 });
+
+it('should go back to first image when reopening the gallery', async () => {
+  render(
+    <HutRenovationCard
+      title={'Example title'}
+      mainImagePath={'/example/image'}
+      description={'Example description'}
+      galleryImages={[{ src: '/example/image1', alt: 'image1' }, { src: '/example/image2', alt: 'image2' }]}
+    />,
+  );
+
+  // open image gallery
+  fireEvent.click(screen.getByTestId('hut-renovation-card-button'));
+
+  // go to next image
+  fireEvent.click(screen.getByTestId('image-gallery-dialog-next-button'));
+  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute('src', '/example/image2');
+  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute('alt', 'image2');
+
+  // close image gallery
+  fireEvent.click(screen.getByTestId('image-gallery-dialog-close-button'));
+
+  await waitFor(() => expect(screen.queryByTestId('image-gallery-dialog')).not.toBeInTheDocument());
+
+  // reopen image gallery
+  fireEvent.click(screen.getByTestId('hut-renovation-card-button'));
+  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute('src', '/example/image1');
+  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute('alt', 'image1');
+});
