@@ -23,7 +23,6 @@ export const App = () => {
           </Route>
           <Route path='/fundraising' element={<NotImplementedView />} />
           <Route path='/volunteer' element={<NotImplementedView />} />
-          <Route path='/volunteer' element={<NotImplementedView />} />
           <Route path='/shop' element={<NotImplementedView />} />
           <Route path='/beavers' element={<NotImplementedView />} />
           <Route path='/cubs' element={<NotImplementedView />} />

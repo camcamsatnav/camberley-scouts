@@ -63,7 +63,7 @@ export const ImageGalleryDialog = ({ open, setOpen, images }: ImageGalleryDialog
         window.removeEventListener('keydown', handleKeyDown);
       };
     }
-  }, [open, images.length]);
+  }, [open, images.length, setOpen]);
 
   /* Reset to first image when reopening the dialog */
   useEffect(() => {

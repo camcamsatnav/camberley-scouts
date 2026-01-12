@@ -8,7 +8,7 @@ export const NotImplementedView = () => {
 
   return (
     <PagePlaceholder
-      icon={<Agriculture sx={{ color: 'var(--purple);' }} />}
+      icon={<Agriculture sx={{ color: 'var(--purple)' }} />}
       mainText={t('notImplemented.title')}
       subText={t('notImplemented.body')}
     />

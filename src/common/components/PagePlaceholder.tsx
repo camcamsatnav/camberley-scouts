@@ -13,7 +13,7 @@ export const PagePlaceholder = ({ icon, mainText, subText }: PagePlaceholderProp
     <div className='page-placeholder' data-testid='page-placeholder'>
       <div className='page-placeholder__icon' data-testid='page-placeholder-icon'>{icon}</div>
       <div className='page-placeholder__text'>{mainText}</div>
-      {subText && <div className='page-placeholder__sub-text'>{subText}</div>}
+      {subText && <div className='page-placeholder__sub-text' data-testid='page-placeholder-subtext'>{subText}</div>}
     </div>
   );
 };

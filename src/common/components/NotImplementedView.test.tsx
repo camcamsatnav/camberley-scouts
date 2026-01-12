@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { NotImplementedView } from './NotImplementedView';
 
-it('should render NotFoundView correctly', () => {
+it('should render NotImplementedView correctly', () => {
   render(<NotImplementedView />);
 
   expect(screen.getByTestId('page-placeholder')).toBeInTheDocument();
