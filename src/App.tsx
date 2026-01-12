@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router';
 import { Footer } from './common/components/Footer';
 import { Navbar } from './common/components/Navbar';
 import { NotFoundView } from './common/components/NotFoundView';
+import { NotImplementedView } from './common/components/NotImplementedView';
 import { HomePageView } from './HomePage/components/HomePageView';
 import { HutRenovationPage } from './HutRenovationPage/components/HutRenovationPage';
 
@@ -13,8 +14,20 @@ export const App = () => {
         <Routes>
           <Route path='/' element={<HomePageView />} />
           <Route path='/about-us'>
-            <Route path='/about-us/hut-renovation' element={<HutRenovationPage />} />
+            <Route index element={<NotImplementedView />} />
+            <Route path='hut-renovation' element={<HutRenovationPage />} />
+            <Route path='bookings' element={<NotImplementedView />} />
+            <Route path='documentation' element={<NotImplementedView />} />
+            <Route path='faq' element={<NotImplementedView />} />
+            <Route path='contact' element={<NotImplementedView />} />
           </Route>
+          <Route path='/fundraising' element={<NotImplementedView />} />
+          <Route path='/volunteer' element={<NotImplementedView />} />
+          <Route path='/volunteer' element={<NotImplementedView />} />
+          <Route path='/shop' element={<NotImplementedView />} />
+          <Route path='/beavers' element={<NotImplementedView />} />
+          <Route path='/cubs' element={<NotImplementedView />} />
+          <Route path='/scouts' element={<NotImplementedView />} />
           <Route path='*' element={<NotFoundView />} />
         </Routes>
       </main>

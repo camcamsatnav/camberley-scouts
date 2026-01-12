@@ -81,7 +81,11 @@
     "hutrenovation": "Hut renovation"
   },
   "notFound": {
-    "title": "Not Found",
-    "body": "The requested page was not found."
+    "title": "Oops...",
+    "body": "We cannot find this page. Please check URL and try again."
+  },
+  "notImplemented": {
+    "title": "No content yet",
+    "body": "This page will come soon..."
   }
 }
