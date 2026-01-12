@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, IconButton } from '@mui/material';
+import { Dialog, DialogContent, Fab, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
@@ -39,24 +39,26 @@ export const ImageGalleryDialog = ({ open, setOpen, images }: ImageGalleryDialog
       >
         <CloseIcon />
       </IconButton>
-      <IconButton
+      <Fab
+        color='primary'
         aria-label='previous'
-        className='image-gallery-dialog__nav-button prev'
-        onClick={onClickPrev}
         disabled={currentImageIndex === 0}
+        onClick={onClickPrev}
+        className='image-gallery-dialog__nav-button prev'
         data-testid='image-gallery-dialog-prev-button'
       >
         <KeyboardArrowLeft />
-      </IconButton>
-      <IconButton
+      </Fab>
+      <Fab
+        color='primary'
         aria-label='next'
-        className='image-gallery-dialog__nav-button next'
-        onClick={onClickNext}
         disabled={currentImageIndex === images.length - 1}
+        onClick={onClickNext}
+        className='image-gallery-dialog__nav-button next'
         data-testid='image-gallery-dialog-next-button'
       >
         <KeyboardArrowRight />
-      </IconButton>
+      </Fab>
       <DialogContent className='image-gallery-dialog__content'>
         <img
           src={images[currentImageIndex].src}
