@@ -10,7 +10,7 @@ import './index.less';
 const theme = createTheme({
   cssVariables: true,
   palette: {
-    primary: { main: '#2A6432' },
+    primary: { main: '#2A6432' }, // --green
   },
   components: {
     MuiButton: {
