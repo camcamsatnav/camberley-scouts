@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { PageHeading } from '../../common/components/PageHeading';
 import {
-  IMPROVEMENTS_CARD_IMAGE_PATH,
-  PROGRESS_CARD_IMAGE_PATH,
+  IMPROVEMENTS_CARD_IMAGE_PATH, IMPROVEMENTS_CARD_IMAGES,
+  PROGRESS_CARD_IMAGE_PATH, PROGRESS_CARD_IMAGES,
   RENOVATED_HUT_IMAGE_PATH,
-  REOPENING_CARD_IMAGE_PATH,
+  REOPENING_CARD_IMAGE_PATH, REOPENING_CARD_IMAGES,
 } from '../constants';
 import { HutRenovationCard } from './HutRenovationCard';
 
@@ -36,16 +36,19 @@ export const HutRenovationPage = () => {
           title={t('aboutUs.hutRenovation.card1.title')}
           mainImagePath={REOPENING_CARD_IMAGE_PATH}
           description={t('aboutUs.hutRenovation.card1.description')}
+          galleryImages={REOPENING_CARD_IMAGES}
         />
         <HutRenovationCard
           title={t('aboutUs.hutRenovation.card2.title')}
           mainImagePath={PROGRESS_CARD_IMAGE_PATH}
           description={t('aboutUs.hutRenovation.card2.description')}
+          galleryImages={PROGRESS_CARD_IMAGES}
         />
         <HutRenovationCard
           title={t('aboutUs.hutRenovation.card3.title')}
           mainImagePath={IMPROVEMENTS_CARD_IMAGE_PATH}
           description={improvementsList()}
+          galleryImages={IMPROVEMENTS_CARD_IMAGES}
         />
       </div>
     </div>
