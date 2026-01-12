@@ -1,0 +1,54 @@
+.image-gallery-dialog {
+  .MuiDialog-paper {
+    overflow: visible;
+    position: relative;
+  }
+
+  &__close-button {
+    position: absolute !important;
+    top: 4px;
+    right: 4px;
+  }
+
+  &__content {
+    /* padding to allow enough space for the close button */
+    padding: 42px !important;
+
+    > img {
+      width: 100%;
+    }
+  }
+
+  &__nav-button {
+    position: absolute !important;
+    top: 50%;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+
+    /* vertical centering */
+    transform: translateY(-50%);
+
+    &.prev {
+      left: -28px;
+      color: var(--mui-palette-common-white);
+      background-color: var(--green);
+
+      &.Mui-disabled {
+        color: var(--mui-palette-common-white);
+        background-color: #B1C5BE;
+      }
+    }
+
+    &.next {
+      right: -28px;
+      color: var(--mui-palette-common-white);
+      background-color: var(--green);
+
+      &.Mui-disabled {
+        color: var(--mui-palette-common-white);
+        background-color: #B1C5BE;
+      }
+    }
+  }
+}
