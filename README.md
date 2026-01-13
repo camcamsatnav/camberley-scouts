@@ -32,10 +32,12 @@ To build and run the website using Docker:
 1. Build the Docker image:
    ```bash
    docker build -t camberley-scouts .
+   docker build -t camberley-scouts-backend -f ./backend/Dockerfile ./backend
    ```
 2. Run the Docker container:
 3. ```bash
    docker run -d -p 8080:80 camberley-scouts
+   docker run -d -p 3000:3000 camberley-scouts-backend
 
 ## Docker compose
 
