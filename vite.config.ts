@@ -15,7 +15,6 @@ export default defineConfig({
         '**/*.less',
         'vite-env.d.ts',
         'src/setupTests.ts',
-        'pomodoro-app',
       ],
     },
     typecheck: {

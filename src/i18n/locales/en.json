@@ -49,13 +49,43 @@
       }
     }
   },
+  "aboutUs": {
+    "hutRenovation": {
+      "title": "Hut renovation",
+      "description": "The scout hut has been given a new lease of life",
+      "card1": {
+        "title": "Grand reopening",
+        "description": "On the 27th September 2025, we were proud to have our grand reopening. Our refurbished scout hut was officially opened by Surrey Heath Mayor – Mrs Louise Ashbery."
+      },
+      "card2": {
+        "title": "Progress",
+        "description": "The whole process took about xx months. We started with ....  scaffolding up to build new roof.... till outside repainting"
+      },
+      "card3": {
+        "title": "Improvements",
+        "list1": "The space has been increased by 25%",
+        "list2": "A new leader’s room has been created",
+        "list3": "New roof, new flooring and new boiler",
+        "list4": "A new kitchen with new appliances",
+        "list5": "A redecorated hall, much more inviting"
+      }
+    }
+  },
   "footer": {
     "address1": "Scout Hall",
     "address2": "270 London Rd, Royal Military Academy, Camberley GU15 3JP",
     "charity": "Registered Charity Number: 1212891"
   },
+  "routes": {
+    "aboutus": "About us",
+    "hutrenovation": "Hut renovation"
+  },
   "notFound": {
-    "title": "Not Found",
-    "body": "The requested page was not found."
+    "title": "Oops...",
+    "body": "We cannot find this page. Please check URL and try again."
+  },
+  "notImplemented": {
+    "title": "No content yet",
+    "body": "This page will come soon..."
   }
 }
