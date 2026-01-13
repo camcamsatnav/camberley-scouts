@@ -29,8 +29,8 @@ export const App = () => {
           <Route path='/scouts' element={<NotImplementedView />} />
           <Route path='*' element={<NotFoundView />} />
         </Routes>
-        <Footer />
       </main>
+      <Footer />
     </div>
   );
 };

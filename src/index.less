@@ -40,8 +40,6 @@
   --spacing-13: calc(var(--mui-spacing, 8px) * 13);
   --spacing-14: calc(var(--mui-spacing, 8px) * 14);
   --spacing-15: calc(var(--mui-spacing, 8px) * 15);
-
-  --navbar-height: 72px;
 }
 
 *,
@@ -62,14 +60,11 @@ body {
 .main-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .content {
   display: flex;
   flex-direction: column;
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  flex: 1 0 auto;
 }
