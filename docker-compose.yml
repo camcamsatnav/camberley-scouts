@@ -1,7 +1,14 @@
 services:
   app:
-    image: ghcr.io/camcamsatnav/camberley-scouts:dev
-    container_name: camberley-scouts-dev
+    image: ghcr.io/camcamsatnav/camberley-scouts-frontend:latest
+    container_name: camberley-scouts-frontend
     restart: always
     ports:
       - "8080:80"
+
+  backend:
+    image: ghcr.io/camcamsatnav/camberley-scouts-backend:latest
+    container_name: camberley-scouts-backend
+    restart: always
+    ports:
+      - "3000:3000"
