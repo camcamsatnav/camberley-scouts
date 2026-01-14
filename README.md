@@ -25,6 +25,22 @@ This repository contains the source code for the Camberley Scout Group website.
    npm run test
    ```
 
+## Running backend
+
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the backend server:
+   ```bash
+    npm run dev
+    ```
+4. The backend server will be running at `http://localhost:3000`.
+
 ## Docker
 
 To build and run the website using Docker:
