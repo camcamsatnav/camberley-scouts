@@ -11,7 +11,7 @@ describe('POST /v1/email', () => {
     app.use('/email', emailRouter);
   });
 
-  it('should reate limit after 3 requests', async () => {
+  it('should rate limit after 3 requests', async () => {
     await request(app).post('/email').expect(200);
     await request(app).post('/email').expect(200);
     await request(app).post('/email').expect(200);
