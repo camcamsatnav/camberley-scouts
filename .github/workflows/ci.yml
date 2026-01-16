@@ -51,7 +51,7 @@ jobs:
         run: cd backend && npm ci
 
       - name: Run tests
-        run: npm run test
+        run: cd backend && npm run test
 
       - name: Run build
-        run: npm run build
+        run: cd backend && npm run build
