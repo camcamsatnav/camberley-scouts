@@ -6,6 +6,7 @@ import cors, { CorsOptions } from 'cors';
 const app = express();
 
 const allowedOrigins = ['https://scouts.camcam.dev'];
+// eslint-disable-next-line no-undef
 if (process.env.NODE_ENV !== 'production') {
   allowedOrigins.push('http://localhost:8080');
   allowedOrigins.push('http://localhost:5173');
