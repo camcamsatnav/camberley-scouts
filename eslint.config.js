@@ -25,9 +25,6 @@ export default defineConfig([
       'react-hooks': reactHooks,
       'typescript-eslint': tseslint,
     },
-    env: {
-      node: true,
-    },
     'rules': {
       'semi': ['error', 'always'],
       'space-in-brackets': 'off',
