@@ -8,6 +8,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
+    exclude: ['backend/**', 'node_modules/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
@@ -15,6 +16,7 @@ export default defineConfig({
         '**/*.less',
         'vite-env.d.ts',
         'src/setupTests.ts',
+        'backend/**',
       ],
     },
     typecheck: {
