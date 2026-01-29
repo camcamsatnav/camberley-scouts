@@ -15,9 +15,9 @@ export const Navbar = () => {
 
   const options = {
     join: [
-      { label: t('navbar.join.beavers'), url: '/beavers' },
-      { label: t('navbar.join.cubs'), url: '/cubs' },
-      { label: t('navbar.join.scouts'), url: '/scouts' },
+      { label: t('navbar.join.beavers'), url: '/join/beavers' },
+      { label: t('navbar.join.cubs'), url: '/join/cubs' },
+      { label: t('navbar.join.scouts'), url: '/join/scouts' },
     ],
     parents: [
       { label: t('navbar.parents.shop'), url: '/shop' },

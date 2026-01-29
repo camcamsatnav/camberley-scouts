@@ -5,6 +5,7 @@ import { NotFoundView } from './common/components/NotFoundView';
 import { NotImplementedView } from './common/components/NotImplementedView';
 import { HomePageView } from './HomePage/components/HomePageView';
 import { HutRenovationPage } from './HutRenovationPage/components/HutRenovationPage';
+import { JoinBeaversPage } from './joinBeaversPage/components/JoinBeaversPage';
 
 export const App = () => {
   return (
@@ -24,9 +25,12 @@ export const App = () => {
           <Route path='/fundraising' element={<NotImplementedView />} />
           <Route path='/volunteer' element={<NotImplementedView />} />
           <Route path='/shop' element={<NotImplementedView />} />
-          <Route path='/beavers' element={<NotImplementedView />} />
-          <Route path='/cubs' element={<NotImplementedView />} />
-          <Route path='/scouts' element={<NotImplementedView />} />
+          <Route path='/join'>
+            <Route index element={<NotImplementedView />} />
+            <Route path='beavers' element={<JoinBeaversPage />} />
+            <Route path='cubs' element={<NotImplementedView />} />
+            <Route path='scouts' element={<NotImplementedView />} />
+          </Route>
           <Route path='*' element={<NotFoundView />} />
         </Routes>
       </main>
