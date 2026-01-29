@@ -71,6 +71,11 @@
       }
     }
   },
+  "join": {
+    "beavers": {
+      "title": "Beavers"
+    }
+  },
   "footer": {
     "address1": "Scout Hall",
     "address2": "270 London Rd, Royal Military Academy, Camberley GU15 3JP",
@@ -78,7 +83,9 @@
   },
   "routes": {
     "aboutus": "About us",
-    "hutrenovation": "Hut renovation"
+    "hutrenovation": "Hut renovation",
+    "join": "Join",
+    "beavers": "Beavers"
   },
   "notFound": {
     "title": "Oops...",
