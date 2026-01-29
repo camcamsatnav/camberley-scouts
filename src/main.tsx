@@ -11,6 +11,7 @@ const theme = createTheme({
   cssVariables: true,
   palette: {
     primary: { main: '#2A6432' }, // --green
+    secondary: { main: '#7C3DEF' }, // --purple
   },
   components: {
     MuiButton: {
