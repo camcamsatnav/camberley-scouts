@@ -25,9 +25,9 @@ export const App = () => {
           <Route path='/fundraising' element={<NotImplementedView />} />
           <Route path='/volunteer' element={<NotImplementedView />} />
           <Route path='/shop' element={<NotImplementedView />} />
-          <Route path='beavers' element={<JoinBeaversPage />} />
-          <Route path='cubs' element={<NotImplementedView />} />
-          <Route path='scouts' element={<NotImplementedView />} />
+          <Route path='/beavers' element={<JoinBeaversPage />} />
+          <Route path='/cubs' element={<NotImplementedView />} />
+          <Route path='/scouts' element={<NotImplementedView />} />
           <Route path='*' element={<NotFoundView />} />
         </Routes>
       </main>
