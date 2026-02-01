@@ -1,4 +1,4 @@
-FROM node:25.2.1 AS builder
+FROM node:25.5.0 AS builder
 
 WORKDIR /build
 
@@ -11,7 +11,7 @@ COPY src ./src
 
 RUN npm run build
 
-FROM node:25.2.1-alpine
+FROM node:25.5.0-alpine
 
 WORKDIR /app
 

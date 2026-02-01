@@ -1,4 +1,4 @@
-FROM node:22 AS builder
+FROM node:25.5.0 AS builder
 
 WORKDIR /build
 
@@ -10,7 +10,7 @@ COPY . .
 
 RUN npm run build
 
-FROM nginx:1.25-alpine
+FROM nginx:1.29.4-alpine
 
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
