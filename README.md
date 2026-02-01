@@ -4,23 +4,26 @@ This repository contains the source code for the Camberley Scout Group website.
 
 ## Development
 
-1. Clone the repository:
+1. Prerequisites:
+    - Node.js (v25.5.0 currently)
+
+2. Clone the repository:
    ```bash
    git clone https://github.com/camcamsatnav/camberley-scouts.git
    cd camberley-scouts
     ```
-2. Install dependencies:
+3. Install dependencies:
    ```bash
    npm install
    ```
 
-3. Start the development server:
+4. Start the development server:
    ```bash
     npm run dev
     ```
-4. Open your browser and navigate to `http://localhost:5173` to view the website.
+5. Open your browser and navigate to `http://localhost:5173` to view the website.
 
-5. Run tests:
+6. Run tests:
    ```bash
    npm run test
    ```
