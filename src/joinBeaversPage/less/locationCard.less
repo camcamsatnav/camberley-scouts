@@ -1,0 +1,42 @@
+.location-card {
+  width: 384px;
+
+  &__header {
+    border-bottom: 1px solid var(--purple);
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+
+  &-title {
+    color: var(--color-neutral-700);
+    font: var(--mui-font-h6);
+    margin-bottom: var(--spacing-1);
+  }
+
+  &-body {
+    color: var(--color-neutral-700);
+    font: var(--mui-font-body1);
+  }
+
+  &-link {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--spacing-1);
+    margin-top: var(--spacing-1);
+    color: var(--color-blue-800);
+
+    &__icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    &__text {
+      font: var(--mui-font-body2);
+    }
+  }
+}
