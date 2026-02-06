@@ -7,4 +7,6 @@ it('should render JoinBeaversPage correctly', () => {
 
   expect(screen.getByTestId('join-beavers-page')).toBeInTheDocument();
   expect(screen.getByTestId('page-heading')).toBeInTheDocument();
+
+  expect(screen.getAllByTestId('location-card')).toHaveLength(2);
 });

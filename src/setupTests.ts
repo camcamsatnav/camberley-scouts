@@ -14,6 +14,15 @@ const resolveKey = (key: string) => {
 
 const translate = (key: string, opts?: Record<string, unknown>) => {
   let value = resolveKey(key);
+  // If the caller explicitly requested objects back from i18next, return the raw value (array/object) when available.
+  if (opts && typeof opts === 'object' && Object.prototype.hasOwnProperty.call(
+    opts,
+    'returnObjects',
+  ) && (opts as Record<string, unknown>).returnObjects) {
+    // If value is undefined, fall back to the key string for compatibility.
+    return value ?? key;
+  }
+
   if (opts && typeof opts === 'object') {
     value = String(value).replace(
       /{{\s*(\w+)\s*}}/g,

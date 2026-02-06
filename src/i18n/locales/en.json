@@ -1,4 +1,8 @@
 {
+  "common": {
+    "yes": "Yes",
+    "no": "No"
+  },
   "navbar": {
     "title": "Camberley 478 Scout Group",
     "join": {
@@ -72,8 +76,34 @@
     }
   },
   "join": {
+    "common": {
+      "schedule": "Day and time",
+      "location": "Location",
+      "maps": "Find us on Google maps",
+      "spaces": "Spaces available?"
+    },
     "beavers": {
-      "title": "Beavers"
+      "title": "Beavers",
+      "location1": {
+        "title": "St Mary's",
+        "sessionTimes": "Friday 6:00 - 7:15 PM",
+        "addressLines": [
+          "St Mary's Church",
+          "Park Road",
+          "Camberley",
+          "GU15 2SR"
+        ]
+      },
+      "location2": {
+        "title": "St Martin's",
+        "sessionTimes": "Thursday 4:45 - 6:00 PM",
+        "addressLines": [
+          "St Martin's Church",
+          "231 Upper College Ride",
+          "Camberley",
+          "GU15 4HE"
+        ]
+      }
     }
   },
   "footer": {
