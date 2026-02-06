@@ -46,6 +46,7 @@ export const LocationCard = ({
             target='_blank'
             rel='noopener noreferrer'
             data-testid='location-card-link'
+            aria-label={`${t('join.common.maps')} (opens in new tab)`}
           >
             <OpenInNew className='location-card-link__icon' />
             <div className='location-card-link__text'>{t('join.common.maps')}</div>

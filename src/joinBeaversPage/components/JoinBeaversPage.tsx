@@ -12,8 +12,8 @@ export const JoinBeaversPage = () => {
   return (
     <div className='join-beavers-page' data-testid='join-beavers-page'>
       <PageHeading title={t('join.beavers.title')} />
-      <div className='join-beavers-page-top'>
-        <div className='join-beavers-page-top__cards'>
+      <div className='join-beavers-page__top'>
+        <div className='join-beavers-page__top__cards'>
           <LocationCard {...BEAVERS_LOCATION_ONE} />
           <LocationCard {...BEAVERS_LOCATION_TWO} />
         </div>
