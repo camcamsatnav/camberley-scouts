@@ -1,5 +1,8 @@
-import { Button, Card, CardContent } from '@mui/material';
+import { Button, Card, CardActionArea, CardContent, CardHeader, CardMedia } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
+import { ROUTES } from '../../common/constants';
+import { BEAVERS_IMAGE_PATH, CUBS_IMAGE_PATH, HOME_PAGE_IMAGE_PATH, SCOUTS_IMAGE_PATH } from '../constants';
 
 import '../less/homePageView.less';
 
@@ -7,13 +10,14 @@ export const HomePageView = () => {
 
   const { t } = useTranslation();
 
+  const descriptionLines = t('home.intro.description', { returnObjects: true }) as string[];
+
   return (
     <div className='home-page' data-testid='home-page'>
       <div className='home-page__top-section'>
-
-        <div className='home-page__kayak'>
+        <div className='home-page__top-section__kayak'>
           <img
-            src='/homePage/kayaks.png'
+            src={HOME_PAGE_IMAGE_PATH}
             alt='Children in kayaks'
             width={608}
             height={280}
@@ -21,9 +25,9 @@ export const HomePageView = () => {
           />
         </div>
         <div className='home-page__intro' data-testid='intro-text'>
-          <div className='line-1'>{t('home.welcome.title')}</div>
-          <div className='line-2'>{t('home.welcome.subtitle')}</div>
-          <div className='buttons'>
+          <div className='home-page__intro__title'>{t('home.welcome.title')}</div>
+          <div className='home-page__intro__subtitle'>{t('home.welcome.subtitle')}</div>
+          <div className='home-page__intro__buttons'>
             <Button color='primary' variant='contained' size='large' data-testid='join-button'>
               {t('home.buttons.join')}
             </Button>
@@ -35,35 +39,39 @@ export const HomePageView = () => {
       </div>
       <div className='home-page__bottom-section'>
         <Card className='home-page-card' data-testid='intro-card'>
-          <CardContent>
-            <div className='card-header'>{t('home.intro.title')}</div>
-            <div className='card-body'>
-              <div className='card-text'>{t('home.intro.line1')}</div>
-              <div className='card-text'>{t('home.intro.line2')}</div>
-              <div className='card-text'>{t('home.intro.line3')}</div>
-            </div>
+          <CardHeader title={t('home.intro.title')} />
+          <CardContent className='home-page-card__text-content'>
+            {descriptionLines.map((line, i) => (
+              <div key={`description-line-${i}`}>{line}</div>
+            ))}
           </CardContent>
         </Card>
         <Card className='home-page-card' data-testid='beavers-card'>
-          <CardContent>
-            <div className='card-header'>{t('home.cards.title')}</div>
-            <img className='card-image' src='/homePage/beavers.png' alt='beavers logo' width={200} height={75} />
-            <div className='card-caption'>{t('home.cards.age.beavers')}</div>
-          </CardContent>
+          <CardActionArea component={Link} to={ROUTES.JOIN.BEAVERS}>
+            <CardHeader title={t('home.cards.title')} />
+            <CardContent className='home-page-card__content'>
+              <CardMedia component='img' image={BEAVERS_IMAGE_PATH} />
+              {t('home.cards.age.beavers')}
+            </CardContent>
+          </CardActionArea>
         </Card>
         <Card className='home-page-card' data-testid='cubs-card'>
-          <CardContent>
-            <div className='card-header'>{t('home.cards.title')}</div>
-            <img className='card-image' src='/homePage/cubs.png' alt='cubs logo' width={200} height={75} />
-            <div className='card-caption'>{t('home.cards.age.cubs')}</div>
-          </CardContent>
+          <CardActionArea component={Link} to={ROUTES.JOIN.CUBS}>
+            <CardHeader title={t('home.cards.title')} />
+            <CardContent className='home-page-card__content'>
+              <CardMedia component='img' image={CUBS_IMAGE_PATH} />
+              {t('home.cards.age.cubs')}
+            </CardContent>
+          </CardActionArea>
         </Card>
         <Card className='home-page-card' data-testid='scouts-card'>
-          <CardContent>
-            <div className='card-header'>{t('home.cards.title')}</div>
-            <img className='card-image' src='/homePage/scouts.png' alt='scouts logo' width={200} height={75} />
-            <div className='card-caption'>{t('home.cards.age.scouts')}</div>
-          </CardContent>
+          <CardActionArea component={Link} to={ROUTES.JOIN.SCOUTS}>
+            <CardHeader title={t('home.cards.title')} />
+            <CardContent className='home-page-card__content'>
+              <CardMedia component='img' image={SCOUTS_IMAGE_PATH} />
+              {t('home.cards.age.scouts')}
+            </CardContent>
+          </CardActionArea>
         </Card>
       </div>
     </div>

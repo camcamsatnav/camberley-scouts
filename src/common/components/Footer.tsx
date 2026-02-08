@@ -8,7 +8,7 @@ export const Footer = () => {
   const { t } = useTranslation();
 
   return (
-    <div className='footer' data-testid='footer'>
+    <footer className='footer' data-testid='footer'>
       <ScoutsStackIcon />
       <span className='footer__address' data-testid='footer-address'>
         <div>{t('footer.address1')}</div>
@@ -17,6 +17,6 @@ export const Footer = () => {
       <span className='footer__charity' data-testid='footer-charity'>
         {t('footer.charity')}
       </span>
-    </div>
+    </footer>
   );
 };

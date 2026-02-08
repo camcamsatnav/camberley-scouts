@@ -40,9 +40,11 @@
     },
     "intro": {
       "title": "Our group",
-      "line1": "We currently have: 2 Beaver colonies, 1 Cub pack and 1 Scout troop.",
-      "line2": "Camberley 478 Scout Group was formed after the original groups in Camberley (4th, 7th and 8th) were at risk of closure.",
-      "line3": "The group has now grown significantly since 2022 and our numbers are increasing further."
+      "description": [
+        "We currently have: 2 Beaver colonies, 1 Cub pack and 1 Scout troop.",
+        "Camberley 478 Scout Group was formed after the original groups in Camberley (4th, 7th and 8th) were at risk of closure.",
+        "The group has now grown significantly since 2022 and our numbers are increasing further."
+      ]
     },
     "cards": {
       "title": "View",
@@ -67,11 +69,13 @@
       },
       "card3": {
         "title": "Improvements",
-        "list1": "The space has been increased by 25%",
-        "list2": "A new leader’s room has been created",
-        "list3": "New roof, new flooring and new boiler",
-        "list4": "A new kitchen with new appliances",
-        "list5": "A redecorated hall, much more inviting"
+        "description": [
+          "The space has been increased by 25%",
+          "A new leader’s room has been created",
+          "New roof, new flooring and new boiler",
+          "A new kitchen with new appliances",
+          "A redecorated hall, much more inviting"
+        ]
       }
     }
   },

@@ -14,13 +14,13 @@ export const HutRenovationPage = () => {
 
   const { t } = useTranslation();
 
+  const improvementLines = t('aboutUs.hutRenovation.card3.description', { returnObjects: true }) as string[];
+
   const improvementsList = () => (
     <ul>
-      <li>{t('aboutUs.hutRenovation.card3.list1')}</li>
-      <li>{t('aboutUs.hutRenovation.card3.list2')}</li>
-      <li>{t('aboutUs.hutRenovation.card3.list3')}</li>
-      <li>{t('aboutUs.hutRenovation.card3.list4')}</li>
-      <li>{t('aboutUs.hutRenovation.card3.list5')}</li>
+      {improvementLines.map((line, i) => (
+        <li key={`improvement-line-${i}`}>{line}</li>
+      ))}
     </ul>
   );
 
