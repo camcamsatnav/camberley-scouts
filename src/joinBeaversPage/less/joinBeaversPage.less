@@ -1,16 +1,44 @@
 .join-beavers-page {
-  &__top {
+  &__content {
     display: flex;
-    flex-direction: row;
-    margin-top: 16px;
-    margin-left: 122px;
-    margin-right: 122px;
-    gap: 80px;
+    flex-direction: column;
+    margin: var(--spacing-2) 122px 54px;
+    gap: var(--spacing-6);
 
     &__cards {
       display: flex;
       flex-direction: row;
       gap: 60px;
+    }
+
+    &__information {
+      display: flex;
+      flex-direction: row;
+      gap: var(--spacing-6);
+      align-items: center;
+
+      &__list {
+        display: flex;
+        flex-direction: column;
+        color: var(--purple-alt);
+        gap: var(--spacing-2);
+        flex: 1 1 33.3333%;
+        max-width: 33.3333%;
+      }
+
+      &__card {
+        flex: 2 1 66.6666%;
+        max-width: 66.6666%;
+
+        &__header {
+          border-bottom: 1px solid var(--purple);
+        }
+
+        &__content {
+          color: var(--color-neutral-700);
+          font: var(--mui-font-body1);
+        }
+      }
     }
   }
 }
