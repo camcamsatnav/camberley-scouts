@@ -9,4 +9,8 @@ it('should render JoinBeaversPage correctly', () => {
   expect(screen.getByTestId('page-heading')).toBeInTheDocument();
 
   expect(screen.getAllByTestId('location-card')).toHaveLength(2);
+
+  expect(screen.getByTestId('beavers-info')).toBeInTheDocument();
+  expect(screen.getByTestId('beavers-info-list')).toBeInTheDocument();
+  expect(screen.getByTestId('beavers-info-card')).toBeInTheDocument();
 });

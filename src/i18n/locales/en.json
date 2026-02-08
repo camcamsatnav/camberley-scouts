@@ -107,6 +107,20 @@
           "Camberley",
           "GU15 4HE"
         ]
+      },
+      "info": {
+        "line1": "We have a team of dedicated leaders who plan and run an amazing programme every term",
+        "line2": "We will go to as many events as we can possibly fit in",
+        "activities": {
+          "title": "Activities",
+          "items": [
+            "District events",
+            "Hikes",
+            "Learning life skills",
+            "A sleepover with another local group every year",
+            "Guest speakers"
+          ]
+        }
       }
     }
   },
