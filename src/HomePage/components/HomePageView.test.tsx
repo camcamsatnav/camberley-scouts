@@ -33,3 +33,33 @@ it('renders HomePageView correctly', () => {
   expect(within(screen.getByTestId('cubs-card')).getByText('8-10½ years')).toBeInTheDocument();
   expect(within(screen.getByTestId('scouts-card')).getByText('10½-14 years')).toBeInTheDocument();
 });
+
+it('should redirect when clicking on the beavers card', () => {
+  render(<HomePageView />);
+
+  const beaversCard = screen.getByTestId('beavers-card');
+  expect(beaversCard).toBeInTheDocument();
+
+  const link = within(beaversCard).getByRole('link');
+  expect(link).toHaveAttribute('href', '/beavers');
+});
+
+it('should redirect when clicking on the cubs card', () => {
+  render(<HomePageView />);
+
+  const cubsCard = screen.getByTestId('cubs-card');
+  expect(cubsCard).toBeInTheDocument();
+
+  const link = within(cubsCard).getByRole('link');
+  expect(link).toHaveAttribute('href', '/cubs');
+});
+
+it('should redirect when clicking on the scouts card', () => {
+  render(<HomePageView />);
+
+  const scoutsCard = screen.getByTestId('scouts-card');
+  expect(scoutsCard).toBeInTheDocument();
+
+  const link = within(scoutsCard).getByRole('link');
+  expect(link).toHaveAttribute('href', '/scouts');
+});

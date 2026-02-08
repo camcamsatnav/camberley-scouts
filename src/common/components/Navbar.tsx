@@ -4,7 +4,7 @@ import Instagram from '@mui/icons-material/Instagram';
 import { IconButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { FACEBOOK_URL, INSTAGRAM_URL } from '../constants';
+import { FACEBOOK_URL, INSTAGRAM_URL, ROUTES } from '../constants';
 import { NavigationButton } from './NavigationButton';
 
 import '../less/navbar.less';
@@ -15,32 +15,32 @@ export const Navbar = () => {
 
   const options = {
     join: [
-      { label: t('navbar.join.beavers'), url: '/beavers' },
-      { label: t('navbar.join.cubs'), url: '/cubs' },
-      { label: t('navbar.join.scouts'), url: '/scouts' },
+      { label: t('navbar.join.beavers'), url: ROUTES.JOIN.BEAVERS },
+      { label: t('navbar.join.cubs'), url: ROUTES.JOIN.CUBS },
+      { label: t('navbar.join.scouts'), url: ROUTES.JOIN.SCOUTS },
     ],
     parents: [
-      { label: t('navbar.parents.shop'), url: '/shop' },
+      { label: t('navbar.parents.shop'), url: ROUTES.PARENTS.SHOP },
     ],
     volunteers: [
-      { label: t('navbar.volunteers.fundraising'), url: '/fundraising' },
-      { label: t('navbar.volunteers.volunteer'), url: '/volunteer' },
+      { label: t('navbar.volunteers.fundraising'), url: ROUTES.VOLUNTEERS.FUNDRAISING },
+      { label: t('navbar.volunteers.volunteer'), url: ROUTES.VOLUNTEERS.VOLUNTEER },
     ],
     about: [
-      { label: t('navbar.about.hut'), url: '/about-us/hut-renovation' },
-      { label: t('navbar.about.bookings'), url: '/about-us/bookings' },
-      { label: t('navbar.about.documentation'), url: '/about-us/documentation' },
-      { label: t('navbar.about.faq'), url: '/about-us/faq' },
-      { label: t('navbar.about.contact'), url: '/about-us/contact' },
+      { label: t('navbar.about.hut'), url: ROUTES.ABOUT.HUT_RENOVATION },
+      { label: t('navbar.about.bookings'), url: ROUTES.ABOUT.BOOKINGS },
+      { label: t('navbar.about.documentation'), url: ROUTES.ABOUT.DOCUMENTATION },
+      { label: t('navbar.about.faq'), url: ROUTES.ABOUT.FAQ },
+      { label: t('navbar.about.contact'), url: ROUTES.ABOUT.CONTACT },
     ],
   };
 
   return (
-    <div className='navbar' data-testid='navbar'>
+    <nav className='navbar' data-testid='navbar'>
       <IconButton
         aria-label='home'
         component={Link}
-        to='/'
+        to={ROUTES.HOME}
         target='_self'
         rel='noopener noreferrer'
         sx={{ marginRight: 'var(--spacing-2)' }}
@@ -77,6 +77,6 @@ export const Navbar = () => {
           <Instagram sx={{ color: 'var(--mui-palette-common-white)' }} />
         </IconButton>
       </div>
-    </div>
+    </nav>
   );
 };
