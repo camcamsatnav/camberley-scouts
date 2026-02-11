@@ -105,6 +105,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-dev-server
+      cancel-in-progress: false
 
     steps:
       - name: Deploy to dev server
@@ -115,6 +118,9 @@ jobs:
           key: ${{ secrets.DEV_SERVER_SSH_KEY }}
           port: ${{ secrets.DEV_SERVER_PORT }}
           script: |
-            cd camberley-scouts
+            set -euo pipefail
+            cd ~/camberley-scouts || { echo "Error: ~/camberley-scouts directory not found"; exit 1; }
+            echo "Deploying to $(pwd)"
             sudo docker compose pull
             sudo docker compose up -d
+            echo "Deployment completed successfully"
