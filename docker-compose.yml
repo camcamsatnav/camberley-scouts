@@ -5,6 +5,12 @@ services:
     restart: always
     ports:
       - "8080:80"
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:80/" ]
+      interval: 30s
+      timeout: 3s
+      start_period: 5s
+      retries: 3
 
   backend:
     image: ghcr.io/camcamsatnav/camberley-scouts-backend:latest
@@ -12,3 +18,9 @@ services:
     restart: always
     ports:
       - "3000:3000"
+    healthcheck:
+      test: [ "CMD", "sh", "-c", "curl -fsS --max-time 5 http://127.0.0.1:3000/v1/health || exit 1" ]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
