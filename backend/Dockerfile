@@ -29,6 +29,6 @@ USER node
 
 EXPOSE 3000
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 CMD ["sh","-c","curl -fsS --max-time 5 http://127.0.0.1:3000/api/v1/health || exit 1"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 CMD ["sh","-c","curl -fsS --max-time 5 http://127.0.0.1:3000/v1/health || exit 1"]
 
 ENTRYPOINT ["node", "dist/bundle.js"]
