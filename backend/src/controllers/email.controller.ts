@@ -5,6 +5,9 @@ export const emailController = {
   sendEmail: async (req: Request, res: Response): Promise<void> => {
     try {
       const emailData: SendEmailRequest = req.body;
+      // TODO: revisit, probably wont be all the parameters, will probably need to switch between templates/emails depending on frontend selection
+
+      console.info('sendEmail ->'); // TODO: put info here, jsut not determined what yet
 
       const result = await emailService.sendEmail(emailData);
 
