@@ -1,7 +1,10 @@
+import { transporter } from '../config/email.config';
+
 export interface SendEmailRequest {
-  to?: string;
-  subject?: string;
-  body?: string;
+  from: string;
+  to: string;
+  subject: string;
+  body: string;
 }
 
 export interface SendEmailResponse {
@@ -11,11 +14,25 @@ export interface SendEmailResponse {
 
 export const emailService = {
   sendEmail: async (data: SendEmailRequest): Promise<SendEmailResponse> => {
-    // TODO: Implement actual email sending logic
-    console.log('Email sending logic would be here', data);
+    try {
+      await transporter.sendMail({
+        from: data.from,
+        to: data.to,
+        subject: data.subject,
+        html: data.body,
+      });
 
-    return {
-      success: true,
-    };
+      console.debug(`Email sent to ${data.to} with subject "${data.subject}"`);
+
+      return {
+        success: true,
+      };
+    } catch (error) {
+      console.error('Error sending email:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to send email',
+      };
+    }
   },
 };
