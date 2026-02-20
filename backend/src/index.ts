@@ -1,11 +1,10 @@
 import express from 'express';
-import emailRouter from './routes/email';
-import healthRouter from './routes/health';
+import routes from './routes';
 import cors, { CorsOptions } from 'cors';
 
 const app = express();
 
-const allowedOrigins = ['https://scouts.camcam.dev'];
+const allowedOrigins = ['https://scouts.camcam.dev', 'localhost'];
 // eslint-disable-next-line no-undef
 if (process.env.NODE_ENV !== 'production') {
   allowedOrigins.push('http://localhost:8080');
@@ -25,8 +24,7 @@ const corsOptions: CorsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use('/v1/health', healthRouter);
-app.use('/v1/email', emailRouter);
+app.use('/v1', routes);
 
 const PORT = 3000;
 
