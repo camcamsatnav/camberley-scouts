@@ -1,13 +1,13 @@
 export interface HealthStatus {
   status: string;
-  timestamp: string;
+  timestamp: Date;
 }
 
 export const healthService = {
   checkHealth: (): HealthStatus => {
     return {
       status: 'OK',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date(),
     };
   },
 };
