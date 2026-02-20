@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import request from 'supertest';
 import emailRouter from './email';
 
-describe('POST /v1/email', () => {
+describe('POST /email', () => {
   let app: express.Express;
 
   beforeEach(() => {
