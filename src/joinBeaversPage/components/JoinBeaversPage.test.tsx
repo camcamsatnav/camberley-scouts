@@ -11,9 +11,11 @@ it('should render JoinBeaversPage correctly', () => {
 
   expect(screen.getByText('We have 2 Beaver Colonies')).toBeInTheDocument();
 
-  expect(screen.getByTestId('beavers-logo-image')).toBe('IMG');
+  expect(screen.getByTestId('beavers-logo-image')).toHaveAttribute('src', BEAVERS_IMAGE_PATH);
 
-  expect(screen.getByTestId('beavers-page-join-button')).toBeInTheDocument();
+  expect(screen.getByText('6-8 years')).toBeInTheDocument();
+
+  expect(screen.getByTestId('beavers-join-button')).toBeInTheDocument();
 
   expect(screen.getAllByTestId('location-card')).toHaveLength(2);
 

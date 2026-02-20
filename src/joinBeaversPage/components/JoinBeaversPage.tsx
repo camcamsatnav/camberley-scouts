@@ -19,29 +19,29 @@ export const JoinBeaversPage = () => {
       <div className='join-beavers-page__content'>
         <div className='join-beavers-page__content__top'>
           <div className='join-beavers-page__content__top__info'>
-            <p className='join-beavers-page__join__intro'>We have 2 Beaver Colonies</p>
-            <div className='join-beavers-page__join__logo'>
-              <img 
+            <p className='join-beavers-page__content__top__info__text'>{t('join.beavers.intro.title')}</p>
+            <div className='join-beavers-page__content__top__info__logo'>
+              <img
                 src={BEAVERS_IMAGE_PATH}
                 alt='Beavers logo and age range'
                 width={200}
                 height={75}
                 data-testid='beavers-logo-image'
               />
-              <p className='join-beavers-page__join__age'>6-8 years</p>
+              <p className='join-beavers-page__content__top__info__logo__age'>{t('join.beavers.intro.age')}</p>
             </div>
-            <div className='join-beavers-page__join__button'>
+            <div className='join-beavers-page__content__top__info__button'>
               <Button
                 color='secondary'
                 variant='contained'
                 size='large'
-                data-testid='beavers-page-join-button'
+                data-testid='beavers-join-button'
               >
                 {t('home.buttons.join')}
               </Button>
             </div>
           </div>
-          <div className='join-beavers-page__content__cards'>
+          <div className='join-beavers-page__content__top__cards'>
             <LocationCard {...BEAVERS_LOCATION_ONE} />
             <LocationCard {...BEAVERS_LOCATION_TWO} />
           </div>

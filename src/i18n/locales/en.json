@@ -88,6 +88,10 @@
     },
     "beavers": {
       "title": "Beavers",
+      "intro": {
+        "title": "We have 2 Beaver Colonies",
+        "age": "6-8 years"
+      },
       "location1": {
         "title": "St Mary's",
         "sessionTimes": "Friday 6:00 - 7:15 PM",
