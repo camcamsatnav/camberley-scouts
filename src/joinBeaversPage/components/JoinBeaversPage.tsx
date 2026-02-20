@@ -2,10 +2,10 @@ import { Button, Card, CardContent, CardHeader } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { PageHeading } from '../../common/components/PageHeading';
 import { BEAVERS_LOCATION_ONE, BEAVERS_LOCATION_TWO } from '../constants';
+import { BEAVERS_IMAGE_PATH } from '../../HomePage/constants';
 import { LocationCard } from './LocationCard';
 
 import '../less/joinBeaversPage.less';
-import { BEAVERS_IMAGE_PATH } from '../../HomePage/constants.ts';
 
 export const JoinBeaversPage = () => {
 
@@ -18,9 +18,9 @@ export const JoinBeaversPage = () => {
       <PageHeading title={t('join.beavers.title')} />
       <div className='join-beavers-page__content'>
         <div className='join-beavers-page__content__top'>
-          <div className='join-beavers-page__join__button'>
+          <div className='join-beavers-page__content__top__info'>
             <p className='join-beavers-page__join__intro'>We have 2 Beaver Colonies</p>
-            <div className='join-beavers-page__beavers__logo'>
+            <div className='join-beavers-page__join__logo'>
               <img 
                 src={BEAVERS_IMAGE_PATH}
                 alt='Beavers logo and age range'
@@ -28,17 +28,18 @@ export const JoinBeaversPage = () => {
                 height={75}
                 data-testid='beavers-logo-image'
               />
-              <p className='join-beavers-page__beavers__age'>6-8 years</p>
+              <p className='join-beavers-page__join__age'>6-8 years</p>
             </div>
-            <Button
-              className='join-beavers-page__join__cta'
-              color='primary'
-              variant='contained'
-              size='large'
-              data-testid='join-button'
-            >
-              {t('home.buttons.join')}
-            </Button>
+            <div className='join-beavers-page__join__button'>
+              <Button
+                color='secondary'
+                variant='contained'
+                size='large'
+                data-testid='beavers-page-join-button'
+              >
+                {t('home.buttons.join')}
+              </Button>
+            </div>
           </div>
           <div className='join-beavers-page__content__cards'>
             <LocationCard {...BEAVERS_LOCATION_ONE} />
