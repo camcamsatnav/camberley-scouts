@@ -2,7 +2,7 @@ import { transporter } from '../config/email.config';
 
 export interface SendEmailRequest {
   from: string;
-  to: string;
+  to: string[];
   subject: string;
   body: string;
 }
@@ -13,6 +13,7 @@ export interface SendEmailResponse {
 }
 
 export const emailService = {
+  /* Send emails to people */
   sendEmail: async (data: SendEmailRequest): Promise<SendEmailResponse> => {
     try {
       await transporter.sendMail({
