@@ -2,13 +2,13 @@
 import { ValidatedEmailRequest } from '../validators/email.validator';
 import { emailService, SendEmailResponse } from './email.service';
 
-const EMAIL_MAPPING = {
+const getEmailMapping = () => ({
   BEAVERS: process.env.BEAVERS_EMAILS?.split(','),
   CUBS: process.env.CUBS_EMAILS?.split(','),
   SCOUTS: process.env.SCOUTS_EMAILS?.split(','),
   VOLUNTEER: process.env.VOLUNTEER_EMAILS?.split(','),
   GENERAL: process.env.GENERAL_EMAILS?.split(','),
-};
+});
 
 export interface ContactResponse {
   success: boolean;
@@ -18,7 +18,8 @@ export interface ContactResponse {
 export const contactService = {
   /* Send emails to required recipients and send a copy to original sender if needed */
   contact: async (request: ValidatedEmailRequest): Promise<ContactResponse> => {
-    const recipients = EMAIL_MAPPING[request.recipientType];
+    const emailMapping = getEmailMapping();
+    const recipients = emailMapping[request.recipientType];
 
     if (!recipients) {
       const error = `Invalid recipient type: ${request.recipientType}`;

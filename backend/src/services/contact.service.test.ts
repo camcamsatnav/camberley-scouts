@@ -11,6 +11,11 @@ vi.mock('./email.service', () => ({
 describe('contactService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.stubEnv('BEAVERS_EMAILS', 'beavers@test.com,general@test.com');
+    vi.stubEnv('CUBS_EMAILS', 'cubs@test.com,general@test.com');
+    vi.stubEnv('SCOUTS_EMAILS', 'scouts@test.com,general@test.com');
+    vi.stubEnv('VOLUNTEER_EMAILS', 'general@test.com');
+    vi.stubEnv('GENERAL_EMAILS', 'general@test.com');
   });
 
   const validRequest = {
@@ -30,7 +35,7 @@ describe('contactService', () => {
         expect(result).toEqual({ success: true });
         expect(emailService.sendEmail).toHaveBeenCalledWith({
           from: 'sender@example.com',
-          to: ['beavers@478.com', 'general@478.com'],
+          to: ['beavers@test.com', 'general@test.com'],
           subject: 'Contact Form Submission - BEAVERS',
           body: 'Test message body',
         });
@@ -47,7 +52,7 @@ describe('contactService', () => {
         expect(result).toEqual({ success: true });
         expect(emailService.sendEmail).toHaveBeenCalledWith({
           from: 'sender@example.com',
-          to: ['cubs@478.com', 'general@478.com'],
+          to: ['cubs@test.com', 'general@test.com'],
           subject: 'Contact Form Submission - CUBS',
           body: 'Test message body',
         });
@@ -64,7 +69,7 @@ describe('contactService', () => {
         expect(result).toEqual({ success: true });
         expect(emailService.sendEmail).toHaveBeenCalledWith({
           from: 'sender@example.com',
-          to: ['scouts@478.com', 'general@478.com'],
+          to: ['scouts@test.com', 'general@test.com'],
           subject: 'Contact Form Submission - SCOUTS',
           body: 'Test message body',
         });
@@ -81,7 +86,7 @@ describe('contactService', () => {
         expect(result).toEqual({ success: true });
         expect(emailService.sendEmail).toHaveBeenCalledWith({
           from: 'sender@example.com',
-          to: ['general@478.com'],
+          to: ['general@test.com'],
           subject: 'Contact Form Submission - VOLUNTEER',
           body: 'Test message body',
         });
@@ -98,7 +103,7 @@ describe('contactService', () => {
         expect(result).toEqual({ success: true });
         expect(emailService.sendEmail).toHaveBeenCalledWith({
           from: 'sender@example.com',
-          to: ['general@478.com'],
+          to: ['general@test.com'],
           subject: 'Contact Form Submission - GENERAL',
           body: 'Test message body',
         });
@@ -120,7 +125,7 @@ describe('contactService', () => {
         // First call: main email
         expect(emailService.sendEmail).toHaveBeenNthCalledWith(1, {
           from: 'sender@example.com',
-          to: ['beavers@478.com', 'general@478.com'],
+          to: ['beavers@test.com', 'general@test.com'],
           subject: 'Contact Form Submission - BEAVERS',
           body: 'Test message body',
         });
@@ -201,7 +206,7 @@ describe('contactService', () => {
         expect(emailService.sendEmail).toHaveBeenCalledTimes(1);
       });
 
-      it('should return error for invalid recipient type', async () => {
+      it('should return error for undefined recipients', async () => {
         const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {
         });
 
