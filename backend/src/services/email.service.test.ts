@@ -14,7 +14,7 @@ describe('emailService', () => {
   });
 
   const validEmailData = {
-    from: 'sender@example.com',
+    from: { name: 'Sender Name', address: 'sender@example.com' },
     to: ['recipient@example.com'],
     subject: 'Test Subject',
     body: '<p>Test body content</p>',
@@ -36,10 +36,11 @@ describe('emailService', () => {
         await emailService.sendEmail(validEmailData);
 
         expect(transporter.sendMail).toHaveBeenCalledWith({
-          from: 'sender@example.com',
+          from: { name: 'Sender Name', address: 'sender@example.com' },
           to: ['recipient@example.com'],
           subject: 'Test Subject',
           html: '<p>Test body content</p>',
+          replyTo: undefined,
         });
       });
 
@@ -57,6 +58,24 @@ describe('emailService', () => {
         expect(transporter.sendMail).toHaveBeenCalledWith(
           expect.objectContaining({
             to: ['recipient1@example.com', 'recipient2@example.com', 'recipient3@example.com'],
+          }),
+        );
+      });
+
+      it('should include replyTo header when provided', async () => {
+        vi.mocked(transporter.sendMail).mockResolvedValue({} as never);
+
+        const dataWithReplyTo = {
+          ...validEmailData,
+          replyTo: 'replyto@example.com',
+        };
+
+        const result = await emailService.sendEmail(dataWithReplyTo);
+
+        expect(result).toEqual({ success: true });
+        expect(transporter.sendMail).toHaveBeenCalledWith(
+          expect.objectContaining({
+            replyTo: 'replyto@example.com',
           }),
         );
       });

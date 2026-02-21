@@ -1,10 +1,16 @@
 import { transporter } from '../config/email.config';
 
+export interface FromAddress {
+  name: string;
+  address: string;
+}
+
 export interface SendEmailRequest {
-  from: string;
+  from: string | FromAddress;
   to: string[];
   subject: string;
   body: string;
+  replyTo?: string;
 }
 
 export interface SendEmailResponse {
@@ -21,6 +27,7 @@ export const emailService = {
         to: data.to,
         subject: data.subject,
         html: data.body,
+        replyTo: data.replyTo,
       });
 
       console.debug(`Email sent to ${data.to} with subject "${data.subject}"`);

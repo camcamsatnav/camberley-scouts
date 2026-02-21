@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+import sanitizeHtml from 'sanitize-html';
 import { ValidatedEmailRequest } from '../validators/email.validator';
 import { emailService, SendEmailResponse } from './email.service';
 
@@ -10,6 +11,10 @@ const getEmailMapping = () => ({
   GENERAL: process.env.GENERAL_EMAILS?.split(','),
 });
 
+const getFromAddress = (): string => {
+  return process.env.SMTP_USER || 'noreply@example.com';
+};
+
 export interface ContactResponse {
   success: boolean;
   error?: string;
@@ -20,6 +25,7 @@ export const contactService = {
   contact: async (request: ValidatedEmailRequest): Promise<ContactResponse> => {
     const emailMapping = getEmailMapping();
     const recipients = emailMapping[request.recipientType];
+    const fromAddress = getFromAddress();
 
     if (!recipients) {
       const error = `Invalid recipient type: ${request.recipientType}`;
@@ -29,10 +35,11 @@ export const contactService = {
 
     // send to recipients
     const result: SendEmailResponse = await emailService.sendEmail({
-      from: request.senderEmail,
+      from: { name: 'Camberley Scouts', address: fromAddress },
       to: recipients,
       subject: `Contact Form Submission - ${request.recipientType}`,
-      body: request.body,
+      body: sanitizeHtml(request.body),
+      replyTo: request.senderEmail,
     });
 
     if (!result.success) {
@@ -41,11 +48,19 @@ export const contactService = {
 
     // send copy to sender if requested
     if (request.sendCopy) {
+      const copyBody = `
+        <p><strong>This is a copy of the message you submitted via our contact form.</strong></p>
+        <hr>
+        <p><strong>Sent to:</strong> ${request.recipientType}</p>
+        <hr>
+        ${sanitizeHtml(request.body)}
+      `;
+
       const copyResult = await emailService.sendEmail({
-        from: request.senderEmail,
+        from: { name: 'Camberley Scouts', address: fromAddress },
         to: [request.senderEmail],
         subject: `Copy: Contact Form Submission - ${request.recipientType}`,
-        body: request.body,
+        body: copyBody,
       });
 
       if (!copyResult.success) {

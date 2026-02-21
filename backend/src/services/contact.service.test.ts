@@ -16,6 +16,7 @@ describe('contactService', () => {
     vi.stubEnv('SCOUTS_EMAILS', 'scouts@test.com,general@test.com');
     vi.stubEnv('VOLUNTEER_EMAILS', 'general@test.com');
     vi.stubEnv('GENERAL_EMAILS', 'general@test.com');
+    vi.stubEnv('SMTP_USER', 'noreply@scouts.test');
   });
 
   const validRequest = {
@@ -34,10 +35,11 @@ describe('contactService', () => {
 
         expect(result).toEqual({ success: true });
         expect(emailService.sendEmail).toHaveBeenCalledWith({
-          from: 'sender@example.com',
+          from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
           to: ['beavers@test.com', 'general@test.com'],
           subject: 'Contact Form Submission - BEAVERS',
           body: 'Test message body',
+          replyTo: 'sender@example.com',
         });
       });
 
@@ -51,10 +53,11 @@ describe('contactService', () => {
 
         expect(result).toEqual({ success: true });
         expect(emailService.sendEmail).toHaveBeenCalledWith({
-          from: 'sender@example.com',
+          from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
           to: ['cubs@test.com', 'general@test.com'],
           subject: 'Contact Form Submission - CUBS',
           body: 'Test message body',
+          replyTo: 'sender@example.com',
         });
       });
 
@@ -68,10 +71,11 @@ describe('contactService', () => {
 
         expect(result).toEqual({ success: true });
         expect(emailService.sendEmail).toHaveBeenCalledWith({
-          from: 'sender@example.com',
+          from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
           to: ['scouts@test.com', 'general@test.com'],
           subject: 'Contact Form Submission - SCOUTS',
           body: 'Test message body',
+          replyTo: 'sender@example.com',
         });
       });
 
@@ -85,10 +89,11 @@ describe('contactService', () => {
 
         expect(result).toEqual({ success: true });
         expect(emailService.sendEmail).toHaveBeenCalledWith({
-          from: 'sender@example.com',
+          from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
           to: ['general@test.com'],
           subject: 'Contact Form Submission - VOLUNTEER',
           body: 'Test message body',
+          replyTo: 'sender@example.com',
         });
       });
 
@@ -102,10 +107,11 @@ describe('contactService', () => {
 
         expect(result).toEqual({ success: true });
         expect(emailService.sendEmail).toHaveBeenCalledWith({
-          from: 'sender@example.com',
+          from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
           to: ['general@test.com'],
           subject: 'Contact Form Submission - GENERAL',
           body: 'Test message body',
+          replyTo: 'sender@example.com',
         });
       });
     });
@@ -124,18 +130,19 @@ describe('contactService', () => {
 
         // First call: main email
         expect(emailService.sendEmail).toHaveBeenNthCalledWith(1, {
-          from: 'sender@example.com',
+          from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
           to: ['beavers@test.com', 'general@test.com'],
           subject: 'Contact Form Submission - BEAVERS',
           body: 'Test message body',
+          replyTo: 'sender@example.com',
         });
 
         // Second call: copy to sender
         expect(emailService.sendEmail).toHaveBeenNthCalledWith(2, {
-          from: 'sender@example.com',
+          from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
           to: ['sender@example.com'],
           subject: 'Copy: Contact Form Submission - BEAVERS',
-          body: 'Test message body',
+          body: expect.stringContaining('This is a copy of the message you submitted via our contact form'),
         });
       });
 
@@ -228,7 +235,7 @@ describe('contactService', () => {
     });
 
     describe('email content', () => {
-      it('should include sender email in from field', async () => {
+      it('should use SMTP_USER as from address and sender email as replyTo', async () => {
         vi.mocked(emailService.sendEmail).mockResolvedValue({ success: true });
 
         await contactService.contact({
@@ -238,7 +245,8 @@ describe('contactService', () => {
 
         expect(emailService.sendEmail).toHaveBeenCalledWith(
           expect.objectContaining({
-            from: 'custom@sender.com',
+            from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
+            replyTo: 'custom@sender.com',
           }),
         );
       });
