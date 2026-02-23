@@ -3,6 +3,7 @@ import { Footer } from './common/components/Footer';
 import { Navbar } from './common/components/Navbar';
 import { NotFoundView } from './common/components/NotFoundView';
 import { NotImplementedView } from './common/components/NotImplementedView';
+import { ContactPageView } from './contactPage/components/ContactPageView';
 import { HomePageView } from './HomePage/components/HomePageView';
 import { HutRenovationPage } from './HutRenovationPage/components/HutRenovationPage';
 import { JoinBeaversPage } from './joinBeaversPage/components/JoinBeaversPage';
@@ -20,7 +21,7 @@ export const App = () => {
             <Route path='bookings' element={<NotImplementedView />} />
             <Route path='documentation' element={<NotImplementedView />} />
             <Route path='faq' element={<NotImplementedView />} />
-            <Route path='contact' element={<NotImplementedView />} />
+            <Route path='contact' element={<ContactPageView />} />
           </Route>
           <Route path='/fundraising' element={<NotImplementedView />} />
           <Route path='/volunteer' element={<NotImplementedView />} />
