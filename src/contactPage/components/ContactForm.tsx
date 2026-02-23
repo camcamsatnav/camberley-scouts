@@ -20,11 +20,14 @@ import { RecipientTypes, UK_PHONE_REGEX } from '../constants';
 import '../less/contactForm.less';
 
 const createSchema = (t: TFunction) => z.object({
-  name: z.string().min(1, t('aboutUs.contact.form.name.required')),
+  name: z.string().min(1, t('aboutUs.contact.form.name.required')).max(100, t('aboutUs.contact.form.name.maxLength')),
   email: z.email(t('aboutUs.contact.form.email.invalid')),
   phone: z.string().regex(UK_PHONE_REGEX, t('aboutUs.contact.form.phone.invalid')).or(z.literal('')).optional(),
   query: z.string().min(1, t('aboutUs.contact.form.query.required')),
-  message: z.string().min(1, t('aboutUs.contact.form.message.required')),
+  message: z.string().min(1, t('aboutUs.contact.form.message.required')).max(
+    2000,
+    t('aboutUs.contact.form.message.maxLength'),
+  ),
   sendCopy: z.boolean().optional(),
 });
 

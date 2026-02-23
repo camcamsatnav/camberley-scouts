@@ -192,6 +192,52 @@ it('should toggle the send copy checkbox', async () => {
   expect(checkbox).not.toBeChecked();
 });
 
+it('should show error when name exceeds 100 characters', async () => {
+  render(<ContactForm />);
+
+  await userEvent.type(getNameInput(), 'a'.repeat(101));
+  fireEvent.click(getSubmitButton());
+
+  expect(await screen.findByText('Name must be less than 100 characters')).toBeInTheDocument();
+});
+
+it('should not show error when name is exactly 100 characters', async () => {
+  render(<ContactForm />);
+
+  await userEvent.type(getNameInput(), 'a'.repeat(100));
+  await userEvent.type(getEmailInput(), 'jane@example.com');
+  await userEvent.type(getMessageInput(), 'Hello');
+  fireEvent.click(getSubmitButton());
+
+  await waitFor(() => {
+    expect(screen.queryByText('Name must be less than 100 characters')).not.toBeInTheDocument();
+  });
+});
+
+it('should show error when message exceeds 2000 characters', async () => {
+  render(<ContactForm />);
+
+  await userEvent.type(getNameInput(), 'Jane Smith');
+  await userEvent.type(getEmailInput(), 'jane@example.com');
+  await userEvent.type(getMessageInput(), 'a'.repeat(2001));
+  fireEvent.click(getSubmitButton());
+
+  expect(await screen.findByText('Message must be less than 2000 characters')).toBeInTheDocument();
+});
+
+it('should not show error when message is exactly 2000 characters', async () => {
+  render(<ContactForm />);
+
+  await userEvent.type(getNameInput(), 'Jane Smith');
+  await userEvent.type(getEmailInput(), 'jane@example.com');
+  await userEvent.type(getMessageInput(), 'a'.repeat(2000));
+  fireEvent.click(getSubmitButton());
+
+  await waitFor(() => {
+    expect(screen.queryByText('Message must be less than 2000 characters')).not.toBeInTheDocument();
+  });
+});
+
 it('should reset the send copy checkbox to unchecked on reset', async () => {
   render(<ContactForm />);
 

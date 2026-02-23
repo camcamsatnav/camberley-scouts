@@ -89,7 +89,8 @@
         "name": {
           "label": "Name",
           "placeholder": "e.g. Jane Smith",
-          "required": "Please enter your name"
+          "required": "Please enter your name",
+          "maxLength": "Name must be less than 100 characters"
         },
         "email": {
           "label": "Email",
@@ -113,7 +114,8 @@
         "message": {
           "label": "Message",
           "placeholder": "How can we help you?",
-          "required": "Please enter a message"
+          "required": "Please enter a message",
+          "maxLength": "Message must be less than 2000 characters"
         },
         "copy": {
           "label": "Send me a copy of this message"

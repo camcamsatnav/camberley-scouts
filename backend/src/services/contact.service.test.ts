@@ -21,7 +21,9 @@ describe('contactService', () => {
 
   const validRequest = {
     recipientType: 'BEAVERS' as const,
+    name: 'Jane Smith',
     senderEmail: 'sender@example.com',
+    phone: '07700 900123',
     body: 'Test message body',
     sendCopy: false,
   };
@@ -34,13 +36,14 @@ describe('contactService', () => {
         const result = await contactService.contact(validRequest);
 
         expect(result).toEqual({ success: true });
-        expect(emailService.sendEmail).toHaveBeenCalledWith({
-          from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
-          to: ['beavers@test.com', 'general@test.com'],
-          subject: 'Contact Form Submission - BEAVERS',
-          body: 'Test message body',
-          replyTo: 'sender@example.com',
-        });
+        expect(emailService.sendEmail).toHaveBeenCalledWith(
+          expect.objectContaining({
+            from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
+            to: ['beavers@test.com', 'general@test.com'],
+            subject: 'Contact Form Submission - BEAVERS',
+            replyTo: 'sender@example.com',
+          }),
+        );
       });
 
       it('should send email to correct recipients for CUBS', async () => {
@@ -52,13 +55,14 @@ describe('contactService', () => {
         });
 
         expect(result).toEqual({ success: true });
-        expect(emailService.sendEmail).toHaveBeenCalledWith({
-          from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
-          to: ['cubs@test.com', 'general@test.com'],
-          subject: 'Contact Form Submission - CUBS',
-          body: 'Test message body',
-          replyTo: 'sender@example.com',
-        });
+        expect(emailService.sendEmail).toHaveBeenCalledWith(
+          expect.objectContaining({
+            from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
+            to: ['cubs@test.com', 'general@test.com'],
+            subject: 'Contact Form Submission - CUBS',
+            replyTo: 'sender@example.com',
+          }),
+        );
       });
 
       it('should send email to correct recipients for SCOUTS', async () => {
@@ -70,13 +74,14 @@ describe('contactService', () => {
         });
 
         expect(result).toEqual({ success: true });
-        expect(emailService.sendEmail).toHaveBeenCalledWith({
-          from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
-          to: ['scouts@test.com', 'general@test.com'],
-          subject: 'Contact Form Submission - SCOUTS',
-          body: 'Test message body',
-          replyTo: 'sender@example.com',
-        });
+        expect(emailService.sendEmail).toHaveBeenCalledWith(
+          expect.objectContaining({
+            from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
+            to: ['scouts@test.com', 'general@test.com'],
+            subject: 'Contact Form Submission - SCOUTS',
+            replyTo: 'sender@example.com',
+          }),
+        );
       });
 
       it('should send email to correct recipients for VOLUNTEER', async () => {
@@ -88,13 +93,14 @@ describe('contactService', () => {
         });
 
         expect(result).toEqual({ success: true });
-        expect(emailService.sendEmail).toHaveBeenCalledWith({
-          from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
-          to: ['general@test.com'],
-          subject: 'Contact Form Submission - VOLUNTEER',
-          body: 'Test message body',
-          replyTo: 'sender@example.com',
-        });
+        expect(emailService.sendEmail).toHaveBeenCalledWith(
+          expect.objectContaining({
+            from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
+            to: ['general@test.com'],
+            subject: 'Contact Form Submission - VOLUNTEER',
+            replyTo: 'sender@example.com',
+          }),
+        );
       });
 
       it('should send email to correct recipients for GENERAL', async () => {
@@ -106,13 +112,14 @@ describe('contactService', () => {
         });
 
         expect(result).toEqual({ success: true });
-        expect(emailService.sendEmail).toHaveBeenCalledWith({
-          from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
-          to: ['general@test.com'],
-          subject: 'Contact Form Submission - GENERAL',
-          body: 'Test message body',
-          replyTo: 'sender@example.com',
-        });
+        expect(emailService.sendEmail).toHaveBeenCalledWith(
+          expect.objectContaining({
+            from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
+            to: ['general@test.com'],
+            subject: 'Contact Form Submission - GENERAL',
+            replyTo: 'sender@example.com',
+          }),
+        );
       });
     });
 
@@ -129,13 +136,15 @@ describe('contactService', () => {
         expect(emailService.sendEmail).toHaveBeenCalledTimes(2);
 
         // First call: main email
-        expect(emailService.sendEmail).toHaveBeenNthCalledWith(1, {
-          from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
-          to: ['beavers@test.com', 'general@test.com'],
-          subject: 'Contact Form Submission - BEAVERS',
-          body: 'Test message body',
-          replyTo: 'sender@example.com',
-        });
+        expect(emailService.sendEmail).toHaveBeenNthCalledWith(
+          1,
+          expect.objectContaining({
+            from: { name: 'Camberley Scouts', address: 'noreply@scouts.test' },
+            to: ['beavers@test.com', 'general@test.com'],
+            subject: 'Contact Form Submission - BEAVERS',
+            replyTo: 'sender@example.com',
+          }),
+        );
 
         // Second call: copy to sender
         expect(emailService.sendEmail).toHaveBeenNthCalledWith(2, {
@@ -251,17 +260,62 @@ describe('contactService', () => {
         );
       });
 
-      it('should include message body in email body', async () => {
+      it('should include name in email body', async () => {
         vi.mocked(emailService.sendEmail).mockResolvedValue({ success: true });
 
-        await contactService.contact({
-          ...validRequest,
-          body: 'Custom message content',
-        });
+        await contactService.contact({ ...validRequest, name: 'Jane Smith' });
 
         expect(emailService.sendEmail).toHaveBeenCalledWith(
           expect.objectContaining({
-            body: 'Custom message content',
+            body: expect.stringContaining('Jane Smith'),
+          }),
+        );
+      });
+
+      it('should include sender email in email body', async () => {
+        vi.mocked(emailService.sendEmail).mockResolvedValue({ success: true });
+
+        await contactService.contact({ ...validRequest, senderEmail: 'jane@example.com' });
+
+        expect(emailService.sendEmail).toHaveBeenCalledWith(
+          expect.objectContaining({
+            body: expect.stringContaining('jane@example.com'),
+          }),
+        );
+      });
+
+      it('should include phone in email body when provided', async () => {
+        vi.mocked(emailService.sendEmail).mockResolvedValue({ success: true });
+
+        await contactService.contact({ ...validRequest, phone: '07700 900123' });
+
+        expect(emailService.sendEmail).toHaveBeenCalledWith(
+          expect.objectContaining({
+            body: expect.stringContaining('07700 900123'),
+          }),
+        );
+      });
+
+      it('should not include phone in email body when not provided', async () => {
+        vi.mocked(emailService.sendEmail).mockResolvedValue({ success: true });
+
+        await contactService.contact({ ...validRequest, phone: undefined });
+
+        expect(emailService.sendEmail).toHaveBeenCalledWith(
+          expect.objectContaining({
+            body: expect.not.stringContaining('Phone'),
+          }),
+        );
+      });
+
+      it('should include message body in email body', async () => {
+        vi.mocked(emailService.sendEmail).mockResolvedValue({ success: true });
+
+        await contactService.contact({ ...validRequest, body: 'Custom message content' });
+
+        expect(emailService.sendEmail).toHaveBeenCalledWith(
+          expect.objectContaining({
+            body: expect.stringContaining('Custom message content'),
           }),
         );
       });
@@ -269,10 +323,7 @@ describe('contactService', () => {
       it('should include recipient type in subject', async () => {
         vi.mocked(emailService.sendEmail).mockResolvedValue({ success: true });
 
-        await contactService.contact({
-          ...validRequest,
-          recipientType: 'SCOUTS',
-        });
+        await contactService.contact({ ...validRequest, recipientType: 'SCOUTS' });
 
         expect(emailService.sendEmail).toHaveBeenCalledWith(
           expect.objectContaining({

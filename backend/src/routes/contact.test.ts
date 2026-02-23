@@ -17,7 +17,9 @@ describe('POST /contact', () => {
 
   const validRequestBody = {
     recipientType: 'BEAVERS',
+    name: 'Jane Smith',
     senderEmail: 'test@example.com',
+    phone: '07700 900123',
     body: 'Test message body',
     sendCopy: false,
   };
@@ -81,6 +83,46 @@ describe('POST /contact', () => {
         expect(response.status).toBe(200);
       }
     });
+
+    it('should accept an empty phone number', async () => {
+      vi.mocked(contactService.contact).mockResolvedValue({ success: true });
+
+      const response = await request(app)
+        .post('/contact')
+        .send({ ...validRequestBody, phone: '' });
+
+      expect(response.status).toBe(200);
+    });
+
+    it('should accept a missing phone number', async () => {
+      vi.mocked(contactService.contact).mockResolvedValue({ success: true });
+
+      const response = await request(app)
+        .post('/contact')
+        .send({ ...validRequestBody, phone: undefined });
+
+      expect(response.status).toBe(200);
+    });
+
+    it('should accept name with exactly 100 characters', async () => {
+      vi.mocked(contactService.contact).mockResolvedValue({ success: true });
+
+      const response = await request(app)
+        .post('/contact')
+        .send({ ...validRequestBody, name: 'a'.repeat(100) });
+
+      expect(response.status).toBe(200);
+    });
+
+    it('should accept body with exactly 2000 characters', async () => {
+      vi.mocked(contactService.contact).mockResolvedValue({ success: true });
+
+      const response = await request(app)
+        .post('/contact')
+        .send({ ...validRequestBody, body: 'a'.repeat(2000) });
+
+      expect(response.status).toBe(200);
+    });
   });
 
   describe('validation errors', () => {
@@ -114,6 +156,76 @@ describe('POST /contact', () => {
 
       expect(response.status).toBe(400);
       expect(response.body.error).toBe('Validation failed');
+    });
+
+    it('should return 400 when body exceeds 2000 characters', async () => {
+      const response = await request(app)
+        .post('/contact')
+        .send({ ...validRequestBody, body: 'a'.repeat(2001) });
+
+      expect(response.status).toBe(400);
+      expect(response.body.error).toBe('Validation failed');
+      expect(response.body.details).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ field: 'body' }),
+        ]),
+      );
+    });
+
+    it('should return 400 when name is missing', async () => {
+      const response = await request(app)
+        .post('/contact')
+        .send({ ...validRequestBody, name: undefined });
+
+      expect(response.status).toBe(400);
+      expect(response.body.error).toBe('Validation failed');
+      expect(response.body.details).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ field: 'name' }),
+        ]),
+      );
+    });
+
+    it('should return 400 when name is empty', async () => {
+      const response = await request(app)
+        .post('/contact')
+        .send({ ...validRequestBody, name: '' });
+
+      expect(response.status).toBe(400);
+      expect(response.body.error).toBe('Validation failed');
+      expect(response.body.details).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ field: 'name' }),
+        ]),
+      );
+    });
+
+    it('should return 400 when name exceeds 100 characters', async () => {
+      const response = await request(app)
+        .post('/contact')
+        .send({ ...validRequestBody, name: 'a'.repeat(101) });
+
+      expect(response.status).toBe(400);
+      expect(response.body.error).toBe('Validation failed');
+      expect(response.body.details).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ field: 'name' }),
+        ]),
+      );
+    });
+
+    it('should return 400 when phone is invalid', async () => {
+      const response = await request(app)
+        .post('/contact')
+        .send({ ...validRequestBody, phone: '123' });
+
+      expect(response.status).toBe(400);
+      expect(response.body.error).toBe('Validation failed');
+      expect(response.body.details).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ field: 'phone' }),
+        ]),
+      );
     });
 
     it('should return 400 when required fields are missing', async () => {
