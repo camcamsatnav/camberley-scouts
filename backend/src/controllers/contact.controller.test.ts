@@ -17,6 +17,7 @@ describe('contactController', () => {
 
   const validRequestBody = {
     recipientType: 'BEAVERS',
+    name: 'Jane Smith',
     senderEmail: 'test@example.com',
     body: 'Test message body',
     sendCopy: false,
@@ -132,8 +133,132 @@ describe('contactController', () => {
         );
       });
 
+      it('should return 400 when name is missing', async () => {
+        mockRequest.body = { ...validRequestBody, name: undefined };
+
+        await contactController.contact(
+          mockRequest as Request,
+          mockResponse as Response,
+        );
+
+        expect(mockStatus).toHaveBeenCalledWith(400);
+        expect(mockJson).toHaveBeenCalledWith(
+          expect.objectContaining({
+            error: 'Validation failed',
+            details: expect.arrayContaining([
+              expect.objectContaining({ field: 'name' }),
+            ]),
+          }),
+        );
+      });
+
+      it('should return 400 when name is empty', async () => {
+        mockRequest.body = { ...validRequestBody, name: '' };
+
+        await contactController.contact(
+          mockRequest as Request,
+          mockResponse as Response,
+        );
+
+        expect(mockStatus).toHaveBeenCalledWith(400);
+        expect(mockJson).toHaveBeenCalledWith(
+          expect.objectContaining({
+            error: 'Validation failed',
+            details: expect.arrayContaining([
+              expect.objectContaining({ field: 'name' }),
+            ]),
+          }),
+        );
+      });
+
+      it('should return 400 when name exceeds 100 characters', async () => {
+        mockRequest.body = { ...validRequestBody, name: 'a'.repeat(101) };
+
+        await contactController.contact(
+          mockRequest as Request,
+          mockResponse as Response,
+        );
+
+        expect(mockStatus).toHaveBeenCalledWith(400);
+        expect(mockJson).toHaveBeenCalledWith(
+          expect.objectContaining({
+            error: 'Validation failed',
+            details: expect.arrayContaining([
+              expect.objectContaining({ field: 'name' }),
+            ]),
+          }),
+        );
+      });
+
+      it('should accept name with exactly 100 characters', async () => {
+        vi.mocked(contactService.contact).mockResolvedValue({ success: true });
+        mockRequest.body = { ...validRequestBody, name: 'a'.repeat(100) };
+
+        await contactController.contact(
+          mockRequest as Request,
+          mockResponse as Response,
+        );
+
+        expect(mockStatus).toHaveBeenCalledWith(200);
+      });
+
+      it('should return 400 when phone is invalid', async () => {
+        mockRequest.body = { ...validRequestBody, phone: '123' };
+
+        await contactController.contact(
+          mockRequest as Request,
+          mockResponse as Response,
+        );
+
+        expect(mockStatus).toHaveBeenCalledWith(400);
+        expect(mockJson).toHaveBeenCalledWith(
+          expect.objectContaining({
+            error: 'Validation failed',
+            details: expect.arrayContaining([
+              expect.objectContaining({ field: 'phone' }),
+            ]),
+          }),
+        );
+      });
+
+      it('should accept a valid UK phone number', async () => {
+        vi.mocked(contactService.contact).mockResolvedValue({ success: true });
+        mockRequest.body = { ...validRequestBody, phone: '07700 900123' };
+
+        await contactController.contact(
+          mockRequest as Request,
+          mockResponse as Response,
+        );
+
+        expect(mockStatus).toHaveBeenCalledWith(200);
+      });
+
+      it('should accept an empty phone number', async () => {
+        vi.mocked(contactService.contact).mockResolvedValue({ success: true });
+        mockRequest.body = { ...validRequestBody, phone: '' };
+
+        await contactController.contact(
+          mockRequest as Request,
+          mockResponse as Response,
+        );
+
+        expect(mockStatus).toHaveBeenCalledWith(200);
+      });
+
+      it('should accept a missing phone number', async () => {
+        vi.mocked(contactService.contact).mockResolvedValue({ success: true });
+        mockRequest.body = { ...validRequestBody, phone: undefined };
+
+        await contactController.contact(
+          mockRequest as Request,
+          mockResponse as Response,
+        );
+
+        expect(mockStatus).toHaveBeenCalledWith(200);
+      });
+
       it('should return 400 when body exceeds max length', async () => {
-        mockRequest.body = { ...validRequestBody, body: 'a'.repeat(5001) };
+        mockRequest.body = { ...validRequestBody, body: 'a'.repeat(2001) };
 
         await contactController.contact(
           mockRequest as Request,

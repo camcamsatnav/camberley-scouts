@@ -34,11 +34,19 @@ export const contactService = {
     }
 
     // send to recipients
+    const emailBody = `
+      <p><strong>Name:</strong> ${sanitizeHtml(request.name)}</p>
+      <p><strong>Email:</strong> ${sanitizeHtml(request.senderEmail)}</p>
+      ${request.phone ? `<p><strong>Phone:</strong> ${sanitizeHtml(request.phone)}</p>` : ''}
+      <hr>
+      <p>${sanitizeHtml(request.body).replace(/\n/g, '<br>')}</p>
+    `;
+
     const result: SendEmailResponse = await emailService.sendEmail({
       from: { name: 'Camberley Scouts', address: fromAddress },
       to: recipients,
       subject: `Contact Form Submission - ${request.recipientType}`,
-      body: sanitizeHtml(request.body),
+      body: emailBody,
       replyTo: request.senderEmail,
     });
 
@@ -53,7 +61,7 @@ export const contactService = {
         <hr>
         <p><strong>Sent to:</strong> ${request.recipientType}</p>
         <hr>
-        ${sanitizeHtml(request.body)}
+        ${emailBody}
       `;
 
       const copyResult = await emailService.sendEmail({

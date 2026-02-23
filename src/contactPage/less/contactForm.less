@@ -1,0 +1,33 @@
+@input-helper-text-height: 20px;
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+
+  &__title {
+    font: var(--mui-font-body1);
+    color: var(--green);
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing-5) - @input-helper-text-height);
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus {
+      box-shadow: 0 0 0 1000px white inset;
+      -webkit-text-fill-color: rgb(0 0 0 / 87%);
+      caret-color: rgb(0 0 0 / 87%);
+    }
+
+    &__buttons {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: var(--spacing-6);
+    }
+  }
+}
