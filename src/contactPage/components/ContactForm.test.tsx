@@ -195,7 +195,7 @@ it('should toggle the send copy checkbox', async () => {
 it('should show error when name exceeds 100 characters', async () => {
   render(<ContactForm />);
 
-  await userEvent.type(getNameInput(), 'a'.repeat(101));
+  fireEvent.change(getNameInput(), { target: { value: 'a'.repeat(101) } });
   fireEvent.click(getSubmitButton());
 
   expect(await screen.findByText('Name must be less than 100 characters')).toBeInTheDocument();
@@ -204,9 +204,9 @@ it('should show error when name exceeds 100 characters', async () => {
 it('should not show error when name is exactly 100 characters', async () => {
   render(<ContactForm />);
 
-  await userEvent.type(getNameInput(), 'a'.repeat(100));
-  await userEvent.type(getEmailInput(), 'jane@example.com');
-  await userEvent.type(getMessageInput(), 'Hello');
+  fireEvent.change(getNameInput(), { target: { value: 'a'.repeat(100) } });
+  fireEvent.change(getEmailInput(), { target: { value: 'jane@example.com' } });
+  fireEvent.change(getMessageInput(), { target: { value: 'Hello' } });
   fireEvent.click(getSubmitButton());
 
   await waitFor(() => {
@@ -217,9 +217,9 @@ it('should not show error when name is exactly 100 characters', async () => {
 it('should show error when message exceeds 2000 characters', async () => {
   render(<ContactForm />);
 
-  await userEvent.type(getNameInput(), 'Jane Smith');
-  await userEvent.type(getEmailInput(), 'jane@example.com');
-  await userEvent.type(getMessageInput(), 'a'.repeat(2001));
+  fireEvent.change(getNameInput(), { target: { value: 'Jane Smith' } });
+  fireEvent.change(getEmailInput(), { target: { value: 'jane@example.com' } });
+  fireEvent.change(getMessageInput(), { target: { value: 'a'.repeat(2001) } });
   fireEvent.click(getSubmitButton());
 
   expect(await screen.findByText('Message must be less than 2000 characters')).toBeInTheDocument();
@@ -228,9 +228,9 @@ it('should show error when message exceeds 2000 characters', async () => {
 it('should not show error when message is exactly 2000 characters', async () => {
   render(<ContactForm />);
 
-  await userEvent.type(getNameInput(), 'Jane Smith');
-  await userEvent.type(getEmailInput(), 'jane@example.com');
-  await userEvent.type(getMessageInput(), 'a'.repeat(2000));
+  fireEvent.change(getNameInput(), { target: { value: 'Jane Smith' } });
+  fireEvent.change(getEmailInput(), { target: { value: 'jane@example.com' } });
+  fireEvent.change(getMessageInput(), { target: { value: 'a'.repeat(2000) } });
   fireEvent.click(getSubmitButton());
 
   await waitFor(() => {
