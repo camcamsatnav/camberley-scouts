@@ -23,6 +23,7 @@ export const ContactPageView = () => {
           <iframe
             src={GOOGLE_MAPS_EMBED_URL}
             className='contact-page__content__info__map'
+            title='Camberley 478 Scout Group location map'
             allowFullScreen
             loading='lazy'
             referrerPolicy='no-referrer-when-downgrade'

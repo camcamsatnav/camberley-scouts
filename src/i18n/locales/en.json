@@ -120,11 +120,6 @@
         "copy": {
           "label": "Send me a copy of this message"
         },
-        "validation": {
-          "required": "This field is required",
-          "email": "Please enter a valid email address",
-          "phone": "Please enter a valid phone number"
-        },
         "buttons": {
           "submit": "Send message",
           "reset": "Clear form"
