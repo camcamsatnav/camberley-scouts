@@ -56,7 +56,7 @@ jobs:
 
       - name: Bump version
         run: |
-          npm version ${{ steps.bump.outputs.LEVEL }} -m "increase version number"
+          cd frontend && npm version ${{ steps.bump.outputs.LEVEL }} -m "increase version number"
 
       - name: Push version + tag
         run: |
@@ -96,8 +96,8 @@ jobs:
         with:
           push: true
           platforms: linux/amd64,linux/arm64
-          context: .
-          file: ./Dockerfile
+          context: ./frontend
+          file: ./frontend/Dockerfile
           tags: |
             ghcr.io/${{ github.repository_owner }}/camberley-scouts-frontend:${{ steps.version.outputs.VERSION }}
             ghcr.io/${{ github.repository_owner }}/camberley-scouts-frontend:latest
