@@ -71,6 +71,10 @@ const routerMock = {
   useLocation: () => ({ pathname: '/', search: '', hash: '', state: null, key: 'test' }),
   useParams: () => ({}),
   useMatch: () => null,
+  useSearchParams: () => [
+    new URLSearchParams(), () => {
+    },
+  ],
 };
 
 vi.mock('react-router-dom', () => {

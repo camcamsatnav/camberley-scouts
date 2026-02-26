@@ -1,13 +1,21 @@
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router';
+import { z } from 'zod';
 import { PageHeading } from '../../common/components/PageHeading';
-import { GOOGLE_MAPS_EMBED_URL } from '../constants';
+import { GOOGLE_MAPS_EMBED_URL, RecipientTypes } from '../constants';
 import { ContactForm } from './ContactForm';
 
 import '../less/contactPageView.less';
 
+const recipientTypeSchema = z.enum(Object.values(RecipientTypes));
+
 export const ContactPageView = () => {
 
   const { t } = useTranslation();
+
+  const [searchParams] = useSearchParams({ query: RecipientTypes.GENERAL });
+
+  const queryParam = recipientTypeSchema.catch(RecipientTypes.GENERAL).parse(searchParams.get('query'));
 
   return (
     <div className='contact-page' data-testid='contact-page'>
@@ -30,7 +38,7 @@ export const ContactPageView = () => {
             data-testid='contact-page-map'
           />
         </div>
-        <ContactForm />
+        <ContactForm defaultQuery={queryParam} />
       </div>
     </div>
   );
