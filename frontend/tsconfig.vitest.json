@@ -7,8 +7,9 @@
     ]
   },
   "include": [
-    "src/**/*.test.ts",
-    "src/**/*.test.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
     "setupTests.ts"
-  ]
+  ],
+  "exclude": []
 }

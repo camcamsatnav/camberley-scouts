@@ -33,7 +33,11 @@ const createSchema = (t: TFunction) => z.object({
 
 type Inputs = z.infer<ReturnType<typeof createSchema>>;
 
-export const ContactForm = () => {
+interface ContactFormProps {
+  defaultQuery?: string;
+}
+
+export const ContactForm = ({ defaultQuery }: ContactFormProps) => {
 
   const { t } = useTranslation();
 
@@ -47,7 +51,7 @@ export const ContactForm = () => {
     formState: { errors },
   } = useForm<Inputs>({
     resolver: zodResolver(schema),
-    defaultValues: { name: '', email: '', phone: '', query: 'GENERAL', message: '', sendCopy: false },
+    defaultValues: { name: '', email: '', phone: '', query: defaultQuery ?? 'GENERAL', message: '', sendCopy: false },
   });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
