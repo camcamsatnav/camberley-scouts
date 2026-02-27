@@ -16,6 +16,7 @@ import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { RecipientTypes, UK_PHONE_REGEX } from '../constants';
+import { useContactFormSubmit } from '../hooks/useContactFormSubmit';
 
 import '../less/contactForm.less';
 
@@ -28,7 +29,7 @@ const createSchema = (t: TFunction) => z.object({
     2000,
     t('aboutUs.contact.form.message.maxLength'),
   ),
-  sendCopy: z.boolean().optional(),
+  sendCopy: z.boolean(),
 });
 
 type Inputs = z.infer<ReturnType<typeof createSchema>>;
@@ -54,8 +55,17 @@ export const ContactForm = ({ defaultQuery }: ContactFormProps) => {
     defaultValues: { name: '', email: '', phone: '', query: defaultQuery ?? 'GENERAL', message: '', sendCopy: false },
   });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+  const { submitContactForm, loading } = useContactFormSubmit();
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    await submitContactForm({
+      name: data.name,
+      senderEmail: data.email,
+      phone: data.phone,
+      recipientType: data.query as (typeof RecipientTypes)[keyof typeof RecipientTypes],
+      body: data.message,
+      sendCopy: data.sendCopy,
+    });
   };
 
   return (
@@ -128,6 +138,7 @@ export const ContactForm = ({ defaultQuery }: ContactFormProps) => {
             size='large'
             type='button'
             onClick={() => reset()}
+            disabled={loading}
             data-testid='contact-form-reset-button'
           >
             {t('aboutUs.contact.form.buttons.reset')}
@@ -137,6 +148,7 @@ export const ContactForm = ({ defaultQuery }: ContactFormProps) => {
             color='primary'
             size='large'
             type='submit'
+            disabled={loading}
             data-testid='contact-form-submit-button'
           >
             {t('aboutUs.contact.form.buttons.submit')}

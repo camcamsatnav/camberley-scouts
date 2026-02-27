@@ -4,6 +4,14 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { RecipientTypes } from '../constants';
 import { ContactPageView } from './ContactPageView';
 
+vi.mock('../hooks/useContactFormSubmit', () => ({
+  useContactFormSubmit: () => ({
+    submitContactForm: vi.fn(),
+    data: undefined,
+    loading: false,
+  }),
+}));
+
 const recipientTypeLabels: Record<string, string> = {
   [RecipientTypes.GENERAL]: 'General',
   [RecipientTypes.BEAVERS]: 'Beavers',
