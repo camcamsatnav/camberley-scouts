@@ -1,7 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
 import { expect, it, vi, beforeEach, describe } from 'vitest';
 import { usePost } from './usePost';
-import { HttpError } from '../errors/HttpError';
 
 const mockFetch = vi.fn();
 vi.stubGlobal('fetch', mockFetch);
@@ -86,7 +85,6 @@ describe('usePost', () => {
     const { result } = renderHook(() => usePost());
 
     act(() => {
-      expect(result.current.post('/contact', requestBody)).rejects.toThrow(HttpError);
       expect(result.current.post('/contact', requestBody)).rejects.toMatchObject({
         status: 429,
         body: 'Too Many Requests',

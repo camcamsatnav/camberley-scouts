@@ -17,6 +17,7 @@ const loadConfig = async () => {
 
 describe('email.config', () => {
   beforeEach(() => {
+    vi.clearAllMocks();
     vi.unstubAllEnvs();
   });
 

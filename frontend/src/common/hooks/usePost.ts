@@ -22,8 +22,8 @@ export const usePost = <T, B extends object>(): UsePostResult<T, B> => {
       });
 
       if (!response.ok) {
-        const body = await response.text();
-        throw new HttpError(response.status, body);
+        const errorBody = await response.text();
+        throw new HttpError(response.status, errorBody);
       }
 
       const result = (await response.json()) as T;

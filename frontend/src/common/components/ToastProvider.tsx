@@ -16,12 +16,14 @@ type ToastAction =
   | { type: 'SHOW'; message: string; title?: string; severity: ToastSeverity }
   | { type: 'HIDE' };
 
-const toastReducer = (_state: Toast, action: ToastAction): Toast => {
+const toastReducer = (state: Toast, action: ToastAction): Toast => {
   switch (action.type) {
     case 'SHOW':
       return { message: action.message, title: action.title, severity: action.severity, open: true };
     case 'HIDE':
-      return { ..._state, open: false };
+      return { ...state, open: false };
+    default:
+      return state;
   }
 };
 
