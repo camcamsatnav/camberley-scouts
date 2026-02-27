@@ -11,3 +11,5 @@ export const RecipientTypes = {
   VOLUNTEER: 'VOLUNTEER',
   GENERAL: 'GENERAL',
 } as const;
+
+export type RecipientType = (typeof RecipientTypes)[keyof typeof RecipientTypes];

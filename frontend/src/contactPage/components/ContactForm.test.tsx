@@ -1,7 +1,20 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { expect, it, describe } from 'vitest';
+import { expect, it, describe, vi, beforeEach } from 'vitest';
 import { ContactForm } from './ContactForm';
+
+const mockSubmitContactForm = vi.fn();
+let mockLoading = false;
+
+vi.mock('../hooks/useContactFormSubmit', () => ({
+  useContactFormSubmit: () => ({
+    submitContactForm: mockSubmitContactForm,
+    data: undefined,
+    get loading() {
+      return mockLoading;
+    },
+  }),
+}));
 
 const getNameInput = () => screen.getByRole('textbox', { name: /^name/i });
 const getEmailInput = () => screen.getByRole('textbox', { name: /^email/i });
@@ -267,5 +280,85 @@ describe('ContactForm default query type', () => {
     render(<ContactForm defaultQuery={undefined} />);
 
     expect(screen.getByRole('combobox')).toHaveTextContent('General');
+  });
+});
+
+describe('ContactForm submission', () => {
+  beforeEach(() => {
+    mockSubmitContactForm.mockReset();
+    mockLoading = false;
+  });
+
+  it('should call submitContactForm with correct data on valid submission', async () => {
+    render(<ContactForm />);
+
+    await fillValidForm();
+    fireEvent.click(getSubmitButton());
+
+    await waitFor(() => {
+      expect(mockSubmitContactForm).toHaveBeenCalledOnce();
+      expect(mockSubmitContactForm).toHaveBeenCalledWith({
+        name: 'Jane Smith',
+        senderEmail: 'jane@example.com',
+        phone: '07700 900123',
+        recipientType: 'GENERAL',
+        body: 'Hello, I have a question.',
+        sendCopy: false,
+      });
+    });
+  });
+
+  it('should call submitContactForm with sendCopy true when checkbox is checked', async () => {
+    render(<ContactForm />);
+
+    await fillValidForm();
+    await userEvent.click(screen.getByRole('checkbox'));
+    fireEvent.click(getSubmitButton());
+
+    await waitFor(() => {
+      expect(mockSubmitContactForm).toHaveBeenCalledWith(
+        expect.objectContaining({ sendCopy: true }),
+      );
+    });
+  });
+
+  it('should call submitContactForm with the selected query type', async () => {
+    render(<ContactForm />);
+
+    await fillValidForm();
+    fireEvent.mouseDown(screen.getByRole('combobox'));
+    fireEvent.click(await screen.findByRole('option', { name: 'Beavers' }));
+    fireEvent.click(getSubmitButton());
+
+    await waitFor(() => {
+      expect(mockSubmitContactForm).toHaveBeenCalledWith(
+        expect.objectContaining({ recipientType: 'BEAVERS' }),
+      );
+    });
+  });
+
+  it('should not call submitContactForm when form is invalid', async () => {
+    render(<ContactForm />);
+
+    fireEvent.click(getSubmitButton());
+
+    await screen.findByText('Please enter your name');
+    expect(mockSubmitContactForm).not.toHaveBeenCalled();
+  });
+
+  it('should disable both buttons while loading', () => {
+    mockLoading = true;
+    render(<ContactForm />);
+
+    expect(getSubmitButton()).toBeDisabled();
+    expect(getResetButton()).toBeDisabled();
+  });
+
+  it('should enable both buttons when not loading', () => {
+    mockLoading = false;
+    render(<ContactForm />);
+
+    expect(getSubmitButton()).not.toBeDisabled();
+    expect(getResetButton()).not.toBeDisabled();
   });
 });

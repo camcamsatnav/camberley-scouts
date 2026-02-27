@@ -32,7 +32,7 @@ export default defineConfig([
       'array-bracket-spacing': ['error', 'never'],
       'space-in-parens': ['error', 'never'],
       'comma-spacing': ['error', { 'before': false, 'after': true }],
-      'indent': ['error', 2],
+      'indent': ['error', 2, { 'SwitchCase': 1 }],
       'eol-last': ['error', 'always'],
       'max-len': [
         'error', {
