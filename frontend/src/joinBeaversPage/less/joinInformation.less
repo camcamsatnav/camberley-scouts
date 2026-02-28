@@ -1,0 +1,28 @@
+.join-information {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-10);
+  align-items: center;
+
+  &__list {
+    flex: 288 1 288px;
+    display: flex;
+    flex-direction: column;
+    color: var(--purple-alt);
+    gap: var(--spacing-2);
+  }
+
+  &__card {
+    flex: 828 1 828px;
+    min-width: 0;
+
+    &__header {
+      border-bottom: 1px solid var(--purple);
+    }
+
+    &__content {
+      color: var(--color-neutral-700);
+      font: var(--mui-font-body1);
+    }
+  }
+}

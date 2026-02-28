@@ -129,6 +129,8 @@
   },
   "join": {
     "common": {
+      "join": "Join",
+      "activities": "Activities",
       "schedule": "Day and time",
       "location": "Location",
       "maps": "Find us on Google maps",
@@ -161,8 +163,10 @@
         ]
       },
       "info": {
-        "line1": "We have a team of dedicated leaders who plan and run an amazing programme every term",
-        "line2": "We will go to as many events as we can possibly fit in",
+        "text": [
+          "We have a team of dedicated leaders who plan and run an amazing programme every term",
+          "We will go to as many events as we can possibly fit in"
+        ],
         "activities": {
           "title": "Activities",
           "items": [

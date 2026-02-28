@@ -1,0 +1,63 @@
+.join-intro {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-10);
+
+  &__info {
+    flex: 288 1 288px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-8);
+    padding: 17.5px 0;
+
+    &__text {
+      font: var(--mui-font-h5);
+      margin: 0;
+      color: var(--purple);
+    }
+
+    &__logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      align-self: center;
+      width: 244px;
+      height: 189px;
+      border-radius: var(--mui-shape-borderRadius);
+      padding: var(--spacing-3);
+      gap: var(--spacing-3);
+      background-color: #B08BF5;
+
+      &__age {
+        font: var(--mui-font-h3);
+        margin: 0;
+        text-align: center;
+        color: var(--color-neutral-700);
+      }
+    }
+
+    &__button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-1) 22px;
+    }
+  }
+
+  &__cards {
+    flex: 828 1 828px;
+    min-width: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 60px;
+
+    > * {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+}
