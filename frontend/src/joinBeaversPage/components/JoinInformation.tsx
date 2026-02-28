@@ -16,7 +16,7 @@ export const JoinInformation = ({ textLines, activityLines }: JoinInformationPro
     <div className='join-information' data-testid='join-info'>
       <ul className='join-information__list' data-testid='join-info-list'>
         {textLines.map((line, i) => (
-          <li key={`beavers-info-line-${i}`}>{line}</li>
+          <li key={`join-info-line-${i}`}>{line}</li>
         ))}
       </ul>
       <Card className='join-information__card' data-testid='join-info-card'>

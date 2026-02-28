@@ -11,7 +11,7 @@ export const JoinImages = ({ images }: JoinImagesProps) => {
     <div className='join-images' data-testid='join-images'>
       {images.map((image, i) => (
         <img
-          key={`beavers-image-${i}`}
+          key={`join-image-${i}`}
           src={image.src}
           alt={image.alt}
         />
