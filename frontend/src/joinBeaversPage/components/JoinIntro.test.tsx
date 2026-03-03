@@ -9,7 +9,7 @@ const defaultProps = {
   image: JOIN_BEAVERS_LOGO,
   ageRange: '10-12',
   locations: JOIN_BEAVERS_LOCATIONS,
-  type: RecipientTypes.BEAVERS,
+  recipientType: RecipientTypes.BEAVERS,
 };
 
 it('should render JoinIntro correctly', () => {
@@ -53,5 +53,5 @@ it('should have correct link to contact page', () => {
   const joinButton = screen.getByTestId('join-button');
   expect(joinButton).toBeInTheDocument();
 
-  expect(joinButton).toHaveAttribute('href', '/about-us/contact?query=beavers');
+  expect(joinButton).toHaveAttribute('href', '/about-us/contact?query=BEAVERS');
 });
