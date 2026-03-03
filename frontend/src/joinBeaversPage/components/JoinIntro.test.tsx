@@ -45,13 +45,13 @@ it('should render JoinIntro correctly', () => {
     'href',
     JOIN_BEAVERS_LOCATIONS[1].googleMapsLink,
   );
+});
 
-  it('should have correct link to contact page', () => {
-    render(<JoinIntro {...defaultProps} />);
+it('should have correct link to contact page', () => {
+  render(<JoinIntro {...defaultProps} />);
 
-    const joinButton = screen.getByTestId('join-button');
-    expect(joinButton).toBeInTheDocument();
+  const joinButton = screen.getByTestId('join-button');
+  expect(joinButton).toBeInTheDocument();
 
-    expect(joinButton).toHaveAttribute('href', '/about-us/contact?query=beavers');
-  });
+  expect(joinButton).toHaveAttribute('href', '/about-us/contact?query=beavers');
 });
