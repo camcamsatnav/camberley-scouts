@@ -34,6 +34,15 @@ it('renders HomePageView correctly', () => {
   expect(within(screen.getByTestId('scouts-card')).getByText('10½-14 years')).toBeInTheDocument();
 });
 
+it('should have correct link on the join button', () => {
+  render(<HomePageView />);
+
+  const joinButton = screen.getByTestId('join-button');
+  expect(joinButton).toBeInTheDocument();
+
+  expect(joinButton).toHaveAttribute('href', '/about-us/contact');
+});
+
 it('should have correct link on the beavers card', () => {
   render(<HomePageView />);
 

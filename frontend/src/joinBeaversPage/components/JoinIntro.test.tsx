@@ -2,12 +2,14 @@ import { render, screen, within } from '@testing-library/react';
 import { it, expect } from 'vitest';
 import { JOIN_BEAVERS_LOCATIONS, JOIN_BEAVERS_LOGO } from '../constants';
 import { JoinIntro } from './JoinIntro';
+import { RecipientTypes } from '../../contactPage/constants';
 
 const defaultProps = {
   title: 'title',
   image: JOIN_BEAVERS_LOGO,
   ageRange: '10-12',
   locations: JOIN_BEAVERS_LOCATIONS,
+  type: RecipientTypes.BEAVERS,
 };
 
 it('should render JoinIntro correctly', () => {
@@ -43,4 +45,13 @@ it('should render JoinIntro correctly', () => {
     'href',
     JOIN_BEAVERS_LOCATIONS[1].googleMapsLink,
   );
+
+  it('should have correct link to contact page', () => {
+    render(<JoinIntro {...defaultProps} />);
+
+    const joinButton = screen.getByTestId('join-button');
+    expect(joinButton).toBeInTheDocument();
+
+    expect(joinButton).toHaveAttribute('href', '/about-us/contact?query=beavers');
+  });
 });
