@@ -1,9 +1,10 @@
 import { render, screen, within } from '@testing-library/react';
 import { expect, it } from 'vitest';
+import { MemoryRouter } from 'react-router';
 import { HomePageView } from './HomePageView';
 
 it('renders HomePageView correctly', () => {
-  render(<HomePageView />);
+  render(<MemoryRouter><HomePageView /></MemoryRouter>);
 
   expect(screen.getByTestId('home-page')).toBeInTheDocument();
   expect(screen.getByTestId('intro-image')).toBeInTheDocument();
@@ -35,7 +36,7 @@ it('renders HomePageView correctly', () => {
 });
 
 it('should have correct link on the join button', () => {
-  render(<HomePageView />);
+  render(<MemoryRouter><HomePageView /></MemoryRouter>);
 
   const joinButton = screen.getByTestId('join-button');
   expect(joinButton).toBeInTheDocument();
@@ -44,7 +45,7 @@ it('should have correct link on the join button', () => {
 });
 
 it('should have correct link on the beavers card', () => {
-  render(<HomePageView />);
+  render(<MemoryRouter><HomePageView /></MemoryRouter>);
 
   const beaversCard = screen.getByTestId('beavers-card');
   expect(beaversCard).toBeInTheDocument();
@@ -54,7 +55,7 @@ it('should have correct link on the beavers card', () => {
 });
 
 it('should have correct link on the cubs card', () => {
-  render(<HomePageView />);
+  render(<MemoryRouter><HomePageView /></MemoryRouter>);
 
   const cubsCard = screen.getByTestId('cubs-card');
   expect(cubsCard).toBeInTheDocument();
@@ -64,7 +65,7 @@ it('should have correct link on the cubs card', () => {
 });
 
 it('should have correct link on the scouts card', () => {
-  render(<HomePageView />);
+  render(<MemoryRouter><HomePageView /></MemoryRouter>);
 
   const scoutsCard = screen.getByTestId('scouts-card');
   expect(scoutsCard).toBeInTheDocument();

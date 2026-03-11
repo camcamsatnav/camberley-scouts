@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
+import { MemoryRouter } from 'react-router';
 import { NavigationButton } from './NavigationButton';
 
 const defaultProps = {
@@ -13,14 +14,14 @@ const defaultProps = {
 };
 
 it('should render NavigationButton correctly', () => {
-  render(<NavigationButton {...defaultProps} />);
+  render(<MemoryRouter><NavigationButton {...defaultProps} /></MemoryRouter>);
 
   expect(screen.getByTestId('example-nav-button')).toBeInTheDocument();
   expect(screen.getByText('Example nav')).toBeInTheDocument();
 });
 
 it('should handle click and display menu options', () => {
-  render(<NavigationButton {...defaultProps} />);
+  render(<MemoryRouter><NavigationButton {...defaultProps} /></MemoryRouter>);
 
   fireEvent.click(screen.getByTestId('example-nav-button'));
 

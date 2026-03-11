@@ -1,5 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
 import { it, expect } from 'vitest';
+import { MemoryRouter } from 'react-router';
 import { JOIN_BEAVERS_LOCATIONS, JOIN_BEAVERS_LOGO } from '../constants';
 import { JoinIntro } from './JoinIntro';
 import { RecipientTypes } from '../../contactPage/constants';
@@ -13,7 +14,7 @@ const defaultProps = {
 };
 
 it('should render JoinIntro correctly', () => {
-  render(<JoinIntro {...defaultProps} />);
+  render(<MemoryRouter><JoinIntro {...defaultProps} /></MemoryRouter>);
 
   expect(screen.getByTestId('join-intro')).toBeInTheDocument();
   expect(screen.getByTestId('join-intro-title')).toHaveTextContent('title');
@@ -48,7 +49,7 @@ it('should render JoinIntro correctly', () => {
 });
 
 it('should have correct link to contact page', () => {
-  render(<JoinIntro {...defaultProps} />);
+  render(<MemoryRouter><JoinIntro {...defaultProps} /></MemoryRouter>);
 
   const joinButton = screen.getByTestId('join-button');
   expect(joinButton).toBeInTheDocument();
