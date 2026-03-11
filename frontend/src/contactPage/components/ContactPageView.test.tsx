@@ -1,6 +1,7 @@
 import * as ReactRouter from 'react-router';
 import { render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { MemoryRouter } from 'react-router';
 import { RecipientTypes } from '../constants';
 import { ContactPageView } from './ContactPageView';
 
@@ -30,20 +31,20 @@ afterEach(() => {
 });
 
 it('should render ContactPage correctly', () => {
-  render(<ContactPageView />);
+  render(<MemoryRouter><ContactPageView /></MemoryRouter>);
 
   expect(screen.getByTestId('contact-page')).toBeInTheDocument();
 });
 
 it('should render the page heading with the correct title', () => {
-  render(<ContactPageView />);
+  render(<MemoryRouter><ContactPageView /></MemoryRouter>);
 
   expect(screen.getByTestId('page-heading')).toBeInTheDocument();
   expect(screen.getByText('Contact')).toBeInTheDocument();
 });
 
 it('should render the info section with the correct text', () => {
-  render(<ContactPageView />);
+  render(<MemoryRouter><ContactPageView /></MemoryRouter>);
 
   expect(screen.getByTestId('contact-page-title')).toBeInTheDocument();
   expect(screen.getByTestId('contact-page-text')).toBeInTheDocument();
@@ -54,13 +55,13 @@ it('should render the info section with the correct text', () => {
 });
 
 it('should render the google maps iframe', () => {
-  render(<ContactPageView />);
+  render(<MemoryRouter><ContactPageView /></MemoryRouter>);
 
   expect(screen.getByTestId('contact-page-map')).toBeInTheDocument();
 });
 
 it('should render the contact form', () => {
-  render(<ContactPageView />);
+  render(<MemoryRouter><ContactPageView /></MemoryRouter>);
 
   expect(screen.getByTestId('contact-form')).toBeInTheDocument();
 });
@@ -68,7 +69,7 @@ it('should render the contact form', () => {
 describe('query param', () => {
   it.each(Object.values(RecipientTypes))('should pass "%s" to the form when query param is valid', (recipientType) => {
     setSearchParams(recipientType);
-    render(<ContactPageView />);
+    render(<MemoryRouter><ContactPageView /></MemoryRouter>);
 
     expect(screen.getByRole('combobox')).toHaveTextContent(recipientTypeLabels[recipientType]);
   });
@@ -81,7 +82,7 @@ describe('query param', () => {
     ['wrong case - mixed case', 'Cubs'],
   ])('should fall back to GENERAL when query param is %s', (_, query) => {
     setSearchParams(query);
-    render(<ContactPageView />);
+    render(<MemoryRouter><ContactPageView /></MemoryRouter>);
 
     expect(screen.getByRole('combobox')).toHaveTextContent(recipientTypeLabels[RecipientTypes.GENERAL]);
   });

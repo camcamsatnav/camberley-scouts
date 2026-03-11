@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import * as RR from 'react-router';
+import { MemoryRouter } from 'react-router';
 import { afterEach, expect, it, vi } from 'vitest';
 import { HutRenovationPage } from './HutRenovationPage';
 
@@ -16,7 +17,7 @@ it('should render HutRenovationPage correctly', () => {
     key: 'test',
   });
 
-  render(<HutRenovationPage />);
+  render(<MemoryRouter><HutRenovationPage /></MemoryRouter>);
 
   expect(screen.getByTestId('hut-renovation-page')).toBeInTheDocument();
   expect(screen.getByTestId('hut-renovation-page-image')).toBeInTheDocument();

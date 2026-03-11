@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import * as RR from 'react-router';
+import { MemoryRouter } from 'react-router';
 import { afterEach, expect, it, vi } from 'vitest';
 import { PageHeading } from './PageHeading';
 
@@ -16,7 +17,7 @@ it('should render PageHeading correctly', () => {
     key: 'test',
   });
 
-  render(<PageHeading title={'Example header'} />);
+  render(<MemoryRouter><PageHeading title={'Example header'} /></MemoryRouter>);
 
   expect(screen.getByTestId('page-heading')).toBeInTheDocument();
   expect(screen.getByTestId('page-heading-breadcrumbs')).toBeInTheDocument();

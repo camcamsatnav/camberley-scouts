@@ -1,9 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
+import { MemoryRouter } from 'react-router';
 import { Navbar } from './Navbar';
 
 it('should render Navbar correctly', () => {
-  render(<Navbar />);
+  render(<MemoryRouter><Navbar /></MemoryRouter>);
 
   expect(screen.getByTestId('navbar')).toBeInTheDocument();
   expect(screen.getByTestId('navbar-home')).toBeInTheDocument();
@@ -15,7 +16,7 @@ it('should render Navbar correctly', () => {
 });
 
 it('should have correct social media links', () => {
-  render(<Navbar />);
+  render(<MemoryRouter><Navbar /></MemoryRouter>);
 
   expect(screen.getByTestId('navbar-facebook')).toHaveAttribute('href', 'https://www.facebook.com/camberley478');
   expect(screen.getByTestId('navbar-instagram')).toHaveAttribute(
@@ -25,7 +26,7 @@ it('should have correct social media links', () => {
 });
 
 it('shows the correct options for each navigation button when clicked', async () => {
-  render(<Navbar />);
+  render(<MemoryRouter><Navbar /></MemoryRouter>);
 
   const cases = [
     {

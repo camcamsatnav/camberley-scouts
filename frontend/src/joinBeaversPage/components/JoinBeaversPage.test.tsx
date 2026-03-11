@@ -1,17 +1,18 @@
 import { render, screen, within } from '@testing-library/react';
 import { expect, it } from 'vitest';
+import { MemoryRouter } from 'react-router';
 import { JOIN_BEAVERS_IMAGES, JOIN_BEAVERS_LOCATIONS, JOIN_BEAVERS_LOGO } from '../constants';
 import { JoinBeaversPage } from './JoinBeaversPage';
 
 it('should render JoinBeaversPage correctly', () => {
-  render(<JoinBeaversPage />);
+  render(<MemoryRouter><JoinBeaversPage /></MemoryRouter>);
 
   expect(screen.getByTestId('join-beavers-page')).toBeInTheDocument();
   expect(screen.getByTestId('page-heading')).toBeInTheDocument();
 });
 
 it('should render JoinIntro with the correct content', () => {
-  render(<JoinBeaversPage />);
+  render(<MemoryRouter><JoinBeaversPage /></MemoryRouter>);
 
   expect(screen.getByTestId('join-intro')).toBeInTheDocument();
   expect(screen.getByTestId('join-intro-title')).toHaveTextContent('We have 2 Beaver Colonies');
@@ -22,7 +23,7 @@ it('should render JoinIntro with the correct content', () => {
 });
 
 it('should render JoinIntro with the correct location cards', () => {
-  render(<JoinBeaversPage />);
+  render(<MemoryRouter><JoinBeaversPage /></MemoryRouter>);
 
   const locationCards = screen.getAllByTestId('location-card');
   expect(locationCards).toHaveLength(JOIN_BEAVERS_LOCATIONS.length);
@@ -41,7 +42,7 @@ it('should render JoinIntro with the correct location cards', () => {
 });
 
 it('should render JoinInformation with the correct content', () => {
-  render(<JoinBeaversPage />);
+  render(<MemoryRouter><JoinBeaversPage /></MemoryRouter>);
 
   expect(screen.getByTestId('join-info')).toBeInTheDocument();
   expect(screen.getByTestId('join-info-list')).toBeInTheDocument();
@@ -50,7 +51,7 @@ it('should render JoinInformation with the correct content', () => {
 });
 
 it('should render JoinImages with the correct images', () => {
-  render(<JoinBeaversPage />);
+  render(<MemoryRouter><JoinBeaversPage /></MemoryRouter>);
 
   expect(screen.getByTestId('join-images')).toBeInTheDocument();
   JOIN_BEAVERS_IMAGES.forEach(image => {

@@ -1,5 +1,8 @@
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
+import { ROUTES } from '../../common/constants';
+import { type RecipientType } from '../../contactPage/constants';
 import type { FileImage } from '../../common/types';
 import { LocationCard, type LocationCardProps } from './LocationCard';
 
@@ -10,9 +13,10 @@ interface JoinIntroProps {
   image: FileImage;
   ageRange: string;
   locations: LocationCardProps[];
+  recipientType: RecipientType
 }
 
-export const JoinIntro = ({ title, image, ageRange, locations }: JoinIntroProps) => {
+export const JoinIntro = ({ title, image, ageRange, locations, recipientType }: JoinIntroProps) => {
 
   const { t } = useTranslation();
 
@@ -32,6 +36,7 @@ export const JoinIntro = ({ title, image, ageRange, locations }: JoinIntroProps)
         </div>
         <div className='join-intro__info__button'>
           <Button
+            component={Link} to={{ pathname: ROUTES.ABOUT.CONTACT, search: `?query=${recipientType}` }}
             color='secondary'
             variant='contained'
             size='large'

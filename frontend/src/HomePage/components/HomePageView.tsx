@@ -28,7 +28,12 @@ export const HomePageView = () => {
           <div className='home-page__intro__title'>{t('home.welcome.title')}</div>
           <div className='home-page__intro__subtitle'>{t('home.welcome.subtitle')}</div>
           <div className='home-page__intro__buttons'>
-            <Button color='primary' variant='contained' size='large' data-testid='join-button'>
+            <Button 
+              component={Link} to={ROUTES.ABOUT.CONTACT}
+              color='primary' 
+              variant='contained' 
+              size='large' 
+              data-testid='join-button'>
               {t('home.buttons.join')}
             </Button>
             <Button color='primary' variant='contained' size='large' data-testid='volunteer-button'>

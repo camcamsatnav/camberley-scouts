@@ -4,6 +4,7 @@ import { JOIN_BEAVERS_IMAGES, JOIN_BEAVERS_LOCATIONS, JOIN_BEAVERS_LOGO } from '
 import { JoinImages } from './JoinImages';
 import { JoinInformation } from './JoinInformation';
 import { JoinIntro } from './JoinIntro';
+import { RecipientTypes } from '../../contactPage/constants';
 
 import '../less/joinBeaversPage.less';
 
@@ -24,6 +25,7 @@ export const JoinBeaversPage = () => {
           image={JOIN_BEAVERS_LOGO}
           ageRange={t('join.beavers.intro.age')}
           locations={JOIN_BEAVERS_LOCATIONS}
+          recipientType = {RecipientTypes.BEAVERS}
         />
         <JoinInformation textLines={textLines} activityLines={activityLines} />
         <JoinImages images={JOIN_BEAVERS_IMAGES} />
