@@ -19,10 +19,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout main
         uses: actions/checkout@v6.0.1
         with:
+          ref: main
           fetch-depth: 0
+
+      - name: Sync local main
+        run: |
+          git fetch origin main --tags
+          git checkout -B main origin/main
 
       - name: Set up Node
         uses: actions/setup-node@v6.1.0
@@ -61,7 +67,7 @@ jobs:
 
       - name: Push version + tag
         run: |
-          git push origin main --tags
+          git push origin HEAD:main --follow-tags
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
