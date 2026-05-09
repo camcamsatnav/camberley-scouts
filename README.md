@@ -1,6 +1,6 @@
 # Camberley 478 Scouts
 
-TanStack Start rewrite of the Camberley 478 Scout Group site.
+Rewrite of the Camberley 478 Scout Group site.
 
 ## Getting Started
 
