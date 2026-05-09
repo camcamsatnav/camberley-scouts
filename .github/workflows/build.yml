@@ -1,73 +1,60 @@
+name: Build and deploy
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - Version
+    types:
+      - completed
+
 permissions:
-  contents: write
+  contents: read
   packages: write
 
-name: build
-on:
-  pull_request_target:
-    types:
-      - closed
-    branches:
-      - main
-
 env:
-  BUILDX_NO_DEFAULT_ATTESTATIONS: 1
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/camberley-scouts
 
 jobs:
   build:
-    if: ${{ github.event.pull_request.merged == true }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6.0.1
+      - name: Checkout main
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          ref: main
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
 
       - name: Set up Node
-        uses: actions/setup-node@v6.1.0
+        uses: actions/setup-node@v4
         with:
           node-version: '25'
-          cache: 'npm'
-          cache-dependency-path: frontend/package-lock.json
+          cache: pnpm
 
-      - name: Determine version bump
-        id: bump
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { data: labels } = await github.rest.issues.listLabelsOnIssue({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number
-            });
-            const names = labels.map(l => l.name);
-            if (names.includes('release:major')) {
-              core.setOutput('LEVEL','major');
-            } else if (names.includes('release:minor')) {
-              core.setOutput('LEVEL','minor');
-            } else {
-              core.setOutput('LEVEL','patch');
-            }
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-      - name: Configure git for commits
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Bump version
-        run: |
-          cd frontend && npm version ${{ steps.bump.outputs.LEVEL }} -m "increase version number"
-
-      - name: Push version + tag
-        run: |
-          git push origin main --tags
+      - name: Run build
+        run: pnpm build
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Read package version
+        id: version
+        run: echo "version=$(node -p 'require(\"./package.json\").version')" >> "$GITHUB_OUTPUT"
 
       - name: Login to GHCR
         uses: docker/login-action@v3.6.0
@@ -76,32 +63,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Read package version
-        id: version
-        run: |
-          echo "VERSION=$(node -p "require('./frontend/package.json').version")" >> $GITHUB_OUTPUT
-
-      - name: Build and push backend image
+      - name: Build and push app image
         uses: docker/build-push-action@v6.18.0
         with:
-          push: true
+          context: .
+          file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
-          context: ./backend
-          file: ./backend/Dockerfile
-          tags: |
-            ghcr.io/${{ github.repository_owner }}/camberley-scouts-backend:${{ steps.version.outputs.VERSION }}
-            ghcr.io/${{ github.repository_owner }}/camberley-scouts-backend:latest
-
-      - name: Build and push frontend image
-        uses: docker/build-push-action@v6.18.0
-        with:
           push: true
-          platforms: linux/amd64,linux/arm64
-          context: ./frontend
-          file: ./frontend/Dockerfile
           tags: |
-            ghcr.io/${{ github.repository_owner }}/camberley-scouts-frontend:${{ steps.version.outputs.VERSION }}
-            ghcr.io/${{ github.repository_owner }}/camberley-scouts-frontend:latest
+            ${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}
+            ${{ env.IMAGE_NAME }}:latest
 
   deploy:
     needs: build
@@ -121,7 +92,12 @@ jobs:
           script: |
             set -euo pipefail
             cd ~/camberley-scouts || { echo "Error: ~/camberley-scouts directory not found"; exit 1; }
-            echo "Deploying to $(pwd)"
+            echo "Deploying version ${{ needs.build.outputs.version }} to $(pwd)"
+            if [ ! -d .git ]; then
+              echo "Error: ~/camberley-scouts must be a git checkout so docker-compose.yml can be updated"
+              exit 1
+            fi
+            git pull --ff-only origin main
             sudo docker compose pull
-            sudo docker compose up -d
+            sudo docker compose up -d --remove-orphans
             echo "Deployment completed successfully"

@@ -1,68 +1,41 @@
-# Camberley Scout Group Website
+# Camberley 478 Scouts
 
-This repository contains the source code for the Camberley Scout Group website.
+TanStack Start rewrite of the Camberley 478 Scout Group site.
 
-## Development
+## Getting Started
 
-1. Prerequisites:
-    - Node.js (v25.5.0 currently)
+```bash
+pnpm install
+pnpm dev
+```
 
-2. Clone the repository:
-   ```bash
-   git clone https://github.com/camcamsatnav/camberley-scouts.git
-   cd camberley-scouts
-    ```
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
+The local dev server runs at `http://127.0.0.1:3000/`.
 
-4. Start the development server:
-   ```bash
-    npm run dev
-    ```
-5. Open your browser and navigate to `http://localhost:5173` to view the website.
+## Scripts
 
-6. Run tests:
-   ```bash
-   npm run test
-   ```
+```bash
+pnpm build
+pnpm test
+pnpm check
+pnpm typecheck
+```
 
-## Running backend
+## Routes
 
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the backend server:
-   ```bash
-    npm run dev
-    ```
-4. The backend server will be running at `http://localhost:3000`.
+The app uses TanStack Router file-based routes in `src/routes`.
 
-## Docker
+Key page routes:
 
-To build and run the website using Docker:
+- `/`
+- `/beavers`
+- `/about-us/contact`
+- `/about-us/hut-renovation`
 
-1. Build the Docker image:
-   ```bash
-   docker build -t camberley-scouts .
-   docker build -t camberley-scouts-backend -f ./backend/Dockerfile ./backend
-   ```
-2. Run the Docker container:
-3. ```bash
-   docker run -d -p 8080:80 camberley-scouts
-   docker run -d -p 3000:3000 camberley-scouts-backend
+Server routes:
 
-## Docker compose
+- `GET /api/v1/health`
+- `POST /api/v1/contact`
 
-1. Start the services using Docker Compose:
-   ```bash
-   docker compose up -d
-   ```
+## Contact Email
 
-Docker images can be found [here](https://github.com/camcamsatnav/camberley-scouts/pkgs/container/camberley-scouts)
+Copy `.env.local.example` to `.env.local` and fill in the SMTP and recipient variables before testing real contact form submissions.

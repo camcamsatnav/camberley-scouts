@@ -1,23 +1,34 @@
 name: Check release label
+
 on:
   pull_request:
-    types: [ opened, reopened, labeled, unlabeled, synchronize ]
-    branches: [ main ]
+    types:
+      - opened
+      - reopened
+      - labeled
+      - unlabeled
+      - synchronize
+      - ready_for_review
+    branches:
+      - main
 
 jobs:
   check-label:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check for release label
-        run: |
-          LABELS='${{ toJson(github.event.pull_request.labels.*.name) }}'
-          
-          echo "PR labels: $LABELS"
-          
-          if echo "$LABELS" | grep -Eq 'release:(patch|minor|major)'; then
-            exit 0
-          else
-            echo "Error: Missing required release label. Please add one of: release:patch, release:minor, or release:major." >&2
-            exit 1
-          fi
+      - name: Check for exactly one release label
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const allowed = ['release:patch', 'release:minor', 'release:major'];
+            const labels = context.payload.pull_request.labels.map((label) => label.name);
+            const releaseLabels = labels.filter((label) => allowed.includes(label));
+
+            core.info(`PR labels: ${labels.join(', ') || '(none)'}`);
+
+            if (releaseLabels.length !== 1) {
+              core.setFailed(
+                `Expected exactly one release label: ${allowed.join(', ')}. Found: ${releaseLabels.join(', ') || '(none)'}.`
+              );
+            }
