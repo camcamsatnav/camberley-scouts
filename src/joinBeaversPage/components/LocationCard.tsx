@@ -1,4 +1,4 @@
-import { OpenInNew } from '@mui/icons-material';
+import OpenInNew from '@mui/icons-material/OpenInNew';
 import { Card, CardContent, CardHeader } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 

@@ -1,4 +1,4 @@
-import { HomeFilled } from '@mui/icons-material';
+import HomeFilled from '@mui/icons-material/HomeFilled';
 import { Breadcrumbs, IconButton, Link } from '@mui/material';
 import { Link as RouterLink, useLocation } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
