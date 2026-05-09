@@ -1,0 +1,17 @@
+node_modules
+dist
+dist-ssr
+.git
+.github
+*.local
+.env
+.nitro
+.tanstack
+.wrangler
+.output
+.vinxi
+__unconfig*
+todos.json
+.idea
+src/generated
+coverage
