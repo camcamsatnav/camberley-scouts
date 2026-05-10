@@ -3,8 +3,6 @@ import {
   RecipientTypes,
   type ValidatedEmailRequest,
 } from '../validators/email.validator';
-import { contactService } from './contact.service';
-import { emailService } from './email.service';
 
 const request: ValidatedEmailRequest = {
   recipientType: RecipientTypes.BEAVERS,
@@ -15,15 +13,38 @@ const request: ValidatedEmailRequest = {
   sendCopy: false,
 };
 
+const DEFAULT_SMTP_PORT = 587;
+
+const defaultServerEnv = {
+  SMTP_PORT: DEFAULT_SMTP_PORT,
+  SMTP_SECURE: false,
+};
+
+const loadContactModules = async (serverEnv: Record<string, unknown> = {}) => {
+  vi.doMock('../config/env', () => ({
+    serverEnv: { ...defaultServerEnv, ...serverEnv },
+  }));
+
+  const [{ contactService }, { emailService }] = await Promise.all([
+    import('./contact.service'),
+    import('./email.service'),
+  ]);
+
+  return { contactService, emailService };
+};
+
 describe('contactService', () => {
   afterEach(() => {
     vi.restoreAllMocks();
-    vi.unstubAllEnvs();
+    vi.doUnmock('../config/env');
+    vi.resetModules();
   });
 
   it('sends a sanitized email to the configured recipient group', async () => {
-    vi.stubEnv('BEAVERS_EMAILS', 'beavers@example.com,leader@example.com');
-    vi.stubEnv('SMTP_USER', 'noreply@example.com');
+    const { contactService, emailService } = await loadContactModules({
+      BEAVERS_EMAILS: ['beavers@example.com', 'leader@example.com'],
+      SMTP_USER: 'noreply@example.com',
+    });
     const sendEmail = vi
       .spyOn(emailService, 'sendEmail')
       .mockResolvedValue({ success: true });
@@ -44,7 +65,9 @@ describe('contactService', () => {
   });
 
   it('sends a copy to the sender when requested', async () => {
-    vi.stubEnv('BEAVERS_EMAILS', 'beavers@example.com');
+    const { contactService, emailService } = await loadContactModules({
+      BEAVERS_EMAILS: ['beavers@example.com'],
+    });
     const sendEmail = vi
       .spyOn(emailService, 'sendEmail')
       .mockResolvedValue({ success: true });
@@ -62,6 +85,7 @@ describe('contactService', () => {
   });
 
   it('returns an error when the target recipient group is not configured', async () => {
+    const { contactService, emailService } = await loadContactModules();
     const sendEmail = vi.spyOn(emailService, 'sendEmail');
 
     const result = await contactService.contact(request);
