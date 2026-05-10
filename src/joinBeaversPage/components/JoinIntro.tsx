@@ -1,4 +1,5 @@
 import { Button } from '@mui/material';
+import { Link } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import type { FileImage } from '../../common/types';
 import type { RecipientType } from '../../contactPage/constants';
@@ -41,8 +42,9 @@ export const JoinIntro = ({
         </div>
         <div className='join-intro__info__button'>
           <Button
-            component='a'
-            href={`/about-us/contact?query=${recipientType}`}
+            component={Link}
+            to='/about-us/contact'
+            search={{ query: recipientType } as never}
             color='secondary'
             variant='contained'
             size='large'

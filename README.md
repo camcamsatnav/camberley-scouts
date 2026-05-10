@@ -9,7 +9,8 @@ pnpm install
 pnpm dev
 ```
 
-The local dev server runs at `http://127.0.0.1:3000/`.
+The local dev server runs at `http://localhost:3000/`.
+Netlify's TanStack Start Vite plugin emulates the Netlify platform through the Vite dev server, so `pnpm dev` is the preferred local command.
 
 ## Scripts
 
