@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { clientEnv } from '../config/env';
 import { HttpError } from '../errors/HttpError';
 
 interface UsePostResult<T, B> {
@@ -12,7 +13,7 @@ export const usePost = <T, B extends object>(): UsePostResult<T, B> => {
   const [loading, setLoading] = useState(false);
 
   const post = async (path: string, body: B): Promise<T> => {
-    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? '/api/v1';
+    const apiBaseUrl = clientEnv.VITE_API_BASE_URL;
     setLoading(true);
     try {
       const response = await fetch(`${apiBaseUrl}${path}`, {

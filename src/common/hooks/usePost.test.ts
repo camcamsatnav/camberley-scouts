@@ -5,6 +5,11 @@ import { usePost } from './usePost';
 const mockFetch = vi.fn();
 vi.stubGlobal('fetch', mockFetch);
 
+const HTTP_OK = 200;
+const HTTP_TOO_MANY_REQUESTS = 429;
+const HTTP_INTERNAL_SERVER_ERROR = 500;
+const RESPONSE_ID = 1;
+
 const mockResponse = (status: number, body: unknown, ok = true) =>
   ({
     ok,
@@ -45,14 +50,13 @@ describe('usePost', () => {
     expect(result.current.loading).toBe(true);
 
     await act(async () => {
-      resolveResponse(mockResponse(200, { ok: true }));
+      resolveResponse(mockResponse(HTTP_OK, { ok: true }));
     });
     expect(result.current.loading).toBe(false);
   });
 
   it('should call fetch with the correct URL, method, headers, and body', async () => {
-    vi.stubEnv('VITE_API_BASE_URL', 'http://localhost:3000/api/v1');
-    mockFetch.mockResolvedValue(mockResponse(200, { ok: true }));
+    mockFetch.mockResolvedValue(mockResponse(HTTP_OK, { ok: true }));
     const { result } = renderHook(() => usePost());
 
     await act(async () => {
@@ -60,21 +64,16 @@ describe('usePost', () => {
     });
 
     expect(mockFetch).toHaveBeenCalledOnce();
-    expect(mockFetch).toHaveBeenCalledWith(
-      'http://localhost:3000/api/v1/contact',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody),
-      },
-    );
-
-    vi.unstubAllEnvs();
+    expect(mockFetch).toHaveBeenCalledWith('/api/v1/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(requestBody),
+    });
   });
 
   it('should set data and return the response body on a successful request', async () => {
-    const responseBody = { id: 1, status: 'sent' };
-    mockFetch.mockResolvedValue(mockResponse(200, responseBody));
+    const responseBody = { id: RESPONSE_ID, status: 'sent' };
+    mockFetch.mockResolvedValue(mockResponse(HTTP_OK, responseBody));
     const { result } = renderHook(() => usePost());
 
     let returned: unknown;
@@ -87,14 +86,16 @@ describe('usePost', () => {
   });
 
   it('should throw an HttpError with the correct status and body on a non-ok response', async () => {
-    mockFetch.mockResolvedValue(mockResponse(429, 'Too Many Requests', false));
+    mockFetch.mockResolvedValue(
+      mockResponse(HTTP_TOO_MANY_REQUESTS, 'Too Many Requests', false),
+    );
     const { result } = renderHook(() => usePost());
 
     await act(async () => {
       await expect(
         result.current.post('/contact', requestBody),
       ).rejects.toMatchObject({
-        status: 429,
+        status: HTTP_TOO_MANY_REQUESTS,
         body: 'Too Many Requests',
       });
     });
@@ -102,7 +103,7 @@ describe('usePost', () => {
 
   it('should set loading to false even when the request fails', async () => {
     mockFetch.mockResolvedValue(
-      mockResponse(500, 'Internal Server Error', false),
+      mockResponse(HTTP_INTERNAL_SERVER_ERROR, 'Internal Server Error', false),
     );
     const { result } = renderHook(() => usePost());
 
@@ -115,7 +116,7 @@ describe('usePost', () => {
 
   it('should not update data when the request fails', async () => {
     mockFetch.mockResolvedValue(
-      mockResponse(500, 'Internal Server Error', false),
+      mockResponse(HTTP_INTERNAL_SERVER_ERROR, 'Internal Server Error', false),
     );
     const { result } = renderHook(() => usePost());
 

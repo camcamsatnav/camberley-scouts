@@ -1,17 +1,18 @@
 import sanitizeHtml from 'sanitize-html';
+import { serverEnv } from '../config/env';
 import type { ValidatedEmailRequest } from '../validators/email.validator';
 import { emailService, type SendEmailResponse } from './email.service';
 
 const getEmailMapping = () => ({
-  BEAVERS: process.env.BEAVERS_EMAILS?.split(','),
-  CUBS: process.env.CUBS_EMAILS?.split(','),
-  SCOUTS: process.env.SCOUTS_EMAILS?.split(','),
-  VOLUNTEER: process.env.VOLUNTEER_EMAILS?.split(','),
-  GENERAL: process.env.GENERAL_EMAILS?.split(','),
+  BEAVERS: serverEnv.BEAVERS_EMAILS,
+  CUBS: serverEnv.CUBS_EMAILS,
+  SCOUTS: serverEnv.SCOUTS_EMAILS,
+  VOLUNTEER: serverEnv.VOLUNTEER_EMAILS,
+  GENERAL: serverEnv.GENERAL_EMAILS,
 });
 
 const getFromAddress = (): string => {
-  return process.env.SMTP_USER || 'noreply@example.com';
+  return serverEnv.SMTP_USER || 'noreply@example.com';
 };
 
 export interface ContactResponse {
