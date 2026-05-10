@@ -86,7 +86,7 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
 
   const handleSnackbarClose = useCallback(
     (_event: SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
-      if (reason !== 'timeout') {
+      if (reason === 'clickaway') {
         return;
       }
 
