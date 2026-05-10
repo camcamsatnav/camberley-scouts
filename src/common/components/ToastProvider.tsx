@@ -1,5 +1,16 @@
-import { Alert, LinearProgress, Snackbar } from '@mui/material';
-import { type ReactNode, useCallback, useReducer, useState } from 'react';
+import {
+  Alert,
+  LinearProgress,
+  Snackbar,
+  type SnackbarCloseReason,
+} from '@mui/material';
+import {
+  type ReactNode,
+  type SyntheticEvent,
+  useCallback,
+  useReducer,
+  useState,
+} from 'react';
 import { ToastContext } from '../context/ToastContext';
 import { ToastContent } from './ToastContent';
 
@@ -73,13 +84,24 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
     dispatch({ type: 'HIDE' });
   }, []);
 
+  const handleSnackbarClose = useCallback(
+    (_event: SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
+      if (reason !== 'timeout') {
+        return;
+      }
+
+      handleClose();
+    },
+    [handleClose],
+  );
+
   return (
     <ToastContext.Provider value={{ success, error, info, warning }}>
       {children}
       <Snackbar
         open={toast.open}
         autoHideDuration={toast.severity === 'error' ? null : TOAST_DURATION}
-        onClose={handleClose}
+        onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
         <Alert onClose={handleClose} severity={toast.severity} variant='filled'>

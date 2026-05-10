@@ -159,6 +159,26 @@ it('should not show a progress bar for error toasts', () => {
   expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
 });
 
+it('should keep the toast open when the page outside it is clicked', async () => {
+  renderWithProvider();
+
+  act(() => {
+    fireEvent.click(screen.getByTestId('trigger-success'));
+  });
+
+  expect(screen.getByTestId('toast-content')).toBeInTheDocument();
+
+  act(() => {
+    fireEvent.mouseDown(document.body);
+    fireEvent.mouseUp(document.body);
+    fireEvent.click(document.body);
+  });
+
+  await waitFor(() => {
+    expect(screen.getByTestId('toast-content')).toBeInTheDocument();
+  });
+});
+
 it('should dismiss the toast when the close button is clicked', async () => {
   renderWithProvider();
 
