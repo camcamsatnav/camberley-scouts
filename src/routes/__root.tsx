@@ -75,10 +75,12 @@ function RootDocument({ children }: { children: ReactNode }) {
         <Providers>
           <div className='main-container' data-testid='main-container'>
             <Navbar />
-            <main className='content' data-testid='content'>
-              {children}
-            </main>
-            <Footer />
+            <div className='page-scroll-container'>
+              <main className='content' data-testid='content'>
+                {children}
+              </main>
+              <Footer />
+            </div>
           </div>
           <TanStackDevtools
             config={{
