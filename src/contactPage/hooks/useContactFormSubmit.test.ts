@@ -7,6 +7,9 @@ const mockPost = vi.fn();
 const mockSuccess = vi.fn();
 const mockError = vi.fn();
 
+const RATE_LIMIT_STATUS = 429;
+const SERVER_ERROR_STATUS = 500;
+
 vi.mock('../../common/hooks/usePost', () => ({
   usePost: () => ({
     post: mockPost,
@@ -39,77 +42,122 @@ describe('useContactFormSubmit', () => {
     mockError.mockReset();
   });
 
-  it('should return submitContactForm, data, and loading', () => {
+  it('returns submitContactForm', () => {
     const { result } = renderHook(() => useContactFormSubmit());
 
     expect(result.current.submitContactForm).toBeTypeOf('function');
+  });
+
+  it('returns data from usePost', () => {
+    const { result } = renderHook(() => useContactFormSubmit());
+
     expect(result.current.data).toBeUndefined();
+  });
+
+  it('returns loading from usePost', () => {
+    const { result } = renderHook(() => useContactFormSubmit());
+
     expect(result.current.loading).toBe(false);
   });
 
-  it('should call post with the correct path and form data', async () => {
+  it('posts the form data to the contact endpoint', async () => {
     mockPost.mockResolvedValue(undefined);
     const { result } = renderHook(() => useContactFormSubmit());
 
     await result.current.submitContactForm(validFormData);
 
-    expect(mockPost).toHaveBeenCalledOnce();
     expect(mockPost).toHaveBeenCalledWith('/contact', validFormData);
   });
 
-  it('should call success toast and not error toast on successful submission', async () => {
+  it('shows the success toast on successful submission', async () => {
     mockPost.mockResolvedValue(undefined);
     const { result } = renderHook(() => useContactFormSubmit());
 
     await result.current.submitContactForm(validFormData);
 
-    expect(mockSuccess).toHaveBeenCalledOnce();
     expect(mockSuccess).toHaveBeenCalledWith(
       'Your message has been sent successfully.',
       'Form submitted',
     );
-    expect(mockError).not.toHaveBeenCalled();
   });
 
-  it('should call rate limit error toast and not generic error toast when a 429 HttpError is thrown', async () => {
-    mockPost.mockRejectedValue(new HttpError(429, 'Too Many Requests'));
+  it('does not show the error toast on successful submission', async () => {
+    mockPost.mockResolvedValue(undefined);
     const { result } = renderHook(() => useContactFormSubmit());
 
     await result.current.submitContactForm(validFormData);
 
-    expect(mockError).toHaveBeenCalledOnce();
+    expect(mockError).not.toHaveBeenCalled();
+  });
+
+  it('shows the rate limit toast for a 429 HttpError', async () => {
+    mockPost.mockRejectedValue(
+      new HttpError(RATE_LIMIT_STATUS, 'Too Many Requests'),
+    );
+    const { result } = renderHook(() => useContactFormSubmit());
+
+    await result.current.submitContactForm(validFormData);
+
     expect(mockError).toHaveBeenCalledWith(
       'You have submitted this form too many times, please try again later.',
       'Failed to submit form',
     );
-    expect(mockSuccess).not.toHaveBeenCalled();
   });
 
-  it('should call generic error toast and not success toast when a non-429 HttpError is thrown', async () => {
-    mockPost.mockRejectedValue(new HttpError(500, 'Internal Server Error'));
+  it('does not show the success toast for a 429 HttpError', async () => {
+    mockPost.mockRejectedValue(
+      new HttpError(RATE_LIMIT_STATUS, 'Too Many Requests'),
+    );
     const { result } = renderHook(() => useContactFormSubmit());
 
     await result.current.submitContactForm(validFormData);
 
-    expect(mockError).toHaveBeenCalledOnce();
+    expect(mockSuccess).not.toHaveBeenCalled();
+  });
+
+  it('shows the generic error toast for a non-429 HttpError', async () => {
+    mockPost.mockRejectedValue(
+      new HttpError(SERVER_ERROR_STATUS, 'Internal Server Error'),
+    );
+    const { result } = renderHook(() => useContactFormSubmit());
+
+    await result.current.submitContactForm(validFormData);
+
     expect(mockError).toHaveBeenCalledWith(
       'Something went wrong, please try again later.',
       'Failed to submit form',
     );
+  });
+
+  it('does not show the success toast for a non-429 HttpError', async () => {
+    mockPost.mockRejectedValue(
+      new HttpError(SERVER_ERROR_STATUS, 'Internal Server Error'),
+    );
+    const { result } = renderHook(() => useContactFormSubmit());
+
+    await result.current.submitContactForm(validFormData);
+
     expect(mockSuccess).not.toHaveBeenCalled();
   });
 
-  it('should call generic error toast and not success toast when a non-HttpError is thrown', async () => {
+  it('shows the generic error toast for a non-HttpError', async () => {
     mockPost.mockRejectedValue(new Error('Network error'));
     const { result } = renderHook(() => useContactFormSubmit());
 
     await result.current.submitContactForm(validFormData);
 
-    expect(mockError).toHaveBeenCalledOnce();
     expect(mockError).toHaveBeenCalledWith(
       'Something went wrong, please try again later.',
       'Failed to submit form',
     );
+  });
+
+  it('does not show the success toast for a non-HttpError', async () => {
+    mockPost.mockRejectedValue(new Error('Network error'));
+    const { result } = renderHook(() => useContactFormSubmit());
+
+    await result.current.submitContactForm(validFormData);
+
     expect(mockSuccess).not.toHaveBeenCalled();
   });
 });

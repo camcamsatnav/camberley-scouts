@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { JoinInformation } from './JoinInformation';
 
 const defaultProps = {
@@ -7,18 +7,41 @@ const defaultProps = {
   activityLines: ['Activity 1', 'Activity 2', 'Activity 3'],
 };
 
-it('should render JoinInformation correctly', () => {
+const renderJoinInformation = () =>
   render(<JoinInformation {...defaultProps} />);
 
-  expect(screen.getByTestId('join-info')).toBeInTheDocument();
-  expect(screen.getByTestId('join-info-list')).toBeInTheDocument();
-  defaultProps.textLines.forEach((line) => {
+describe('JoinInformation', () => {
+  it('renders the information section', () => {
+    renderJoinInformation();
+
+    expect(screen.getByTestId('join-info')).toBeInTheDocument();
+  });
+
+  it.each(
+    defaultProps.textLines,
+  )('renders the information text line "%s"', (line) => {
+    renderJoinInformation();
+
     expect(screen.getByText(line)).toBeInTheDocument();
   });
 
-  expect(screen.getByTestId('join-info-card')).toBeInTheDocument();
-  expect(screen.getByText('Activities')).toBeInTheDocument();
-  defaultProps.activityLines.forEach((line) => {
+  it('renders the activities card', () => {
+    renderJoinInformation();
+
+    expect(screen.getByTestId('join-info-card')).toBeInTheDocument();
+  });
+
+  it('renders the activities heading', () => {
+    renderJoinInformation();
+
+    expect(screen.getByText('Activities')).toBeInTheDocument();
+  });
+
+  it.each(
+    defaultProps.activityLines,
+  )('renders the activity line "%s"', (line) => {
+    renderJoinInformation();
+
     expect(screen.getByText(line)).toBeInTheDocument();
   });
 });

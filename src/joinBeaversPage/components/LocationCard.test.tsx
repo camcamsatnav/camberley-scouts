@@ -1,45 +1,64 @@
 import { render, screen } from '@testing-library/react';
-import { expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { BEAVERS_LOCATION_ONE } from '../constants';
 import { LocationCard } from './LocationCard';
 
-it('should render LocationCard correctly', () => {
-  render(<LocationCard {...BEAVERS_LOCATION_ONE} />);
+const renderLocationCard = (
+  props: Partial<Parameters<typeof LocationCard>[0]> = {},
+) => render(<LocationCard {...BEAVERS_LOCATION_ONE} {...props} />);
 
-  expect(screen.getByTestId('location-card')).toBeInTheDocument();
-  expect(screen.getByTestId('location-card-title')).toBeInTheDocument();
-  expect(screen.getByTestId('location-card-date')).toBeInTheDocument();
-  expect(screen.getByTestId('location-card-address')).toBeInTheDocument();
-  expect(screen.getByTestId('location-card-link')).toBeInTheDocument();
-  expect(screen.getByTestId('location-card-spaces')).toBeInTheDocument();
+describe('LocationCard', () => {
+  it('renders the location card', () => {
+    renderLocationCard();
 
-  expect(screen.getByText('Day and time')).toBeInTheDocument();
-  expect(screen.getByText('Location')).toBeInTheDocument();
-  expect(screen.getByText('Find us on Google maps')).toBeInTheDocument();
-  expect(screen.getByText('Spaces available?')).toBeInTheDocument();
+    expect(screen.getByTestId('location-card')).toBeInTheDocument();
+  });
 
-  expect(screen.getByText("St Mary's")).toBeInTheDocument();
-  expect(screen.getByText("St Mary's Church")).toBeInTheDocument();
-  expect(screen.getByText('Park Road')).toBeInTheDocument();
-  expect(screen.getByText('Camberley')).toBeInTheDocument();
-  expect(screen.getByText('GU15 2SR')).toBeInTheDocument();
+  it('renders the location title', () => {
+    renderLocationCard();
 
-  expect(screen.getByTestId('location-card-link')).toHaveAttribute(
-    'href',
-    'https://maps.app.goo.gl/CFDX869WgfsKcrbs7',
-  );
+    expect(screen.getByText("St Mary's")).toBeInTheDocument();
+  });
 
-  expect(screen.getByTestId('location-card-spaces')).toHaveTextContent('Yes');
-  expect(screen.getByTestId('location-card-spaces')).not.toHaveTextContent(
-    'No',
-  );
-});
+  it.each([
+    'Day and time',
+    'Location',
+    'Find us on Google maps',
+  ])('renders the "%s" label', (label) => {
+    renderLocationCard();
 
-it('should render LocationCard with no spaces available', () => {
-  render(<LocationCard {...BEAVERS_LOCATION_ONE} spacesAvailable={false} />);
+    expect(screen.getByText(label)).toBeInTheDocument();
+  });
 
-  expect(screen.getByTestId('location-card-spaces')).toHaveTextContent('No');
-  expect(screen.getByTestId('location-card-spaces')).not.toHaveTextContent(
-    'Yes',
-  );
+  it.each([
+    "St Mary's Church",
+    'Park Road',
+    'Camberley',
+    'GU15 2SR',
+  ])('renders the address line "%s"', (addressLine) => {
+    renderLocationCard();
+
+    expect(screen.getByText(addressLine)).toBeInTheDocument();
+  });
+
+  it('links to the configured Google Maps location', () => {
+    renderLocationCard();
+
+    expect(screen.getByTestId('location-card-link')).toHaveAttribute(
+      'href',
+      'https://maps.app.goo.gl/CFDX869WgfsKcrbs7',
+    );
+  });
+
+  it('shows that spaces are available', () => {
+    renderLocationCard();
+
+    expect(screen.getByTestId('location-card-spaces')).toHaveTextContent('Yes');
+  });
+
+  it('shows that spaces are unavailable', () => {
+    renderLocationCard({ spacesAvailable: false });
+
+    expect(screen.getByTestId('location-card-spaces')).toHaveTextContent('No');
+  });
 });

@@ -1,22 +1,43 @@
 import { render, screen } from '@testing-library/react';
-import { expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { Footer } from './Footer';
 
-it('should render correctly', () => {
-  render(<Footer />);
+const renderFooter = () => render(<Footer />);
 
-  expect(screen.getByTestId('footer')).toBeInTheDocument();
-  expect(screen.getByTestId('footer-address')).toBeInTheDocument();
-  expect(screen.getByTestId('footer-charity')).toBeInTheDocument();
-  expect(screen.getByTestId('scouts-icon')).toBeInTheDocument();
+describe('Footer', () => {
+  it('renders the footer container', () => {
+    renderFooter();
 
-  expect(screen.getByText('Scout Hall')).toBeInTheDocument();
-  expect(
-    screen.getByText(
-      '270 London Rd, Royal Military Academy, Camberley GU15 3JP',
-    ),
-  ).toBeInTheDocument();
-  expect(
-    screen.getByText('Registered Charity Number: 1212891'),
-  ).toBeInTheDocument();
+    expect(screen.getByTestId('footer')).toBeInTheDocument();
+  });
+
+  it('renders the hall name', () => {
+    renderFooter();
+
+    expect(screen.getByText('Scout Hall')).toBeInTheDocument();
+  });
+
+  it('renders the address', () => {
+    renderFooter();
+
+    expect(
+      screen.getByText(
+        '270 London Rd, Royal Military Academy, Camberley GU15 3JP',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('renders the charity number', () => {
+    renderFooter();
+
+    expect(
+      screen.getByText('Registered Charity Number: 1212891'),
+    ).toBeInTheDocument();
+  });
+
+  it('renders the Scouts icon', () => {
+    renderFooter();
+
+    expect(screen.getByTestId('scouts-icon')).toBeInTheDocument();
+  });
 });

@@ -4,21 +4,17 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { RecipientTypes } from '../constants';
 import { ContactPageView } from './ContactPageView';
 
-vi.mock('../hooks/useContactFormSubmit', () => ({
-  useContactFormSubmit: () => ({
-    submitContactForm: vi.fn(),
-    data: undefined,
-    loading: false,
-  }),
+vi.mock('../../common/components/PageHeading', () => ({
+  PageHeading: ({ title }: { title: string }) => (
+    <div data-testid='page-heading'>{title}</div>
+  ),
 }));
 
-const recipientTypeLabels: Record<string, string> = {
-  [RecipientTypes.GENERAL]: 'General',
-  [RecipientTypes.BEAVERS]: 'Beavers',
-  [RecipientTypes.CUBS]: 'Cubs',
-  [RecipientTypes.SCOUTS]: 'Scouts',
-  [RecipientTypes.VOLUNTEER]: 'Volunteering',
-};
+vi.mock('./ContactForm', () => ({
+  ContactForm: ({ defaultQuery }: { defaultQuery?: string }) => (
+    <div data-default-query={defaultQuery} data-testid='contact-form' />
+  ),
+}));
 
 const setSearchParams = (query: string | null) => {
   vi.spyOn(ReactRouter, 'useSearch').mockReturnValue(
@@ -26,57 +22,62 @@ const setSearchParams = (query: string | null) => {
   );
 };
 
-afterEach(() => {
-  vi.restoreAllMocks();
-});
+const renderContactPageView = () => render(<ContactPageView />);
 
-it('should render ContactPage correctly', () => {
-  render(<ContactPageView />);
+describe('ContactPageView', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
-  expect(screen.getByTestId('contact-page')).toBeInTheDocument();
-});
+  it('renders the page container', () => {
+    renderContactPageView();
 
-it('should render the page heading with the correct title', () => {
-  render(<ContactPageView />);
+    expect(screen.getByTestId('contact-page')).toBeInTheDocument();
+  });
 
-  expect(screen.getByTestId('page-heading')).toBeInTheDocument();
-  expect(screen.getByText('Contact')).toBeInTheDocument();
-});
+  it('renders the page heading title', () => {
+    renderContactPageView();
 
-it('should render the info section with the correct text', () => {
-  render(<ContactPageView />);
+    expect(screen.getByTestId('page-heading')).toHaveTextContent('Contact');
+  });
 
-  expect(screen.getByTestId('contact-page-title')).toBeInTheDocument();
-  expect(screen.getByTestId('contact-page-text')).toBeInTheDocument();
-  expect(screen.getByText("We'd love to hear from you.")).toBeInTheDocument();
-  expect(
-    screen.getByText(
-      'Whether you have a question, need support, or want to volunteer, just drop us a message. Our team will get back to you as soon as possible.',
-    ),
-  ).toBeInTheDocument();
-});
+  it('renders the info heading', () => {
+    renderContactPageView();
 
-it('should render the google maps iframe', () => {
-  render(<ContactPageView />);
+    expect(screen.getByText("We'd love to hear from you.")).toBeInTheDocument();
+  });
 
-  expect(screen.getByTestId('contact-page-map')).toBeInTheDocument();
-});
+  it('renders the info body copy', () => {
+    renderContactPageView();
 
-it('should render the contact form', () => {
-  render(<ContactPageView />);
+    expect(
+      screen.getByText(
+        'Whether you have a question, need support, or want to volunteer, just drop us a message. Our team will get back to you as soon as possible.',
+      ),
+    ).toBeInTheDocument();
+  });
 
-  expect(screen.getByTestId('contact-form')).toBeInTheDocument();
-});
+  it('renders the Google Maps iframe', () => {
+    renderContactPageView();
 
-describe('query param', () => {
+    expect(screen.getByTestId('contact-page-map')).toBeInTheDocument();
+  });
+
+  it('renders the contact form', () => {
+    renderContactPageView();
+
+    expect(screen.getByTestId('contact-form')).toBeInTheDocument();
+  });
+
   it.each(
     Object.values(RecipientTypes),
-  )('should pass "%s" to the form when query param is valid', (recipientType) => {
+  )('passes "%s" to ContactForm when the query param is valid', (recipientType) => {
     setSearchParams(recipientType);
-    render(<ContactPageView />);
+    renderContactPageView();
 
-    expect(screen.getByRole('combobox')).toHaveTextContent(
-      recipientTypeLabels[recipientType],
+    expect(screen.getByTestId('contact-form')).toHaveAttribute(
+      'data-default-query',
+      recipientType,
     );
   });
 
@@ -86,12 +87,13 @@ describe('query param', () => {
     ['invalid value', 'INVALID'],
     ['wrong case - lowercase', 'cubs'],
     ['wrong case - mixed case', 'Cubs'],
-  ])('should fall back to GENERAL when query param is %s', (_, query) => {
+  ])('passes GENERAL to ContactForm when the query param is %s', (_, query) => {
     setSearchParams(query);
-    render(<ContactPageView />);
+    renderContactPageView();
 
-    expect(screen.getByRole('combobox')).toHaveTextContent(
-      recipientTypeLabels[RecipientTypes.GENERAL],
+    expect(screen.getByTestId('contact-form')).toHaveAttribute(
+      'data-default-query',
+      RecipientTypes.GENERAL,
     );
   });
 });

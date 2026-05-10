@@ -1,12 +1,31 @@
 import { render, screen } from '@testing-library/react';
-import { expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { NotImplementedView } from './NotImplementedView';
 
-it('should render NotImplementedView correctly', () => {
-  render(<NotImplementedView />);
+const renderNotImplementedView = () => render(<NotImplementedView />);
 
-  expect(screen.getByTestId('page-placeholder')).toBeInTheDocument();
-  expect(screen.getByTestId('page-placeholder-icon')).toBeInTheDocument();
-  expect(screen.getByText('No content yet')).toBeInTheDocument();
-  expect(screen.getByText('This page will come soon...')).toBeInTheDocument();
+describe('NotImplementedView', () => {
+  it('renders the placeholder', () => {
+    renderNotImplementedView();
+
+    expect(screen.getByTestId('page-placeholder')).toBeInTheDocument();
+  });
+
+  it('renders the placeholder icon', () => {
+    renderNotImplementedView();
+
+    expect(screen.getByTestId('page-placeholder-icon')).toBeInTheDocument();
+  });
+
+  it('renders the main text', () => {
+    renderNotImplementedView();
+
+    expect(screen.getByText('No content yet')).toBeInTheDocument();
+  });
+
+  it('renders the sub text', () => {
+    renderNotImplementedView();
+
+    expect(screen.getByText('This page will come soon...')).toBeInTheDocument();
+  });
 });

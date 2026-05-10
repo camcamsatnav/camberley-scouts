@@ -1,16 +1,35 @@
 import { render, screen } from '@testing-library/react';
-import { expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { NotFoundView } from './NotFoundView';
 
-it('should render NotFoundView correctly', () => {
-  render(<NotFoundView />);
+const renderNotFoundView = () => render(<NotFoundView />);
 
-  expect(screen.getByTestId('page-placeholder')).toBeInTheDocument();
-  expect(screen.getByTestId('page-placeholder-icon')).toBeInTheDocument();
-  expect(screen.getByText('Oops...')).toBeInTheDocument();
-  expect(
-    screen.getByText(
-      'We cannot find this page. Please check URL and try again.',
-    ),
-  ).toBeInTheDocument();
+describe('NotFoundView', () => {
+  it('renders the placeholder', () => {
+    renderNotFoundView();
+
+    expect(screen.getByTestId('page-placeholder')).toBeInTheDocument();
+  });
+
+  it('renders the placeholder icon', () => {
+    renderNotFoundView();
+
+    expect(screen.getByTestId('page-placeholder-icon')).toBeInTheDocument();
+  });
+
+  it('renders the main text', () => {
+    renderNotFoundView();
+
+    expect(screen.getByText('Oops...')).toBeInTheDocument();
+  });
+
+  it('renders the sub text', () => {
+    renderNotFoundView();
+
+    expect(
+      screen.getByText(
+        'We cannot find this page. Please check URL and try again.',
+      ),
+    ).toBeInTheDocument();
+  });
 });

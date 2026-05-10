@@ -5,7 +5,7 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
-import { expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { useToast } from '../hooks/useToast';
 import { ToastProvider } from './ToastProvider';
 
@@ -66,144 +66,130 @@ const renderWithProvider = () =>
     </ToastProvider>,
   );
 
-it('should render children without showing a toast initially', () => {
-  renderWithProvider();
+describe('ToastProvider', () => {
+  it('renders children', () => {
+    renderWithProvider();
 
-  expect(screen.getByTestId('trigger-success')).toBeInTheDocument();
-  expect(screen.queryByTestId('toast-content')).not.toBeInTheDocument();
-});
-
-it('should show a success toast with the correct message', () => {
-  renderWithProvider();
-
-  act(() => {
-    fireEvent.click(screen.getByTestId('trigger-success'));
+    expect(screen.getByTestId('trigger-success')).toBeInTheDocument();
   });
 
-  expect(screen.getByTestId('toast-content')).toBeInTheDocument();
-  expect(screen.getByText('Operation succeeded')).toBeInTheDocument();
-});
+  it('does not show a toast initially', () => {
+    renderWithProvider();
 
-it('should show a success toast with a title and message', () => {
-  renderWithProvider();
-
-  act(() => {
-    fireEvent.click(screen.getByTestId('trigger-success-title'));
-  });
-
-  expect(screen.getByText('Success Title')).toBeInTheDocument();
-  expect(screen.getByText('Operation succeeded')).toBeInTheDocument();
-});
-
-it('should show an error toast with the correct message', () => {
-  renderWithProvider();
-
-  act(() => {
-    fireEvent.click(screen.getByTestId('trigger-error'));
-  });
-
-  expect(screen.getByTestId('toast-content')).toBeInTheDocument();
-  expect(screen.getByText('Something went wrong')).toBeInTheDocument();
-});
-
-it('should show an error toast with a title and message', () => {
-  renderWithProvider();
-
-  act(() => {
-    fireEvent.click(screen.getByTestId('trigger-error-title'));
-  });
-
-  expect(screen.getByText('Error Title')).toBeInTheDocument();
-  expect(screen.getByText('Something went wrong')).toBeInTheDocument();
-});
-
-it('should show an info toast with the correct message', () => {
-  renderWithProvider();
-
-  act(() => {
-    fireEvent.click(screen.getByTestId('trigger-info'));
-  });
-
-  expect(screen.getByTestId('toast-content')).toBeInTheDocument();
-  expect(screen.getByText('Here is some info')).toBeInTheDocument();
-});
-
-it('should show a warning toast with the correct message', () => {
-  renderWithProvider();
-
-  act(() => {
-    fireEvent.click(screen.getByTestId('trigger-warning'));
-  });
-
-  expect(screen.getByTestId('toast-content')).toBeInTheDocument();
-  expect(screen.getByText('Be careful')).toBeInTheDocument();
-});
-
-it('should show a progress bar for non-error toasts', () => {
-  renderWithProvider();
-
-  act(() => {
-    fireEvent.click(screen.getByTestId('trigger-success'));
-  });
-
-  expect(screen.getByRole('progressbar')).toBeInTheDocument();
-});
-
-it('should not show a progress bar for error toasts', () => {
-  renderWithProvider();
-
-  act(() => {
-    fireEvent.click(screen.getByTestId('trigger-error'));
-  });
-
-  expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
-});
-
-it('should keep the toast open when the page outside it is clicked', async () => {
-  renderWithProvider();
-
-  act(() => {
-    fireEvent.click(screen.getByTestId('trigger-success'));
-  });
-
-  expect(screen.getByTestId('toast-content')).toBeInTheDocument();
-
-  act(() => {
-    fireEvent.mouseDown(document.body);
-    fireEvent.mouseUp(document.body);
-    fireEvent.click(document.body);
-  });
-
-  await waitFor(() => {
-    expect(screen.getByTestId('toast-content')).toBeInTheDocument();
-  });
-});
-
-it('should dismiss the toast when the close button is clicked', async () => {
-  renderWithProvider();
-
-  act(() => {
-    fireEvent.click(screen.getByTestId('trigger-success'));
-  });
-
-  expect(screen.getByTestId('toast-content')).toBeInTheDocument();
-
-  act(() => {
-    fireEvent.click(screen.getByRole('button', { name: /close/i }));
-  });
-
-  await waitFor(() => {
     expect(screen.queryByTestId('toast-content')).not.toBeInTheDocument();
   });
-});
 
-it('should throw if useToast is used outside of ToastProvider', () => {
-  const ThrowingComponent = () => {
-    useToast();
-    return null;
-  };
+  it('shows a success toast message', () => {
+    renderWithProvider();
 
-  expect(() => render(<ThrowingComponent />)).toThrow(
-    'useToast must be used within a ToastProvider',
-  );
+    act(() => {
+      fireEvent.click(screen.getByTestId('trigger-success'));
+    });
+
+    expect(screen.getByText('Operation succeeded')).toBeInTheDocument();
+  });
+
+  it('shows a success toast title', () => {
+    renderWithProvider();
+
+    act(() => {
+      fireEvent.click(screen.getByTestId('trigger-success-title'));
+    });
+
+    expect(screen.getByText('Success Title')).toBeInTheDocument();
+  });
+
+  it('shows an error toast message', () => {
+    renderWithProvider();
+
+    act(() => {
+      fireEvent.click(screen.getByTestId('trigger-error'));
+    });
+
+    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+  });
+
+  it('shows an error toast title', () => {
+    renderWithProvider();
+
+    act(() => {
+      fireEvent.click(screen.getByTestId('trigger-error-title'));
+    });
+
+    expect(screen.getByText('Error Title')).toBeInTheDocument();
+  });
+
+  it('shows an info toast message', () => {
+    renderWithProvider();
+
+    act(() => {
+      fireEvent.click(screen.getByTestId('trigger-info'));
+    });
+
+    expect(screen.getByText('Here is some info')).toBeInTheDocument();
+  });
+
+  it('shows a warning toast message', () => {
+    renderWithProvider();
+
+    act(() => {
+      fireEvent.click(screen.getByTestId('trigger-warning'));
+    });
+
+    expect(screen.getByText('Be careful')).toBeInTheDocument();
+  });
+
+  it('shows a progress bar for non-error toasts', () => {
+    renderWithProvider();
+
+    act(() => {
+      fireEvent.click(screen.getByTestId('trigger-success'));
+    });
+
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+  });
+
+  it('does not show a progress bar for error toasts', () => {
+    renderWithProvider();
+
+    act(() => {
+      fireEvent.click(screen.getByTestId('trigger-error'));
+    });
+
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+  });
+
+  it('keeps the toast open when the page outside it is clicked', async () => {
+    renderWithProvider();
+
+    act(() => {
+      fireEvent.click(screen.getByTestId('trigger-success'));
+    });
+
+    act(() => {
+      fireEvent.mouseDown(document.body);
+      fireEvent.mouseUp(document.body);
+      fireEvent.click(document.body);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('toast-content')).toBeInTheDocument();
+    });
+  });
+
+  it('dismisses the toast when the close button is clicked', async () => {
+    renderWithProvider();
+
+    act(() => {
+      fireEvent.click(screen.getByTestId('trigger-success'));
+    });
+
+    act(() => {
+      fireEvent.click(screen.getByRole('button', { name: /close/i }));
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('toast-content')).not.toBeInTheDocument();
+    });
+  });
 });

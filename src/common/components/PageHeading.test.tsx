@@ -1,29 +1,45 @@
 import * as RR from '@tanstack/react-router';
 import { render, screen } from '@testing-library/react';
-import { afterEach, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { PageHeading } from './PageHeading';
 
-afterEach(() => {
-  vi.restoreAllMocks();
-});
-
-it('should render PageHeading correctly', () => {
+const renderPageHeading = () => {
   vi.spyOn(RR, 'useLocation').mockReturnValue({
     pathname: '/about-us/hut-renovation',
   } as never);
 
-  render(<PageHeading title={'Example header'} />);
+  render(<PageHeading title='Example header' />);
+};
 
-  expect(screen.getByTestId('page-heading')).toBeInTheDocument();
-  expect(screen.getByTestId('page-heading-breadcrumbs')).toBeInTheDocument();
-  expect(screen.getByText('Example header')).toBeInTheDocument();
+describe('PageHeading', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
-  expect(screen.getByTestId('breadcrumbs-home')).toBeInTheDocument();
+  it('renders the heading container', () => {
+    renderPageHeading();
 
-  expect(screen.getByTestId('breadcrumbs-link-0')).toBeInTheDocument();
-  expect(screen.getByTestId('breadcrumbs-link-1')).toBeInTheDocument();
+    expect(screen.getByTestId('page-heading')).toBeInTheDocument();
+  });
 
-  // renders all texts with correct translation
-  expect(screen.getByText('About us')).toBeInTheDocument();
-  expect(screen.getByText('Hut renovation')).toBeInTheDocument();
+  it('renders the title', () => {
+    renderPageHeading();
+
+    expect(screen.getByText('Example header')).toBeInTheDocument();
+  });
+
+  it('renders the home breadcrumb', () => {
+    renderPageHeading();
+
+    expect(screen.getByTestId('breadcrumbs-home')).toBeInTheDocument();
+  });
+
+  it.each([
+    ['breadcrumbs-link-0', 'About us'],
+    ['breadcrumbs-link-1', 'Hut renovation'],
+  ])('renders the %s breadcrumb label', (testId, label) => {
+    renderPageHeading();
+
+    expect(screen.getByTestId(testId)).toHaveTextContent(label);
+  });
 });
