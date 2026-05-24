@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { NavigationButton } from './NavigationButton';
 
 const defaultProps = {
@@ -12,29 +12,49 @@ const defaultProps = {
   testId: 'example-nav',
 };
 
-it('should render NavigationButton correctly', () => {
+const renderNavigationButton = () =>
   render(<NavigationButton {...defaultProps} />);
 
-  expect(screen.getByTestId('example-nav-button')).toBeInTheDocument();
-  expect(screen.getByText('Example nav')).toBeInTheDocument();
-});
+describe('NavigationButton', () => {
+  it('renders the navigation button', () => {
+    renderNavigationButton();
 
-it('should handle click and display menu options', () => {
-  render(<NavigationButton {...defaultProps} />);
+    expect(screen.getByTestId('example-nav-button')).toBeInTheDocument();
+  });
 
-  fireEvent.click(screen.getByTestId('example-nav-button'));
+  it('renders the button title', () => {
+    renderNavigationButton();
 
-  expect(screen.getByTestId('example-nav-menu')).toBeInTheDocument();
-  defaultProps.options.forEach((option, index) => {
-    expect(
-      screen.getByTestId(`example-nav-menu-item-${index}-container`),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Example nav')).toBeInTheDocument();
+  });
+
+  it('opens the menu when clicked', () => {
+    renderNavigationButton();
+
+    fireEvent.click(screen.getByTestId('example-nav-button'));
+
+    expect(screen.getByTestId('example-nav-menu')).toBeInTheDocument();
+  });
+
+  it.each(
+    defaultProps.options.map((option, index) => [option, index] as const),
+  )('links option %i to its route', (option, index) => {
+    renderNavigationButton();
+
+    fireEvent.click(screen.getByTestId('example-nav-button'));
+
     expect(
       screen.getByTestId(`example-nav-menu-item-${index}-container`),
     ).toHaveAttribute('href', option.to);
-    expect(
-      screen.getByTestId(`example-nav-menu-item-${index}`),
-    ).toBeInTheDocument();
+  });
+
+  it.each(
+    defaultProps.options.map((option, index) => [option, index] as const),
+  )('renders option %i label', (option, index) => {
+    renderNavigationButton();
+
+    fireEvent.click(screen.getByTestId('example-nav-button'));
+
     expect(
       screen.getByTestId(`example-nav-menu-item-${index}`),
     ).toHaveTextContent(option.label);

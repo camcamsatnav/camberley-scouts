@@ -1,232 +1,191 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { ImageGalleryDialog } from './ImageGalleryDialog';
 
-it('should render ImageGalleryDialog correctly', () => {
-  render(
-    <ImageGalleryDialog
-      open={true}
-      setOpen={vi.fn()}
-      images={[
-        { src: '/example/image1', alt: 'image1' },
-        { src: '/example/image2', alt: 'image2' },
-      ]}
-    />,
-  );
+const images = [
+  { src: '/example/image1', alt: 'image1' },
+  { src: '/example/image2', alt: 'image2' },
+];
 
-  expect(screen.getByTestId('image-gallery-dialog')).toBeInTheDocument();
-  expect(
-    screen.getByTestId('image-gallery-dialog-close-button'),
-  ).toBeInTheDocument();
-  expect(
-    screen.getByTestId('image-gallery-dialog-prev-button'),
-  ).toBeInTheDocument();
-  expect(
-    screen.getByTestId('image-gallery-dialog-next-button'),
-  ).toBeInTheDocument();
-  expect(screen.getByTestId('image-gallery-dialog-image')).toBeInTheDocument();
+const renderImageGalleryDialog = ({
+  open = true,
+  setOpen = vi.fn(),
+}: {
+  open?: boolean;
+  setOpen?: (open: boolean) => void;
+} = {}) =>
+  render(<ImageGalleryDialog images={images} open={open} setOpen={setOpen} />);
 
-  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute(
-    'src',
-    '/example/image1',
-  );
-  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute(
-    'alt',
-    'image1',
-  );
-});
+const getImage = () => screen.getByTestId('image-gallery-dialog-image');
+const getNextButton = () =>
+  screen.getByTestId('image-gallery-dialog-next-button');
+const getPrevButton = () =>
+  screen.getByTestId('image-gallery-dialog-prev-button');
 
-it('should handle next and prev button presses', () => {
-  render(
-    <ImageGalleryDialog
-      open={true}
-      setOpen={vi.fn()}
-      images={[
-        { src: '/example/image1', alt: 'image1' },
-        { src: '/example/image2', alt: 'image2' },
-      ]}
-    />,
-  );
+describe('ImageGalleryDialog', () => {
+  it('renders the dialog when open', () => {
+    renderImageGalleryDialog();
 
-  // first page, previous button should be disabled
-  expect(screen.getByTestId('image-gallery-dialog-prev-button')).toBeDisabled();
-  expect(
-    screen.getByTestId('image-gallery-dialog-next-button'),
-  ).not.toBeDisabled();
+    expect(screen.getByTestId('image-gallery-dialog')).toBeInTheDocument();
+  });
 
-  fireEvent.click(screen.getByTestId('image-gallery-dialog-next-button'));
+  it('does not render the dialog when closed', () => {
+    renderImageGalleryDialog({ open: false });
 
-  // second page, next button should be disabled
-  expect(
-    screen.getByTestId('image-gallery-dialog-prev-button'),
-  ).not.toBeDisabled();
-  expect(screen.getByTestId('image-gallery-dialog-next-button')).toBeDisabled();
+    expect(
+      screen.queryByTestId('image-gallery-dialog'),
+    ).not.toBeInTheDocument();
+  });
 
-  fireEvent.click(screen.getByTestId('image-gallery-dialog-next-button'));
+  it('renders the close button', () => {
+    renderImageGalleryDialog();
 
-  // still second page, next button should be disabled
-  expect(
-    screen.getByTestId('image-gallery-dialog-prev-button'),
-  ).not.toBeDisabled();
-  expect(screen.getByTestId('image-gallery-dialog-next-button')).toBeDisabled();
+    expect(
+      screen.getByTestId('image-gallery-dialog-close-button'),
+    ).toBeInTheDocument();
+  });
 
-  fireEvent.click(screen.getByTestId('image-gallery-dialog-prev-button'));
+  it('renders the previous button', () => {
+    renderImageGalleryDialog();
 
-  // back to first page, previous button should be disabled
-  expect(screen.getByTestId('image-gallery-dialog-prev-button')).toBeDisabled();
-  expect(
-    screen.getByTestId('image-gallery-dialog-next-button'),
-  ).not.toBeDisabled();
-});
+    expect(getPrevButton()).toBeInTheDocument();
+  });
 
-it('should render correctly when open is false', () => {
-  render(
-    <ImageGalleryDialog
-      open={false}
-      setOpen={vi.fn()}
-      images={[
-        { src: '/example/image1', alt: 'image1' },
-        { src: '/example/image2', alt: 'image2' },
-      ]}
-    />,
-  );
+  it('renders the next button', () => {
+    renderImageGalleryDialog();
 
-  expect(screen.queryByTestId('image-gallery-dialog')).not.toBeInTheDocument();
-});
+    expect(getNextButton()).toBeInTheDocument();
+  });
 
-it('should handle close button click', () => {
-  const setOpen = vi.fn();
+  it('renders the first image source initially', () => {
+    renderImageGalleryDialog();
 
-  render(
-    <ImageGalleryDialog
-      open={true}
-      setOpen={setOpen}
-      images={[
-        { src: '/example/image1', alt: 'image1' },
-        { src: '/example/image2', alt: 'image2' },
-      ]}
-    />,
-  );
+    expect(getImage()).toHaveAttribute('src', '/example/image1');
+  });
 
-  fireEvent.click(screen.getByTestId('image-gallery-dialog-close-button'));
+  it('renders the first image alt text initially', () => {
+    renderImageGalleryDialog();
 
-  expect(setOpen).toHaveBeenCalledWith(false);
-});
+    expect(getImage()).toHaveAttribute('alt', 'image1');
+  });
 
-it('should reset to first image when reopening the dialog', () => {
-  const { rerender } = render(
-    <ImageGalleryDialog
-      open={true}
-      setOpen={vi.fn()}
-      images={[
-        { src: '/example/image1', alt: 'image1' },
-        { src: '/example/image2', alt: 'image2' },
-      ]}
-    />,
-  );
+  it('disables the previous button on the first image', () => {
+    renderImageGalleryDialog();
 
-  // go to next image
-  fireEvent.click(screen.getByTestId('image-gallery-dialog-next-button'));
-  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute(
-    'src',
-    '/example/image2',
-  );
-  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute(
-    'alt',
-    'image2',
-  );
+    expect(getPrevButton()).toBeDisabled();
+  });
 
-  // close dialog
-  rerender(
-    <ImageGalleryDialog
-      open={false}
-      setOpen={vi.fn()}
-      images={[
-        { src: '/example/image1', alt: 'image1' },
-        { src: '/example/image2', alt: 'image2' },
-      ]}
-    />,
-  );
+  it('enables the next button on the first image', () => {
+    renderImageGalleryDialog();
 
-  // reopen dialog
-  rerender(
-    <ImageGalleryDialog
-      open={true}
-      setOpen={vi.fn()}
-      images={[
-        { src: '/example/image1', alt: 'image1' },
-        { src: '/example/image2', alt: 'image2' },
-      ]}
-    />,
-  );
-  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute(
-    'src',
-    '/example/image1',
-  );
-  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute(
-    'alt',
-    'image1',
-  );
-});
+    expect(getNextButton()).not.toBeDisabled();
+  });
 
-it('should handle keyboard navigation', async () => {
-  const setOpen = vi.fn();
-  render(
-    <ImageGalleryDialog
-      open={true}
-      setOpen={setOpen}
-      images={[
-        { src: '/example/image1', alt: 'image1' },
-        { src: '/example/image2', alt: 'image2' },
-      ]}
-    />,
-  );
+  it('advances to the next image when next is clicked', () => {
+    renderImageGalleryDialog();
 
-  fireEvent.keyDown(document, { key: 'ArrowRight' });
+    fireEvent.click(getNextButton());
 
-  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute(
-    'src',
-    '/example/image2',
-  );
-  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute(
-    'alt',
-    'image2',
-  );
+    expect(getImage()).toHaveAttribute('src', '/example/image2');
+  });
 
-  fireEvent.keyDown(document, { key: 'ArrowRight' });
-  // still on second image
-  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute(
-    'src',
-    '/example/image2',
-  );
-  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute(
-    'alt',
-    'image2',
-  );
+  it('disables the next button on the last image', () => {
+    renderImageGalleryDialog();
 
-  fireEvent.keyDown(document, { key: 'ArrowLeft' });
+    fireEvent.click(getNextButton());
 
-  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute(
-    'src',
-    '/example/image1',
-  );
-  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute(
-    'alt',
-    'image1',
-  );
+    expect(getNextButton()).toBeDisabled();
+  });
 
-  fireEvent.keyDown(document, { key: 'ArrowLeft' });
-  // still on first image
-  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute(
-    'src',
-    '/example/image1',
-  );
-  expect(screen.getByTestId('image-gallery-dialog-image')).toHaveAttribute(
-    'alt',
-    'image1',
-  );
+  it('does not advance past the last image', () => {
+    renderImageGalleryDialog();
 
-  // close dialog using escape
-  fireEvent.keyDown(document, { key: 'Escape' });
-  expect(setOpen).toHaveBeenCalledWith(false);
+    fireEvent.click(getNextButton());
+    fireEvent.click(getNextButton());
+
+    expect(getImage()).toHaveAttribute('src', '/example/image2');
+  });
+
+  it('returns to the previous image when previous is clicked', () => {
+    renderImageGalleryDialog();
+
+    fireEvent.click(getNextButton());
+    fireEvent.click(getPrevButton());
+
+    expect(getImage()).toHaveAttribute('src', '/example/image1');
+  });
+
+  it('does not move before the first image', () => {
+    renderImageGalleryDialog();
+
+    fireEvent.click(getPrevButton());
+
+    expect(getImage()).toHaveAttribute('src', '/example/image1');
+  });
+
+  it('calls setOpen with false when the close button is clicked', () => {
+    const setOpen = vi.fn();
+    renderImageGalleryDialog({ setOpen });
+
+    fireEvent.click(screen.getByTestId('image-gallery-dialog-close-button'));
+
+    expect(setOpen).toHaveBeenCalledWith(false);
+  });
+
+  it('resets to the first image when reopened', () => {
+    const { rerender } = renderImageGalleryDialog();
+
+    fireEvent.click(getNextButton());
+    rerender(
+      <ImageGalleryDialog images={images} open={false} setOpen={vi.fn()} />,
+    );
+    rerender(
+      <ImageGalleryDialog images={images} open={true} setOpen={vi.fn()} />,
+    );
+
+    expect(getImage()).toHaveAttribute('src', '/example/image1');
+  });
+
+  it('advances when ArrowRight is pressed', () => {
+    renderImageGalleryDialog();
+
+    fireEvent.keyDown(window, { key: 'ArrowRight' });
+
+    expect(getImage()).toHaveAttribute('src', '/example/image2');
+  });
+
+  it('does not advance past the last image with ArrowRight', () => {
+    renderImageGalleryDialog();
+
+    fireEvent.keyDown(window, { key: 'ArrowRight' });
+    fireEvent.keyDown(window, { key: 'ArrowRight' });
+
+    expect(getImage()).toHaveAttribute('src', '/example/image2');
+  });
+
+  it('returns when ArrowLeft is pressed', () => {
+    renderImageGalleryDialog();
+
+    fireEvent.keyDown(window, { key: 'ArrowRight' });
+    fireEvent.keyDown(window, { key: 'ArrowLeft' });
+
+    expect(getImage()).toHaveAttribute('src', '/example/image1');
+  });
+
+  it('does not move before the first image with ArrowLeft', () => {
+    renderImageGalleryDialog();
+
+    fireEvent.keyDown(window, { key: 'ArrowLeft' });
+
+    expect(getImage()).toHaveAttribute('src', '/example/image1');
+  });
+
+  it('calls setOpen with false when Escape is pressed', () => {
+    const setOpen = vi.fn();
+    renderImageGalleryDialog({ setOpen });
+
+    fireEvent.keyDown(window, { key: 'Escape' });
+
+    expect(setOpen).toHaveBeenCalledWith(false);
+  });
 });

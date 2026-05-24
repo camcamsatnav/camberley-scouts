@@ -1,12 +1,21 @@
 import { render, screen, within } from '@testing-library/react';
-import { expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { ScoutsStackIcon } from './ScoutsStackIcon';
 
-it('should render icon', () => {
-  render(<ScoutsStackIcon />);
+const renderScoutsStackIcon = () => render(<ScoutsStackIcon />);
 
-  expect(screen.getByTestId('scouts-icon')).toBeInTheDocument();
-  expect(
-    within(screen.getByTestId('scouts-icon')).getByAltText('scouts icon'),
-  ).toBeInTheDocument();
+describe('ScoutsStackIcon', () => {
+  it('renders the icon container', () => {
+    renderScoutsStackIcon();
+
+    expect(screen.getByTestId('scouts-icon')).toBeInTheDocument();
+  });
+
+  it('renders the Scouts image', () => {
+    renderScoutsStackIcon();
+
+    expect(
+      within(screen.getByTestId('scouts-icon')).getByAltText('scouts icon'),
+    ).toBeInTheDocument();
+  });
 });

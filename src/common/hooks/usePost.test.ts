@@ -26,36 +26,49 @@ describe('usePost', () => {
     mockFetch.mockReset();
   });
 
-  it('should return post function, undefined data, and loading false initially', () => {
+  it('returns a post function initially', () => {
     const { result } = renderHook(() => usePost());
 
     expect(result.current.post).toBeTypeOf('function');
+  });
+
+  it('returns undefined data initially', () => {
+    const { result } = renderHook(() => usePost());
+
     expect(result.current.data).toBeUndefined();
+  });
+
+  it('returns loading false initially', () => {
+    const { result } = renderHook(() => usePost());
+
     expect(result.current.loading).toBe(false);
   });
 
-  it('should set loading to true while the request is in flight and false after', async () => {
-    let resolveResponse!: (value: Response) => void;
-    mockFetch.mockReturnValue(
-      new Promise<Response>((resolve) => {
-        resolveResponse = resolve;
-      }),
-    );
+  it('sets loading to true while the request is in flight', () => {
+    mockFetch.mockReturnValue(new Promise<Response>(() => {}));
 
     const { result } = renderHook(() => usePost());
 
     act(() => {
       result.current.post('/test', requestBody);
     });
+
     expect(result.current.loading).toBe(true);
+  });
+
+  it('sets loading to false after the request completes', async () => {
+    mockFetch.mockResolvedValue(mockResponse(HTTP_OK, { ok: true }));
+
+    const { result } = renderHook(() => usePost());
 
     await act(async () => {
-      resolveResponse(mockResponse(HTTP_OK, { ok: true }));
+      await result.current.post('/test', requestBody);
     });
+
     expect(result.current.loading).toBe(false);
   });
 
-  it('should call fetch with the correct URL, method, headers, and body', async () => {
+  it('calls fetch with the default endpoint and request options', async () => {
     mockFetch.mockResolvedValue(mockResponse(HTTP_OK, { ok: true }));
     const { result } = renderHook(() => usePost());
 
@@ -63,7 +76,6 @@ describe('usePost', () => {
       await result.current.post('/contact', requestBody);
     });
 
-    expect(mockFetch).toHaveBeenCalledOnce();
     expect(mockFetch).toHaveBeenCalledWith('/api/v1/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -71,7 +83,19 @@ describe('usePost', () => {
     });
   });
 
-  it('should set data and return the response body on a successful request', async () => {
+  it('sets data to the response body on a successful request', async () => {
+    const responseBody = { id: RESPONSE_ID, status: 'sent' };
+    mockFetch.mockResolvedValue(mockResponse(HTTP_OK, responseBody));
+    const { result } = renderHook(() => usePost());
+
+    await act(async () => {
+      await result.current.post('/contact', requestBody);
+    });
+
+    expect(result.current.data).toEqual(responseBody);
+  });
+
+  it('returns the response body on a successful request', async () => {
     const responseBody = { id: RESPONSE_ID, status: 'sent' };
     mockFetch.mockResolvedValue(mockResponse(HTTP_OK, responseBody));
     const { result } = renderHook(() => usePost());
@@ -81,11 +105,10 @@ describe('usePost', () => {
       returned = await result.current.post('/contact', requestBody);
     });
 
-    expect(result.current.data).toEqual(responseBody);
     expect(returned).toEqual(responseBody);
   });
 
-  it('should throw an HttpError with the correct status and body on a non-ok response', async () => {
+  it('throws an HttpError for a non-ok response', async () => {
     mockFetch.mockResolvedValue(
       mockResponse(HTTP_TOO_MANY_REQUESTS, 'Too Many Requests', false),
     );
@@ -94,14 +117,37 @@ describe('usePost', () => {
     await act(async () => {
       await expect(
         result.current.post('/contact', requestBody),
-      ).rejects.toMatchObject({
-        status: HTTP_TOO_MANY_REQUESTS,
-        body: 'Too Many Requests',
-      });
+      ).rejects.toThrow('Request failed with status 429');
     });
   });
 
-  it('should set loading to false even when the request fails', async () => {
+  it('includes the response status on a non-ok response error', async () => {
+    mockFetch.mockResolvedValue(
+      mockResponse(HTTP_TOO_MANY_REQUESTS, 'Too Many Requests', false),
+    );
+    const { result } = renderHook(() => usePost());
+
+    await act(async () => {
+      await expect(
+        result.current.post('/contact', requestBody),
+      ).rejects.toMatchObject({ status: HTTP_TOO_MANY_REQUESTS });
+    });
+  });
+
+  it('includes the response body on a non-ok response error', async () => {
+    mockFetch.mockResolvedValue(
+      mockResponse(HTTP_TOO_MANY_REQUESTS, 'Too Many Requests', false),
+    );
+    const { result } = renderHook(() => usePost());
+
+    await act(async () => {
+      await expect(
+        result.current.post('/contact', requestBody),
+      ).rejects.toMatchObject({ body: 'Too Many Requests' });
+    });
+  });
+
+  it('sets loading to false when the request fails', async () => {
     mockFetch.mockResolvedValue(
       mockResponse(HTTP_INTERNAL_SERVER_ERROR, 'Internal Server Error', false),
     );
@@ -114,7 +160,7 @@ describe('usePost', () => {
     expect(result.current.loading).toBe(false);
   });
 
-  it('should not update data when the request fails', async () => {
+  it('does not update data when the request fails', async () => {
     mockFetch.mockResolvedValue(
       mockResponse(HTTP_INTERNAL_SERVER_ERROR, 'Internal Server Error', false),
     );

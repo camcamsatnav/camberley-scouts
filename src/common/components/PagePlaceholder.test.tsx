@@ -1,30 +1,46 @@
 import { render, screen } from '@testing-library/react';
-import { expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { PagePlaceholder } from './PagePlaceholder';
 
-it('should render PagePlaceholder correctly', () => {
+const renderPagePlaceholder = (subText?: string) =>
   render(
     <PagePlaceholder
       icon={<div>icon</div>}
-      mainText={'Main text'}
-      subText={'Sub text'}
+      mainText='Main text'
+      subText={subText}
     />,
   );
 
-  expect(screen.getByTestId('page-placeholder')).toBeInTheDocument();
-  expect(screen.getByTestId('page-placeholder-icon')).toBeInTheDocument();
-  expect(screen.getByText('Main text')).toBeInTheDocument();
-  expect(screen.getByText('Sub text')).toBeInTheDocument();
-});
+describe('PagePlaceholder', () => {
+  it('renders the placeholder container', () => {
+    renderPagePlaceholder('Sub text');
 
-it('should render PagePlaceholder without subText correctly', () => {
-  render(<PagePlaceholder icon={<div>icon</div>} mainText={'Main text'} />);
+    expect(screen.getByTestId('page-placeholder')).toBeInTheDocument();
+  });
 
-  expect(screen.getByTestId('page-placeholder')).toBeInTheDocument();
-  expect(screen.getByTestId('page-placeholder-icon')).toBeInTheDocument();
-  expect(screen.getByText('Main text')).toBeInTheDocument();
+  it('renders the icon', () => {
+    renderPagePlaceholder('Sub text');
 
-  expect(
-    screen.queryByTestId('page-placeholder-subtext'),
-  ).not.toBeInTheDocument();
+    expect(screen.getByTestId('page-placeholder-icon')).toBeInTheDocument();
+  });
+
+  it('renders the main text', () => {
+    renderPagePlaceholder('Sub text');
+
+    expect(screen.getByText('Main text')).toBeInTheDocument();
+  });
+
+  it('renders the sub text when provided', () => {
+    renderPagePlaceholder('Sub text');
+
+    expect(screen.getByText('Sub text')).toBeInTheDocument();
+  });
+
+  it('does not render sub text when omitted', () => {
+    renderPagePlaceholder();
+
+    expect(
+      screen.queryByTestId('page-placeholder-subtext'),
+    ).not.toBeInTheDocument();
+  });
 });

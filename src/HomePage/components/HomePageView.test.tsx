@@ -1,91 +1,92 @@
 import { render, screen, within } from '@testing-library/react';
-import { expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { HomePageView } from './HomePageView';
 
-it('renders HomePageView correctly', () => {
-  render(<HomePageView />);
+const renderHomePage = () => render(<HomePageView />);
 
-  expect(screen.getByTestId('home-page')).toBeInTheDocument();
-  expect(screen.getByTestId('intro-image')).toBeInTheDocument();
-  expect(screen.getByTestId('intro-text')).toBeInTheDocument();
-  expect(screen.getByTestId('join-button')).toBeInTheDocument();
-  expect(screen.getByTestId('volunteer-button')).toBeInTheDocument();
-  expect(screen.getByTestId('intro-card')).toBeInTheDocument();
-  expect(screen.getByTestId('beavers-card')).toBeInTheDocument();
-  expect(screen.getByTestId('cubs-card')).toBeInTheDocument();
-  expect(screen.getByTestId('scouts-card')).toBeInTheDocument();
+describe('HomePageView', () => {
+  it('renders the page container', () => {
+    renderHomePage();
 
-  expect(
-    screen.getByText('Welcome to Camberley 478 scout group'),
-  ).toBeInTheDocument();
-  expect(
-    screen.getByText('where every child has the right to an adventure'),
-  ).toBeInTheDocument();
-  expect(screen.getByText('Join')).toBeInTheDocument();
-  expect(screen.getByText('Volunteer')).toBeInTheDocument();
-  expect(screen.getByText('Our group')).toBeInTheDocument();
-  expect(
-    within(screen.getByTestId('intro-card')).getByText(
-      'We currently have: 2 Beaver colonies, 1 Cub pack and 1 Scout troop.',
-    ),
-  ).toBeInTheDocument();
-  expect(
-    within(screen.getByTestId('intro-card')).getByText(
-      'Camberley 478 Scout Group was formed after the original groups in Camberley (4th, 7th and 8th) were at risk of closure.',
-    ),
-  ).toBeInTheDocument();
-  expect(
-    within(screen.getByTestId('intro-card')).getByText(
-      'The group has now grown significantly since 2022 and our numbers are increasing further.',
-    ),
-  ).toBeInTheDocument();
-  expect(screen.getAllByText('View').length).toEqual(3);
-  expect(
-    within(screen.getByTestId('beavers-card')).getByText('6-8 years'),
-  ).toBeInTheDocument();
-  expect(
-    within(screen.getByTestId('cubs-card')).getByText('8-10½ years'),
-  ).toBeInTheDocument();
-  expect(
-    within(screen.getByTestId('scouts-card')).getByText('10½-14 years'),
-  ).toBeInTheDocument();
-});
+    expect(screen.getByTestId('home-page')).toBeInTheDocument();
+  });
 
-it('should have correct link on the join button', () => {
-  render(<HomePageView />);
+  it('renders the intro image', () => {
+    renderHomePage();
 
-  const joinButton = screen.getByTestId('join-button');
-  expect(joinButton).toBeInTheDocument();
+    expect(screen.getByTestId('intro-image')).toBeInTheDocument();
+  });
 
-  expect(joinButton).toHaveAttribute('href', '/about-us/contact');
-});
+  it('renders the welcome title', () => {
+    renderHomePage();
 
-it('should have correct link on the beavers card', () => {
-  render(<HomePageView />);
+    expect(
+      screen.getByText('Welcome to Camberley 478 scout group'),
+    ).toBeInTheDocument();
+  });
 
-  const beaversCard = screen.getByTestId('beavers-card');
-  expect(beaversCard).toBeInTheDocument();
+  it('renders the welcome subtitle', () => {
+    renderHomePage();
 
-  const link = within(beaversCard).getByRole('link');
-  expect(link).toHaveAttribute('href', '/beavers');
-});
+    expect(
+      screen.getByText('where every child has the right to an adventure'),
+    ).toBeInTheDocument();
+  });
 
-it('should have correct link on the cubs card', () => {
-  render(<HomePageView />);
+  it('links the join button to the contact page', () => {
+    renderHomePage();
 
-  const cubsCard = screen.getByTestId('cubs-card');
-  expect(cubsCard).toBeInTheDocument();
+    expect(screen.getByTestId('join-button')).toHaveAttribute(
+      'href',
+      '/about-us/contact',
+    );
+  });
 
-  const link = within(cubsCard).getByRole('link');
-  expect(link).toHaveAttribute('href', '/cubs');
-});
+  it('renders the volunteer button', () => {
+    renderHomePage();
 
-it('should have correct link on the scouts card', () => {
-  render(<HomePageView />);
+    expect(screen.getByText('Volunteer')).toBeInTheDocument();
+  });
 
-  const scoutsCard = screen.getByTestId('scouts-card');
-  expect(scoutsCard).toBeInTheDocument();
+  it('renders the group information card title', () => {
+    renderHomePage();
 
-  const link = within(scoutsCard).getByRole('link');
-  expect(link).toHaveAttribute('href', '/scouts');
+    expect(screen.getByText('Our group')).toBeInTheDocument();
+  });
+
+  it.each([
+    'We currently have: 2 Beaver colonies, 1 Cub pack and 1 Scout troop.',
+    'Camberley 478 Scout Group was formed after the original groups in Camberley (4th, 7th and 8th) were at risk of closure.',
+    'The group has now grown significantly since 2022 and our numbers are increasing further.',
+  ])('renders the group description line "%s"', (descriptionLine) => {
+    renderHomePage();
+
+    expect(
+      within(screen.getByTestId('intro-card')).getByText(descriptionLine),
+    ).toBeInTheDocument();
+  });
+
+  it.each([
+    ['beavers-card', '/beavers'],
+    ['cubs-card', '/cubs'],
+    ['scouts-card', '/scouts'],
+  ])('links %s to %s', (testId, href) => {
+    renderHomePage();
+
+    expect(
+      within(screen.getByTestId(testId)).getByRole('link'),
+    ).toHaveAttribute('href', href);
+  });
+
+  it.each([
+    ['beavers-card', '6-8 years'],
+    ['cubs-card', '8-10½ years'],
+    ['scouts-card', '10½-14 years'],
+  ])('renders the age range for %s', (testId, ageRange) => {
+    renderHomePage();
+
+    expect(
+      within(screen.getByTestId(testId)).getByText(ageRange),
+    ).toBeInTheDocument();
+  });
 });

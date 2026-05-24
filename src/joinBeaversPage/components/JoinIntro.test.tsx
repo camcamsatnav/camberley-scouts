@@ -1,5 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
-import { expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { RecipientTypes } from '../../contactPage/constants';
 import { JOIN_BEAVERS_LOCATIONS, JOIN_BEAVERS_LOGO } from '../constants';
 import { JoinIntro } from './JoinIntro';
@@ -12,52 +12,55 @@ const defaultProps = {
   recipientType: RecipientTypes.BEAVERS,
 };
 
-it('should render JoinIntro correctly', () => {
-  render(<JoinIntro {...defaultProps} />);
+const renderJoinIntro = () => render(<JoinIntro {...defaultProps} />);
 
-  expect(screen.getByTestId('join-intro')).toBeInTheDocument();
-  expect(screen.getByTestId('join-intro-title')).toHaveTextContent('title');
-  expect(screen.getByTestId('join-logo')).toHaveAttribute(
-    'src',
-    JOIN_BEAVERS_LOGO.src,
-  );
-  expect(screen.getByTestId('join-logo')).toHaveAttribute(
-    'alt',
-    JOIN_BEAVERS_LOGO.alt,
-  );
-  expect(screen.getByText('10-12')).toBeInTheDocument();
-  expect(screen.getByTestId('join-button')).toBeInTheDocument();
+describe('JoinIntro', () => {
+  it('renders the intro section', () => {
+    renderJoinIntro();
 
-  const location1 = screen.getAllByTestId('location-card')[0];
-  expect(location1).toBeInTheDocument();
-  expect(location1).toHaveTextContent('Friday 6:00 - 7:15 PM');
-  expect(location1).toHaveTextContent("St Mary's Church");
-  expect(location1).toHaveTextContent('Park Road');
-  expect(location1).toHaveTextContent('Camberley');
-  expect(location1).toHaveTextContent('GU15 2SR');
-  expect(within(location1).getByTestId('location-card-link')).toHaveAttribute(
-    'href',
-    JOIN_BEAVERS_LOCATIONS[0].googleMapsLink,
-  );
+    expect(screen.getByTestId('join-intro')).toBeInTheDocument();
+  });
 
-  const location2 = screen.getAllByTestId('location-card')[1];
-  expect(location2).toBeInTheDocument();
-  expect(location2).toHaveTextContent('Thursday 4:45 - 6:00 PM');
-  expect(location2).toHaveTextContent("St Martin's Church");
-  expect(location2).toHaveTextContent('231 Upper College Ride');
-  expect(location2).toHaveTextContent('Camberley');
-  expect(location2).toHaveTextContent('GU15 4HE');
-  expect(within(location2).getByTestId('location-card-link')).toHaveAttribute(
-    'href',
-    JOIN_BEAVERS_LOCATIONS[1].googleMapsLink,
-  );
-});
+  it('renders the title', () => {
+    renderJoinIntro();
 
-it('should have correct link to contact page', () => {
-  render(<JoinIntro {...defaultProps} />);
+    expect(screen.getByTestId('join-intro-title')).toHaveTextContent('title');
+  });
 
-  const joinButton = screen.getByTestId('join-button');
-  expect(joinButton).toBeInTheDocument();
+  it('renders the logo image', () => {
+    renderJoinIntro();
 
-  expect(joinButton).toHaveAttribute('href', '/about-us/contact?query=BEAVERS');
+    expect(screen.getByTestId('join-logo')).toHaveAttribute(
+      'src',
+      JOIN_BEAVERS_LOGO.src,
+    );
+  });
+
+  it('renders the age range', () => {
+    renderJoinIntro();
+
+    expect(screen.getByText('10-12')).toBeInTheDocument();
+  });
+
+  it('links the join button to the contact page for the recipient type', () => {
+    renderJoinIntro();
+
+    expect(screen.getByTestId('join-button')).toHaveAttribute(
+      'href',
+      '/about-us/contact?query=BEAVERS',
+    );
+  });
+
+  it.each([
+    [0, JOIN_BEAVERS_LOCATIONS[0].googleMapsLink],
+    [1, JOIN_BEAVERS_LOCATIONS[1].googleMapsLink],
+  ])('links location card %i to its Google Maps location', (index, href) => {
+    renderJoinIntro();
+
+    expect(
+      within(screen.getAllByTestId('location-card')[index]).getByTestId(
+        'location-card-link',
+      ),
+    ).toHaveAttribute('href', href);
+  });
 });

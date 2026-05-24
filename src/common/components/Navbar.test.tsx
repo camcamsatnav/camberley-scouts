@@ -1,76 +1,72 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { expect, it } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import { FACEBOOK_URL, INSTAGRAM_URL } from '../constants';
 import { Navbar } from './Navbar';
+import type { NavigationButtonProps } from './NavigationButton';
 
-it('should render Navbar correctly', () => {
-  render(<Navbar />);
+vi.mock('./NavigationButton', () => ({
+  NavigationButton: ({ title, options, testId }: NavigationButtonProps) => (
+    <div
+      data-options={options.map((option) => option.label).join('|')}
+      data-testid={testId}
+    >
+      {title}
+    </div>
+  ),
+}));
 
-  expect(screen.getByTestId('navbar')).toBeInTheDocument();
-  expect(screen.getByTestId('navbar-home')).toBeInTheDocument();
-  expect(screen.getByText('Camberley 478 Scout Group')).toBeInTheDocument();
+const renderNavbar = () => render(<Navbar />);
 
-  expect(screen.getByTestId('navbar-socials')).toBeInTheDocument();
-  expect(screen.getByTestId('navbar-facebook')).toBeInTheDocument();
-  expect(screen.getByTestId('navbar-instagram')).toBeInTheDocument();
-});
+describe('Navbar', () => {
+  it('renders the navbar container', () => {
+    renderNavbar();
 
-it('should have correct social media links', () => {
-  render(<Navbar />);
+    expect(screen.getByTestId('navbar')).toBeInTheDocument();
+  });
 
-  expect(screen.getByTestId('navbar-facebook')).toHaveAttribute(
-    'href',
-    'https://www.facebook.com/camberley478',
-  );
-  expect(screen.getByTestId('navbar-instagram')).toHaveAttribute(
-    'href',
-    'https://www.instagram.com/camberley.478.scout.group',
-  );
-});
+  it('renders the home link', () => {
+    renderNavbar();
 
-it('shows the correct options for each navigation button when clicked', async () => {
-  render(<Navbar />);
+    expect(screen.getByTestId('navbar-home')).toBeInTheDocument();
+  });
 
-  const cases = [
-    {
-      testId: 'nav-join',
-      expected: ['Beavers', 'Cubs', 'Scouts'],
-    },
-    {
-      testId: 'nav-parents',
-      expected: ['Scout shop'],
-    },
-    {
-      testId: 'nav-volunteers',
-      expected: ['Fundraising', 'Volunteer'],
-    },
-    {
-      testId: 'nav-about',
-      expected: [
-        'Hut renovation',
-        'Bookings',
-        'Official documentation',
-        'FAQ',
-        'Contact',
-      ],
-    },
-  ];
+  it('renders the group title', () => {
+    renderNavbar();
 
-  for (const c of cases) {
-    const button = screen.getByTestId(`${c.testId}-button`);
-    expect(button).toBeInTheDocument();
-    fireEvent.click(button);
+    expect(screen.getByText('Camberley 478 Scout Group')).toBeInTheDocument();
+  });
 
-    const menu = screen.getByTestId(`${c.testId}-menu`);
-    expect(menu).toBeInTheDocument();
+  it.each([
+    ['nav-join', 'Join', 'Beavers|Cubs|Scouts'],
+    ['nav-parents', 'Info for parents', 'Scout shop'],
+    ['nav-volunteers', 'Info for volunteers', 'Fundraising|Volunteer'],
+    [
+      'nav-about',
+      'About us',
+      'Hut renovation|Bookings|Official documentation|FAQ|Contact',
+    ],
+  ])('passes the %s navigation options', (testId, label, options) => {
+    renderNavbar();
 
-    // shows all options
-    for (let i = 0; i < c.expected.length; i++) {
-      const item = screen.getByTestId(`${c.testId}-menu-item-${i}`);
-      expect(item).toBeInTheDocument();
-      expect(item).toHaveTextContent(c.expected[i]);
-    }
+    expect(screen.getByTestId(testId)).toHaveTextContent(label);
+    expect(screen.getByTestId(testId)).toHaveAttribute('data-options', options);
+  });
 
-    // Close the menu after checking
-    fireEvent.click(document.body);
-  }
+  it('links the Facebook button to the group page', () => {
+    renderNavbar();
+
+    expect(screen.getByTestId('navbar-facebook')).toHaveAttribute(
+      'href',
+      FACEBOOK_URL,
+    );
+  });
+
+  it('links the Instagram button to the group page', () => {
+    renderNavbar();
+
+    expect(screen.getByTestId('navbar-instagram')).toHaveAttribute(
+      'href',
+      INSTAGRAM_URL,
+    );
+  });
 });

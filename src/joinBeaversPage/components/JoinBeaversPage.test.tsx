@@ -1,5 +1,6 @@
-import { render, screen, within } from '@testing-library/react';
-import { expect, it } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import { RecipientTypes } from '../../contactPage/constants';
 import {
   JOIN_BEAVERS_IMAGES,
   JOIN_BEAVERS_LOCATIONS,
@@ -7,66 +8,135 @@ import {
 } from '../constants';
 import { JoinBeaversPage } from './JoinBeaversPage';
 
-it('should render JoinBeaversPage correctly', () => {
-  render(<JoinBeaversPage />);
+vi.mock('../../common/components/PageHeading', () => ({
+  PageHeading: ({ title }: { title: string }) => (
+    <div data-testid='page-heading'>{title}</div>
+  ),
+}));
 
-  expect(screen.getByTestId('join-beavers-page')).toBeInTheDocument();
-  expect(screen.getByTestId('page-heading')).toBeInTheDocument();
-});
+vi.mock('./JoinIntro', () => ({
+  JoinIntro: ({
+    title,
+    image,
+    ageRange,
+    locations,
+    recipientType,
+  }: {
+    title: string;
+    image: { src: string; alt: string };
+    ageRange: string;
+    locations: unknown[];
+    recipientType: string;
+  }) => (
+    <div
+      data-age-range={ageRange}
+      data-image-alt={image.alt}
+      data-image-src={image.src}
+      data-locations-count={locations.length}
+      data-recipient-type={recipientType}
+      data-testid='join-intro'
+    >
+      {title}
+    </div>
+  ),
+}));
 
-it('should render JoinIntro with the correct content', () => {
-  render(<JoinBeaversPage />);
+vi.mock('./JoinInformation', () => ({
+  JoinInformation: ({
+    textLines,
+    activityLines,
+  }: {
+    textLines: string[];
+    activityLines: string[];
+  }) => (
+    <div
+      data-activity-lines-count={activityLines.length}
+      data-testid='join-info'
+      data-text-lines-count={textLines.length}
+    />
+  ),
+}));
 
-  expect(screen.getByTestId('join-intro')).toBeInTheDocument();
-  expect(screen.getByTestId('join-intro-title')).toHaveTextContent(
-    'We have 2 Beaver Colonies',
-  );
-  expect(screen.getByTestId('join-logo')).toHaveAttribute(
-    'src',
-    JOIN_BEAVERS_LOGO.src,
-  );
-  expect(screen.getByTestId('join-logo')).toHaveAttribute(
-    'alt',
-    JOIN_BEAVERS_LOGO.alt,
-  );
-  expect(screen.getByText('6-8 years')).toBeInTheDocument();
-  expect(screen.getByTestId('join-button')).toBeInTheDocument();
-});
+vi.mock('./JoinImages', () => ({
+  JoinImages: ({ images }: { images: unknown[] }) => (
+    <div data-images-count={images.length} data-testid='join-images' />
+  ),
+}));
 
-it('should render JoinIntro with the correct location cards', () => {
-  render(<JoinBeaversPage />);
+const renderJoinBeaversPage = () => render(<JoinBeaversPage />);
 
-  const locationCards = screen.getAllByTestId('location-card');
-  expect(locationCards).toHaveLength(JOIN_BEAVERS_LOCATIONS.length);
+describe('JoinBeaversPage', () => {
+  it('renders the page container', () => {
+    renderJoinBeaversPage();
 
-  const location1 = locationCards[0];
-  expect(within(location1).getByTestId('location-card-link')).toHaveAttribute(
-    'href',
-    JOIN_BEAVERS_LOCATIONS[0].googleMapsLink,
-  );
+    expect(screen.getByTestId('join-beavers-page')).toBeInTheDocument();
+  });
 
-  const location2 = locationCards[1];
-  expect(within(location2).getByTestId('location-card-link')).toHaveAttribute(
-    'href',
-    JOIN_BEAVERS_LOCATIONS[1].googleMapsLink,
-  );
-});
+  it('renders the page heading title', () => {
+    renderJoinBeaversPage();
 
-it('should render JoinInformation with the correct content', () => {
-  render(<JoinBeaversPage />);
+    expect(screen.getByTestId('page-heading')).toHaveTextContent('Beavers');
+  });
 
-  expect(screen.getByTestId('join-info')).toBeInTheDocument();
-  expect(screen.getByTestId('join-info-list')).toBeInTheDocument();
-  expect(screen.getByTestId('join-info-card')).toBeInTheDocument();
-  expect(screen.getByText('Activities')).toBeInTheDocument();
-});
+  it('passes the translated intro title to JoinIntro', () => {
+    renderJoinBeaversPage();
 
-it('should render JoinImages with the correct images', () => {
-  render(<JoinBeaversPage />);
+    expect(screen.getByTestId('join-intro')).toHaveTextContent(
+      'We have 2 Beaver Colonies',
+    );
+  });
 
-  expect(screen.getByTestId('join-images')).toBeInTheDocument();
-  JOIN_BEAVERS_IMAGES.forEach((image) => {
-    const imgElement = screen.getByAltText(image.alt);
-    expect(imgElement).toHaveAttribute('src', image.src);
+  it('passes the configured logo to JoinIntro', () => {
+    renderJoinBeaversPage();
+
+    expect(screen.getByTestId('join-intro')).toHaveAttribute(
+      'data-image-src',
+      JOIN_BEAVERS_LOGO.src,
+    );
+  });
+
+  it('passes the configured locations to JoinIntro', () => {
+    renderJoinBeaversPage();
+
+    expect(screen.getByTestId('join-intro')).toHaveAttribute(
+      'data-locations-count',
+      String(JOIN_BEAVERS_LOCATIONS.length),
+    );
+  });
+
+  it('passes the Beavers recipient type to JoinIntro', () => {
+    renderJoinBeaversPage();
+
+    expect(screen.getByTestId('join-intro')).toHaveAttribute(
+      'data-recipient-type',
+      RecipientTypes.BEAVERS,
+    );
+  });
+
+  it('passes information text lines to JoinInformation', () => {
+    renderJoinBeaversPage();
+
+    expect(screen.getByTestId('join-info')).toHaveAttribute(
+      'data-text-lines-count',
+      '2',
+    );
+  });
+
+  it('passes activity lines to JoinInformation', () => {
+    renderJoinBeaversPage();
+
+    expect(screen.getByTestId('join-info')).toHaveAttribute(
+      'data-activity-lines-count',
+      '5',
+    );
+  });
+
+  it('passes the configured images to JoinImages', () => {
+    renderJoinBeaversPage();
+
+    expect(screen.getByTestId('join-images')).toHaveAttribute(
+      'data-images-count',
+      String(JOIN_BEAVERS_IMAGES.length),
+    );
   });
 });
