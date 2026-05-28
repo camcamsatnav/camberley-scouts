@@ -1,5 +1,6 @@
 [build]
     command = "pnpm run build"
+    ignore = 'test "$BRANCH" = "main" && git log -1 --pretty=%s "$COMMIT_REF" | grep -q "^chore: bump version to "'
     publish = "dist/client"
 
 [dev]
