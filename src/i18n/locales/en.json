@@ -27,6 +27,11 @@
       "documentation": "Official documentation",
       "faq": "FAQ",
       "contact": "Contact"
+    },
+    "menu": {
+      "label": "Navigation",
+      "open": "Open navigation menu",
+      "close": "Close navigation menu"
     }
   },
   "home": {

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { FACEBOOK_URL, INSTAGRAM_URL } from '../constants';
 import { Navbar } from './Navbar';
@@ -68,5 +68,91 @@ describe('Navbar', () => {
       'href',
       INSTAGRAM_URL,
     );
+  });
+
+  it('renders an accessible mobile navigation button', () => {
+    renderNavbar();
+
+    expect(
+      screen.getByRole('button', { name: 'Open navigation menu' }),
+    ).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('opens a mobile drawer containing every navigation route', () => {
+    renderNavbar();
+
+    const menuButton = screen.getByRole('button', {
+      name: 'Open navigation menu',
+    });
+    fireEvent.click(menuButton);
+
+    const mobileNavigation = screen.getByTestId('navbar-mobile-navigation');
+
+    expect(menuButton).toHaveAttribute('aria-expanded', 'true');
+
+    for (const [label, href] of [
+      ['Beavers', '/beavers'],
+      ['Cubs', '/cubs'],
+      ['Scouts', '/scouts'],
+      ['Scout shop', '/shop'],
+      ['Fundraising', '/fundraising'],
+      ['Volunteer', '/volunteer'],
+      ['Hut renovation', '/about-us/hut-renovation'],
+      ['Bookings', '/about-us/bookings'],
+      ['Official documentation', '/about-us/documentation'],
+      ['FAQ', '/about-us/faq'],
+      ['Contact', '/about-us/contact'],
+    ]) {
+      expect(
+        within(mobileNavigation).getByRole('link', { name: label }),
+      ).toHaveAttribute('href', href);
+    }
+  });
+
+  it('includes social links in the mobile drawer', () => {
+    renderNavbar();
+
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Open navigation menu' }),
+    );
+
+    const mobileSocials = screen.getByTestId('navbar-mobile-socials');
+
+    expect(
+      within(mobileSocials).getByRole('link', { name: 'facebook' }),
+    ).toHaveAttribute('href', FACEBOOK_URL);
+    expect(
+      within(mobileSocials).getByRole('link', { name: 'instagram' }),
+    ).toHaveAttribute('href', INSTAGRAM_URL);
+  });
+
+  it('closes the mobile drawer from its accessible close button', () => {
+    renderNavbar();
+
+    const menuButton = screen.getByRole('button', {
+      name: 'Open navigation menu',
+    });
+    fireEvent.click(menuButton);
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Close navigation menu' }),
+    );
+
+    expect(menuButton).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('closes the mobile drawer after selecting a route', () => {
+    renderNavbar();
+
+    const menuButton = screen.getByRole('button', {
+      name: 'Open navigation menu',
+    });
+    fireEvent.click(menuButton);
+    const beaversLink = within(
+      screen.getByTestId('navbar-mobile-navigation'),
+    ).getByRole('link', { name: 'Beavers' });
+    beaversLink.addEventListener('click', (event) => event.preventDefault());
+    fireEvent.click(beaversLink);
+
+    expect(menuButton).toHaveAttribute('aria-expanded', 'false');
   });
 });
