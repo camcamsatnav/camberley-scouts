@@ -66,7 +66,10 @@ export const HomePageView = () => {
         </div>
       </div>
       <div className='home-page__bottom-section'>
-        <Card className='home-page-card' data-testid='intro-card'>
+        <Card
+          className='home-page-card home-page-card--intro'
+          data-testid='intro-card'
+        >
           <CardHeader title={t('home.intro.title')} />
           <CardContent className='home-page-card__text-content'>
             {descriptionLines.map((line) => (
