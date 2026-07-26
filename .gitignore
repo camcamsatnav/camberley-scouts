@@ -14,3 +14,10 @@ todos.json
 .idea
 .netlify
 src/generated
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
