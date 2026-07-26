@@ -21,7 +21,10 @@ describe('HomePageView', () => {
     renderHomePage();
 
     expect(
-      screen.getByText('Welcome to Camberley 478 scout group'),
+      screen.getByRole('heading', {
+        level: 1,
+        name: 'Welcome to Camberley 478 scout group',
+      }),
     ).toBeInTheDocument();
   });
 
@@ -42,10 +45,13 @@ describe('HomePageView', () => {
     );
   });
 
-  it('renders the volunteer button', () => {
+  it('links the volunteer button to the volunteer page', () => {
     renderHomePage();
 
-    expect(screen.getByText('Volunteer')).toBeInTheDocument();
+    expect(screen.getByTestId('volunteer-button')).toHaveAttribute(
+      'href',
+      '/volunteer',
+    );
   });
 
   it('renders the group information card title', () => {
@@ -93,6 +99,18 @@ describe('HomePageView', () => {
     expect(
       within(screen.getByTestId(testId)).getByRole('link'),
     ).toHaveAttribute('href', href);
+  });
+
+  it.each([
+    ['beavers-card', 'Beavers'],
+    ['cubs-card', 'Cubs'],
+    ['scouts-card', 'Scouts'],
+  ])('provides meaningful alternative text for %s', (testId, altText) => {
+    renderHomePage();
+
+    expect(
+      within(screen.getByTestId(testId)).getByAltText(altText),
+    ).toBeInTheDocument();
   });
 
   it.each([

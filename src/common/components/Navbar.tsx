@@ -1,9 +1,20 @@
 import AccountBalance from '@mui/icons-material/AccountBalance';
+import Close from '@mui/icons-material/Close';
 import FacebookRounded from '@mui/icons-material/FacebookRounded';
 import Instagram from '@mui/icons-material/Instagram';
-import { IconButton } from '@mui/material';
+import Menu from '@mui/icons-material/Menu';
+import {
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  ListSubheader,
+} from '@mui/material';
 import { Link } from '@tanstack/react-router';
 import type { ComponentProps } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FACEBOOK_URL, INSTAGRAM_URL } from '../constants';
 import { NavigationButton } from './NavigationButton';
@@ -12,6 +23,7 @@ import '../less/navbar.less';
 
 export const Navbar = () => {
   const { t } = useTranslation();
+  const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
 
   const options = {
     join: [
@@ -45,15 +57,26 @@ export const Navbar = () => {
     { label: string; to: ComponentProps<typeof Link>['to'] }[]
   >;
 
+  const navigationGroups = [
+    { label: t('navbar.join.label'), options: options.join },
+    { label: t('navbar.parents.label'), options: options.parents },
+    { label: t('navbar.volunteers.label'), options: options.volunteers },
+    { label: t('navbar.about.label'), options: options.about },
+  ];
+
+  const closeMobileNavigation = () => {
+    setMobileNavigationOpen(false);
+  };
+
   return (
     <nav className='navbar' data-testid='navbar'>
       <IconButton
+        className='navbar__home'
         aria-label='home'
         component={Link}
         to='/'
         target='_self'
         rel='noopener noreferrer'
-        sx={{ marginRight: 'var(--spacing-2)' }}
         data-testid='navbar-home'
       >
         <AccountBalance
@@ -105,6 +128,90 @@ export const Navbar = () => {
           <Instagram sx={{ color: 'var(--mui-palette-common-white)' }} />
         </IconButton>
       </div>
+
+      <IconButton
+        className='navbar__mobile-menu-button'
+        aria-label={t('navbar.menu.open')}
+        aria-controls={
+          mobileNavigationOpen ? 'navbar-mobile-navigation' : undefined
+        }
+        aria-expanded={mobileNavigationOpen}
+        onClick={() => setMobileNavigationOpen(true)}
+        data-testid='navbar-mobile-menu-button'
+      >
+        <Menu sx={{ color: 'var(--mui-palette-common-white)' }} />
+      </IconButton>
+
+      <Drawer
+        anchor='right'
+        open={mobileNavigationOpen}
+        onClose={closeMobileNavigation}
+        slotProps={{
+          paper: {
+            className: 'navbar-mobile-drawer',
+          },
+        }}
+      >
+        <div
+          className='navbar-mobile-navigation'
+          id='navbar-mobile-navigation'
+          data-testid='navbar-mobile-navigation'
+        >
+          <div className='navbar-mobile-navigation__header'>
+            <span>{t('navbar.menu.label')}</span>
+            <IconButton
+              aria-label={t('navbar.menu.close')}
+              onClick={closeMobileNavigation}
+              data-testid='navbar-mobile-menu-close'
+            >
+              <Close />
+            </IconButton>
+          </div>
+          <div className='navbar-mobile-navigation__links'>
+            {navigationGroups.map((group) => (
+              <List
+                key={group.label}
+                subheader={
+                  <ListSubheader disableSticky>{group.label}</ListSubheader>
+                }
+              >
+                {group.options.map((option) => (
+                  <ListItem key={option.to} disablePadding>
+                    <ListItemButton
+                      component={Link}
+                      to={option.to}
+                      onClick={closeMobileNavigation}
+                    >
+                      <ListItemText primary={option.label} />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            ))}
+          </div>
+          <div
+            className='navbar-mobile-navigation__socials'
+            data-testid='navbar-mobile-socials'
+          >
+            <IconButton
+              aria-label='facebook'
+              href={FACEBOOK_URL}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <FacebookRounded />
+            </IconButton>
+            <IconButton
+              aria-label='instagram'
+              href={INSTAGRAM_URL}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <Instagram />
+            </IconButton>
+          </div>
+        </div>
+      </Drawer>
     </nav>
   );
 };

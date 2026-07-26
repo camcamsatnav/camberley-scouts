@@ -37,12 +37,10 @@ export const HomePageView = () => {
           />
         </div>
         <div className='home-page__intro' data-testid='intro-text'>
-          <div className='home-page__intro__title'>
-            {t('home.welcome.title')}
-          </div>
-          <div className='home-page__intro__subtitle'>
+          <h1 className='home-page__intro__title'>{t('home.welcome.title')}</h1>
+          <p className='home-page__intro__subtitle'>
             {t('home.welcome.subtitle')}
-          </div>
+          </p>
           <div className='home-page__intro__buttons'>
             <Button
               component={Link}
@@ -55,6 +53,8 @@ export const HomePageView = () => {
               {t('home.buttons.join')}
             </Button>
             <Button
+              component={Link}
+              to='/volunteer'
               color='primary'
               variant='contained'
               size='large'
@@ -81,7 +81,11 @@ export const HomePageView = () => {
           <CardActionArea component={Link} to='/beavers'>
             <CardHeader title={t('home.cards.title')} />
             <CardContent className='home-page-card__content'>
-              <CardMedia component='img' image={BEAVERS_IMAGE_PATH} />
+              <CardMedia
+                component='img'
+                image={BEAVERS_IMAGE_PATH}
+                alt={t('navbar.join.beavers')}
+              />
               {t('home.cards.age.beavers')}
             </CardContent>
           </CardActionArea>
@@ -90,7 +94,11 @@ export const HomePageView = () => {
           <CardActionArea component={Link} to='/cubs'>
             <CardHeader title={t('home.cards.title')} />
             <CardContent className='home-page-card__content'>
-              <CardMedia component='img' image={CUBS_IMAGE_PATH} />
+              <CardMedia
+                component='img'
+                image={CUBS_IMAGE_PATH}
+                alt={t('navbar.join.cubs')}
+              />
               {t('home.cards.age.cubs')}
             </CardContent>
           </CardActionArea>
@@ -99,7 +107,11 @@ export const HomePageView = () => {
           <CardActionArea component={Link} to='/scouts'>
             <CardHeader title={t('home.cards.title')} />
             <CardContent className='home-page-card__content'>
-              <CardMedia component='img' image={SCOUTS_IMAGE_PATH} />
+              <CardMedia
+                component='img'
+                image={SCOUTS_IMAGE_PATH}
+                alt={t('navbar.join.scouts')}
+              />
               {t('home.cards.age.scouts')}
             </CardContent>
           </CardActionArea>
