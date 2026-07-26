@@ -54,6 +54,23 @@ describe('HomePageView', () => {
     expect(screen.getByText('Our group')).toBeInTheDocument();
   });
 
+  it('marks only the group information card as the intro card', () => {
+    renderHomePage();
+
+    expect(screen.getByTestId('intro-card')).toHaveClass(
+      'home-page-card--intro',
+    );
+    expect(screen.getByTestId('beavers-card')).not.toHaveClass(
+      'home-page-card--intro',
+    );
+    expect(screen.getByTestId('cubs-card')).not.toHaveClass(
+      'home-page-card--intro',
+    );
+    expect(screen.getByTestId('scouts-card')).not.toHaveClass(
+      'home-page-card--intro',
+    );
+  });
+
   it.each([
     'We currently have: 2 Beaver colonies, 1 Cub pack and 1 Scout troop.',
     'Camberley 478 Scout Group was formed after the original groups in Camberley (4th, 7th and 8th) were at risk of closure.',
