@@ -37,9 +37,7 @@ export const HomePageView = () => {
           />
         </div>
         <div className='home-page__intro' data-testid='intro-text'>
-          <h1 className='home-page__intro__title'>
-            {t('home.welcome.title')}
-          </h1>
+          <h1 className='home-page__intro__title'>{t('home.welcome.title')}</h1>
           <div className='home-page__intro__subtitle'>
             {t('home.welcome.subtitle')}
           </div>
